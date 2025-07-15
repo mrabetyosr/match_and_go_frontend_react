@@ -1,0 +1,199 @@
+:root {
+  --primary-green: #2ecc71;
+  --primary-green-dark: #27ae60;
+  --light-green: #f0fff8;
+  --white: #ffffff;
+  --gray-text: #555;
+  --border: #e8e8e8;
+  --shadow: rgba(0, 0, 0, 0.04);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+.navbar {
+  width: 100%;
+  height: 80px; /* Increased from 65px to accommodate bigger logo */
+  background: linear-gradient(135deg, var(--white) 0%, #f9fdfb 100%);
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 10px var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  height: 250px;           /* Adjust as needed (e.g., 50px–60px) */
+  width: auto;            /* Maintain aspect ratio */
+  cursor: pointer;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  object-fit: contain;
+  display: block;         /* Helps with alignment */
+}
+
+
+.navbar-menu {
+  display: flex;
+  list-style: none;
+  gap: 8px;
+  /* Suppression du fond et du cadre */
+  padding: 6px;
+  border-radius: 12px;
+  /* border: 1px solid #f0f0f0; */
+  /* background: rgba(255, 255, 255, 0.85); */
+}
+
+.navbar-menu li {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-text);
+  cursor: pointer;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+  text-transform: capitalize;
+}
+
+.navbar-menu li:hover {
+  color: var(--primary-green-dark);
+  background: linear-gradient(135deg, #f0fff8 0%, #dbfbe7 100%);
+  transform: translateY(-1px);
+}
+
+.navbar-menu li.active {
+  color: var(--white);
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-right-menu {
+  display: flex;
+  list-style: none;
+  gap: 10px;
+  align-items: center;
+  /* Suppression du fond et du cadre */
+  padding: 6px;
+  border-radius: 12px;
+  /* border: 1px solid #f0f0f0; */
+  /* background: rgba(255, 255, 255, 0.85); */
+}
+
+.navbar-right-menu li {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-text);
+  cursor: pointer;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  text-transform: capitalize;
+}
+
+.navbar-right-menu li:hover {
+  color: var(--primary-green-dark);
+  background: linear-gradient(135deg, #f0fff8 0%, #dbfbe7 100%);
+  transform: translateY(-1px);
+}
+
+.navbar-right-menu li.active {
+  color: var(--white);
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+}
+
+.navbar button {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 13px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 10px rgba(46, 204, 113, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.navbar button:hover {
+  background: linear-gradient(135deg, #26c26a 0%, #1e9b50 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+}
+
+.navbar button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(46, 204, 113, 0.3);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 3%;
+    height: 70px; /* Increased from 60px */
+  }
+
+  .logo {
+    height: 45px; /* Increased from 32px */
+  }
+
+  .navbar-menu {
+    display: none;
+  }
+
+  .navbar-right-menu {
+    gap: 8px;
+  }
+
+  .navbar button {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0 2%;
+    height: 65px; /* Increased from default */
+  }
+
+  .logo {
+    height: 40px; /* Increased from 28px */
+  }
+
+  .navbar-right-menu {
+    gap: 6px;
+  }
+
+  .navbar button {
+    padding: 7px 14px;
+    font-size: 11px;
+  }
+}
+
+@supports (backdrop-filter: blur(10px)) {
+  .navbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+  }
+}

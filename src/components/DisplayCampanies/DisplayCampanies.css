@@ -1,0 +1,291 @@
+.company-list {
+  width: 88vw;
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 40px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  justify-content: center;
+}
+
+.company-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.company-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.company-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(50, 151, 72, 0.05), rgba(101, 174, 94, 0.05));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.company-card:hover::before {
+  opacity: 1;
+}
+
+/* Company Cover Image */
+.company-cover {
+  width: 100%;
+  height: 150px; /* Fixed height for cover image */
+  object-fit: cover;
+  border-radius: 16px 16px 0 0;
+  transition: transform 0.4s ease;
+}
+
+.company-card:hover .company-cover {
+  transform: scale(1.05);
+}
+
+/* Company Content Area */
+.company-content {
+  padding: 20px;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Company Logo */
+.company-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: -40px; /* Position it to overlap the cover image */
+  left: 20px;
+  background: #fff; /* Ensure white background if logo has transparency */
+  transition: transform 0.3s ease;
+}
+
+.company-card:hover .company-logo {
+  transform: scale(1.08);
+}
+
+/* Company Name */
+.company-content h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #333;
+  margin-top: 45px; /* Adjust margin to make space for the logo */
+  margin-bottom: 10px;
+  line-height: 1.3;
+  transition: color 0.3s ease;
+}
+
+.company-card:hover .company-content h2 {
+  color: #329748;
+}
+
+/* Company Description */
+.company-content p:first-of-type { /* This targets the description paragraph */
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 4.5em; /* Ensure consistent height for descriptions */
+}
+
+/* Specific Info Lines (Location, Job, Places) */
+.company-content p {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.company-content p strong {
+  color: #333;
+  font-weight: 600;
+  margin-right: 8px;
+  min-width: 70px; /* Align labels */
+}
+
+.company-content p:last-of-type {
+  margin-bottom: 0; /* No bottom margin for the last paragraph */
+}
+
+/* Highlight for Job Title and Places */
+.company-content p:nth-of-type(3) { /* Targets "Job: {company.jobTitle}" */
+  color: #329748; /* Green for job title */
+  font-weight: 600;
+}
+
+.company-content p:nth-of-type(4) { /* Targets "Places: {company.jobSlots}" */
+  color: #65ae5e; /* Lighter green for job slots */
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .company-list {
+    width: 95vw;
+    gap: 25px;
+    padding: 30px 0;
+  }
+  
+  .company-card {
+    border-radius: 14px;
+  }
+  
+  .company-cover {
+    height: 130px;
+  }
+  
+  .company-content {
+    padding: 18px;
+  }
+  
+  .company-logo {
+    width: 70px;
+    height: 70px;
+    top: -35px;
+    left: 18px;
+  }
+  
+  .company-content h2 {
+    font-size: 1.3rem;
+    margin-top: 40px;
+  }
+  
+  .company-content p:first-of-type {
+    font-size: 0.9rem;
+    min-height: 4.2em;
+  }
+  
+  .company-content p {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .company-list {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin: 40px auto;
+    padding: 20px 0;
+  }
+  
+  .company-card {
+    border-radius: 12px;
+  }
+  
+  .company-cover {
+    height: 120px;
+  }
+  
+  .company-content {
+    padding: 16px;
+  }
+  
+  .company-logo {
+    width: 60px;
+    height: 60px;
+    top: -30px;
+    left: 16px;
+    border-width: 3px;
+  }
+  
+  .company-content h2 {
+    font-size: 1.2rem;
+    margin-top: 35px;
+  }
+  
+  .company-content p:first-of-type {
+    font-size: 0.85rem;
+    min-height: 3.8em;
+  }
+  
+  .company-content p {
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+  }
+  
+  .company-content p strong {
+    min-width: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .company-list {
+    grid-template-columns: 1fr; /* Stack cards on very small screens */
+    gap: 15px;
+    margin: 30px auto;
+    padding: 15px 0;
+  }
+  
+  .company-card {
+    border-radius: 10px;
+  }
+  
+  .company-cover {
+    height: 100px;
+  }
+  
+  .company-content {
+    padding: 14px;
+  }
+  
+  .company-logo {
+    width: 50px;
+    height: 50px;
+    top: -25px;
+    left: 14px;
+    border-width: 2px;
+  }
+  
+  .company-content h2 {
+    font-size: 1.1rem;
+    margin-top: 30px;
+  }
+  
+  .company-content p:first-of-type {
+    font-size: 0.8rem;
+    min-height: 3.5em;
+  }
+  
+  .company-content p {
+    font-size: 0.75rem;
+    margin-bottom: 5px;
+  }
+  
+  .company-content p strong {
+    min-width: 50px;
+  }
+}
+
+/* Accessibility */
+.company-card:focus {
+  outline: 2px solid #329748;
+  outline-offset: 2px;
+}

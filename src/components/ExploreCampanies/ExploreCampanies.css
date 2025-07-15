@@ -1,0 +1,62 @@
+/* ExploreCampanies.css */
+
+.explore-companies {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #fafafa;
+}
+
+.explore-companies h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.explore-companies p {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.explore-companies-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.explore-companies-buttons button {
+  padding: 10px 22px;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  background-color: #fff;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.explore-companies-buttons button:hover {
+  background-color: #f0f0f0;
+}
+
+.explore-companies-buttons button.active {
+  background-color: #2ecc71;
+  color: #fff;
+  border-color: #2ecc71;
+}
+
+/* Responsive for small screens */
+@media (max-width: 600px) {
+  .explore-companies-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .explore-companies-buttons button {
+    width: 100%;
+    max-width: 280px;
+  }
+}
