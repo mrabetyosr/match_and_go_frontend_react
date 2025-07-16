@@ -1,15 +1,122 @@
-.company-list {
+
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+/* Overall wrapper for the scrollable area and arrows */
+.scroll-wrapper {
   width: 88vw;
   max-width: 1200px;
   margin: 60px auto;
-  padding: 40px 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 30px;
-  justify-content: center;
+  position: relative; /* For positioning arrows */
+  display: flex; /* To align the scroll container and potentially push arrows out */
+  align-items: center; /* Vertically center the scroll container and arrows */
+  padding: 0 60px; /* Add padding for arrows to sit outside the main content flow */
 }
 
+/* Container for the company cards - now horizontal */
+.company-list-horizontal {
+  flex-grow: 1; /* Allow it to take available space */
+  display: flex;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+  scroll-snap-type: x mandatory; /* Snap to cards */
+  scroll-behavior: smooth; /* Smooth scrolling with buttons */
+  gap: 30px; /* Gap between items */
+  padding: 40px 0; /* Original padding for content */
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+}
+
+/* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+.company-list-horizontal::-webkit-scrollbar {
+  display: none;
+}
+
+/* Company Card */
 .company-card {
+  flex-shrink: 0; /* Prevent cards from shrinking */
+  width: 300px; /* Fixed width for cards, adjust as needed */
+  scroll-snap-align: start; /* Snap to the start of each card */
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -27,7 +134,7 @@
 }
 
 .company-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -102,7 +209,8 @@
 }
 
 /* Company Description */
-.company-content p:first-of-type { /* This targets the description paragraph */
+.company-content p:first-of-type {
+  /* This targets the description paragraph */
   color: #666;
   font-size: 0.95rem;
   line-height: 1.5;
@@ -136,78 +244,115 @@
 }
 
 /* Highlight for Job Title and Places */
-.company-content p:nth-of-type(3) { /* Targets "Job: {company.jobTitle}" */
+.company-content p:nth-of-type(3) {
+  /* Targets "Job: \{company.jobTitle\}" */
   color: #329748; /* Green for job title */
   font-weight: 600;
 }
 
-.company-content p:nth-of-type(4) { /* Targets "Places: {company.jobSlots}" */
+.company-content p:nth-of-type(4) {
+  /* Targets "Places: \{company.jobSlots\}" */
   color: #65ae5e; /* Lighter green for job slots */
   font-weight: 600;
 }
 
+/* Scroll Arrows */
+.scroll-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 48px; /* Slightly larger arrows */
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+  font-size: 1.5rem; /* Larger arrow text */
+  color: #333;
+}
+
+.scroll-arrow:hover {
+  background: #f0f0f0;
+  transform: translateY(-50%) scale(1.08);
+  border-color: #bbb;
+}
+
+.scroll-arrow.left {
+  left: 0; /* Position at the start of the scroll-wrapper padding */
+}
+
+.scroll-arrow.right {
+  right: 0; /* Position at the end of the scroll-wrapper padding */
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
-  .company-list {
+  .scroll-wrapper {
     width: 95vw;
+    padding: 0 40px; /* Adjust padding for arrows */
+  }
+  .company-list-horizontal {
     gap: 25px;
     padding: 30px 0;
   }
-  
   .company-card {
     border-radius: 14px;
   }
-  
   .company-cover {
     height: 130px;
   }
-  
   .company-content {
     padding: 18px;
   }
-  
   .company-logo {
     width: 70px;
     height: 70px;
     top: -35px;
     left: 18px;
   }
-  
   .company-content h2 {
     font-size: 1.3rem;
     margin-top: 40px;
   }
-  
   .company-content p:first-of-type {
     font-size: 0.9rem;
     min-height: 4.2em;
   }
-  
   .company-content p {
     font-size: 0.85rem;
+  }
+  .scroll-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
   }
 }
 
 @media (max-width: 768px) {
-  .company-list {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+  .scroll-wrapper {
+    width: 98vw; /* Allow more width on smaller screens */
     margin: 40px auto;
+    padding: 0 30px;
+  }
+  .company-list-horizontal {
+    gap: 20px;
     padding: 20px 0;
   }
-  
   .company-card {
     border-radius: 12px;
   }
-  
   .company-cover {
     height: 120px;
   }
-  
   .company-content {
     padding: 16px;
   }
-  
   .company-logo {
     width: 60px;
     height: 60px;
@@ -215,47 +360,48 @@
     left: 16px;
     border-width: 3px;
   }
-  
   .company-content h2 {
     font-size: 1.2rem;
     margin-top: 35px;
   }
-  
   .company-content p:first-of-type {
     font-size: 0.85rem;
     min-height: 3.8em;
   }
-  
   .company-content p {
     font-size: 0.8rem;
     margin-bottom: 6px;
   }
-  
   .company-content p strong {
     min-width: 60px;
+  }
+  .scroll-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .company-list {
-    grid-template-columns: 1fr; /* Stack cards on very small screens */
-    gap: 15px;
+  .scroll-wrapper {
+    width: 100vw; /* Full width on very small screens */
     margin: 30px auto;
+    padding: 0 15px; /* Smaller padding, arrows closer to edge */
+  }
+  .company-list-horizontal {
+    gap: 15px;
     padding: 15px 0;
   }
-  
   .company-card {
+    width: 280px; /* Slightly smaller card width for mobile */
     border-radius: 10px;
   }
-  
   .company-cover {
     height: 100px;
   }
-  
   .company-content {
     padding: 14px;
   }
-  
   .company-logo {
     width: 50px;
     height: 50px;
@@ -263,24 +409,28 @@
     left: 14px;
     border-width: 2px;
   }
-  
   .company-content h2 {
     font-size: 1.1rem;
     margin-top: 30px;
   }
-  
   .company-content p:first-of-type {
     font-size: 0.8rem;
     min-height: 3.5em;
   }
-  
   .company-content p {
     font-size: 0.75rem;
     margin-bottom: 5px;
   }
-  
   .company-content p strong {
     min-width: 50px;
+  }
+  .scroll-arrow {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+    /* For very small screens, position arrows inside the scrollable area if space is tight */
+    left: 5px;
+    right: 5px;
   }
 }
 
@@ -288,4 +438,138 @@
 .company-card:focus {
   outline: 2px solid #329748;
   outline-offset: 2px;
+}
+.company-names-ticker {
+  width: 88vw;
+  max-width: 1200px;
+margin: -35px auto 0 auto;  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 0 60px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.ticker-track {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+  min-width: 0;
+  /* Animate horizontally for infinite scroll */
+  animation: ticker-scroll 20s linear infinite;
+  /* Only show overflow horizontally, keep vertical clean */
+  white-space: nowrap;
+}
+
+.ticker-item {
+  display: inline-block;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #329748;
+  background: rgba(101, 174, 94, 0.08);
+  border-radius: 20px;
+  padding: 8px 28px;
+  margin: 0 0;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+  text-align: center;
+  vertical-align: middle;
+  /* Make sure text doesn't wrap */
+  white-space: nowrap;
+  transition: background 0.3s;
+}
+
+.ticker-item:hover {
+  background: rgba(50,151,72,0.15);
+}
+
+/* Infinite horizontal scroll keyframes */
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Responsive design for ticker */
+@media (max-width: 1024px) {
+  .company-names-ticker {
+    width: 95vw;
+    padding: 0 40px;
+  }
+  .ticker-track {
+    gap: 30px;
+  }
+  .ticker-item {
+    font-size: 1rem;
+    padding: 7px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .company-names-ticker {
+    width: 98vw;
+    padding: 0 20px;
+  }
+  .ticker-track {
+    gap: 20px;
+  }
+  .ticker-item {
+    font-size: 0.95rem;
+    padding: 6px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .company-names-ticker {
+    width: 100vw;
+    padding: 0 8px;
+  }
+  .ticker-track {
+    gap: 10px;
+  }
+  .ticker-item {
+    font-size: 0.85rem;
+    padding: 5px 8px;
+  }
+}
+.view-offer-button {
+  margin-top: 10px;
+  align-self: flex-start;
+  background: #f8f8f8;
+  color: #333;
+  font-size: 0.92rem;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  border-radius: 18px;
+  padding: 7px 18px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.18s;
+}
+
+.view-offer-button:hover,
+.view-offer-button:focus {
+  background: #ececec;
+  color: #222;
+  border-color: #888;
+  transform: scale(1.03);
+  outline: none;
+}
+
+@media (max-width: 768px) {
+  .view-offer-button {
+    font-size: 0.88rem;
+    padding: 6px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .view-offer-button {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+  }
 }

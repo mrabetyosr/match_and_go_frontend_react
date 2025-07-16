@@ -8,7 +8,6 @@ const ExploreCampanies = ({ category, setCategory }) => {
     "Culture / Media",
     "Consulting / Audit",
     "Education / Training",
-    "Engineering / Construction",
     "Finance / Banking"
   ];
   return (
