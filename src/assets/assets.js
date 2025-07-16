@@ -11,21 +11,23 @@ import orangelogo from './orangelogo.png';
 import orangecover from './orangecover.jpg';
 import ooredoologo from './ooredoologo.jpeg';
 import ooredoocover from './ooredoocover.jpeg';
-import jobsection1 from './1.png';
+
 import jobsection2 from './2.png';
 import jobsection3 from './3.png';
-import lol from './lol.png';
-import lol1 from './lol1.png';
+import findjob from './findjob.png';
+import candidaturesection from './candidatureSection.png';
+  
+
 
 export const assets = {
     namelogo,
     headervideo1,
     headervideo2,
-    jobsection1,
     jobsection2,
     jobsection3,
-    lol,
-    lol1
+    findjob,
+    candidaturesection
+
 }
 
 export const companies = [

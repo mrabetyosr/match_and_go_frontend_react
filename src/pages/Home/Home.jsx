@@ -5,6 +5,7 @@ import ExploreCompanies from '../../components/ExploreCampanies/ExploreCampanies
 import { useState } from 'react';
 import DisplayCompanies from '../../components/DisplayCampanies/DisplayCampanies.jsx';
 import JobSection from '../../components/JobSection/JobSection.jsx';
+import CandidatureSection from '../../components/CandidateurSection/CandidatureSection.jsx';
 const Home = () => {
      const [category, setCategory] = useState("All");
   return (
@@ -14,6 +15,7 @@ const Home = () => {
       <ExploreCompanies category={category} setCategory={setCategory}></ExploreCompanies>
       <DisplayCompanies category={category} /> 
       <JobSection/>
+      <CandidatureSection/>
     </div>
   );
 }
