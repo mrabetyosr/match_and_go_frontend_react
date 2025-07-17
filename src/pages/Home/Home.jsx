@@ -6,6 +6,7 @@ import { useState } from 'react';
 import DisplayCompanies from '../../components/DisplayCampanies/DisplayCampanies.jsx';
 import JobSection from '../../components/JobSection/JobSection.jsx';
 import CandidatureSection from '../../components/CandidateurSection/CandidatureSection.jsx';
+import ForumSection from '../../components/ForumSection/Forum.jsx';
 const Home = () => {
      const [category, setCategory] = useState("All");
   return (
@@ -16,6 +17,7 @@ const Home = () => {
       <DisplayCompanies category={category} /> 
       <JobSection/>
       <CandidatureSection/>
+      <ForumSection/>
     </div>
   );
 }

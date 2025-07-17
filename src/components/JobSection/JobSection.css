@@ -6,31 +6,21 @@
   background-color: #a3a3a316;
   position: relative;
 }
-.job-image-title {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 38px;
-  font-weight: 700;
-  color: #000000;
-  z-index: 2;
-    font-size: 2.6rem;
-  font-weight: 800;
-  margin-bottom: 15px;
-  letter-spacing: 0.03em;
-  color: #3c3636;
-text-align: center;
-}
+
+/* Supprimé ou désactivé car le titre est maintenant dans le cadre */
+
+
+
 
 .job-section-image-container {
   position: relative;
   max-width: 1100px;
-  width: 90%;
+  width: 100%;
   border-radius: 40px;
   overflow: hidden;
-  margin-top: 40px;
+  margin: 40px auto 0 auto; /* centré horizontalement + marge top */
 }
+
 
 .job-image {
   width: 100%;
@@ -39,46 +29,44 @@ text-align: center;
   border-radius: 20px;
 }
 
-/* Nouveau style du cadre */
+/* Nouveau style du cadre plus petit et positionné en haut à droite */
 .job-text-overlay {
   position: absolute;
-  top: 50%;
-  left: 700px;
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.497);
+  top: 60px;
+  right: 80px;
   backdrop-filter: blur(8px);
-  padding: 35px 30px;
-  border-radius: 18px;
-  max-width: 380px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  padding: 14px 18px;
+  border-radius: 12px;
+  max-width: 400px;
+  z-index: 2;
 }
 
-/* Amélioration du titre */
+/* Titre intégré dans le cadre */
 .job-text-overlay h1 {
   font-family: 'Poppins', sans-serif;
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 600;
   color: #1a1a1a;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   letter-spacing: -0.5px;
   line-height: 1.4;
 }
 
-/* Texte principal plus doux et lisible */
+/* Texte de description */
 .job-text-overlay p {
   font-family: 'Poppins', sans-serif;
   font-size: 15.5px;
   color: #444;
   line-height: 1.6;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   font-weight: 400;
 }
 
-/* Style modernisé du bouton */
+/* Bouton modernisé */
 .find-job-button {
   background-color: #464646;
   color: #fff;
-  padding: 12px 24px;
+  padding: 10px 20px;
   border: none;
   border-radius: 8px;
   cursor: pointer;

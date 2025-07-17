@@ -16,7 +16,8 @@ import jobsection2 from './2.png';
 import jobsection3 from './3.png';
 import findjob from './findjob.png';
 import candidaturesection from './candidatureSection.png';
-  
+import findjob1 from './findjob1.png';
+import test from './test.png';
 
 
 export const assets = {
@@ -26,7 +27,9 @@ export const assets = {
     jobsection2,
     jobsection3,
     findjob,
-    candidaturesection
+    candidaturesection,
+    findjob1,
+    test
 
 }
 
