@@ -26,6 +26,8 @@ import leoPhoto from './user4.jpg';
 import amiraPhoto from './user5.jpg';
 import matchgorforum from './matchgorforum.png';
 import sideimage from './sideimage.jpg'
+import GetFound from './GetFound.png';
+
 
 
 
@@ -40,79 +42,63 @@ export const assets = {
     findjob1,
     test,
     matchgorforum,
-    sideimage
+    sideimage,
+    GetFound
 
 }
-
 export const companies = [
   {
     id: 1,
+    name: "Orange Tunisie",
+    logo: orangelogo,
+    cover: orangecover,
+    description: "Orange Tunisie is a major telecommunications company offering innovative mobile, internet, and digital services to individuals and businesses across Tunisia.",
+    location: "Tunis, Tunisia",
+    category: "Tech"
+  },
+  {
+    id: 2,
     name: "Sofrecom",
     logo: sofrecomlogo,
     cover: sofrecomcover,
     description: "Sofrecom is a consulting company specializing in telecommunications.",
     location: "Tunis, Tunisia",
-    category: "Tech",
-    jobTitle: "Frontend Developer",
-    jobSlots: 3
+    category: "Tech"
+  },
+  // ...other companies
+];
+export const jobs = [
+  {
+    id: 1,
+    companyId: 1, // Orange Tunisie
+    jobTitle: "Network Engineer",
+    jobType: "Full-time",
+    jobSalary: 3500,
+    jobSlots: 4,
+    jobDate: "2025-07-15"
   },
   {
     id: 2,
-    name: "Medianet",
-    logo: medianetlogo,
-    cover: medianetcover,
-    description: "Medianet focuses on digital solutions and online marketing.",
-    location: "Ariana, Tunisia",
-    category: "Tech",
-    jobTitle: "UI/UX Designer",
-    jobSlots: 2
-  },
-    {
-    id: 3,
-    name: "STB bank",
-    logo: stbbanklogo,
-    cover: stbbankcover,
-    description: "STB Bank is a leading financial institution, providing a wide range of banking and financial services to individuals, businesses, and institutions.",
-    location: "Tunis, Tunisia",
-    category: "Finance / Banking",
-    jobTitle: "Financial Controller",
-    jobSlots: 2
+    companyId: 1, // Orange Tunisie
+    jobTitle: "Digital Marketing Specialist",
+    jobType: "Internship",
+    jobSalary: 1200,
+    jobSlots: 2,
+    jobDate: "2025-07-20"
   },
   {
-  id: 4,
-  name: "Orange Tunisie",
-  logo: orangelogo,
-  cover: orangecover,
-  description: "Orange Tunisie is a major telecommunications company offering innovative mobile, internet, and digital services to individuals and businesses across Tunisia.",
-  location: "Tunis, Tunisia",
-  category: "Tech",
-  jobTitle: "Network Engineer",
-  jobSlots: 4
-},
-{
-  id: 5,
-  name: "Ooredoo Tunisie",
-  logo: ooredoologo,
-  cover: ooredoocover,
-  description: "Ooredoo Tunisie is a major telecom operator known for its commitment to innovation and customer satisfaction. The company also provides business consulting services to support digital transformation and strategic growth.",
-  location: "Tunis, Tunisia",
-  category: "Consulting / Audit",
-  jobTitle: "Business Consultant",
-  jobSlots: 3
-},
-{
-  id: 6,
-  name: "Orange Tunisie",
-  logo: orangelogo,
-  cover: orangecover,
-  description: "Orange Tunisie is a major telecommunications company offering innovative mobile, internet, and digital services to individuals and businesses across Tunisia.",
-  location: "Tunis, Tunisia",
-  category: "Advertising / Marketing",
-  jobTitle: "Digital Marketing Specialist",
-  jobSlots: 2
-}
-  
+    id: 3,
+    companyId: 2, // Sofrecom
+    jobTitle: "Frontend Developer",
+    jobType: "Full-time",
+    jobSalary: 3000,
+    jobSlots: 3,
+    jobDate: "2025-07-26"
+  },
+  // ...other jobs
 ];
+
+
 export const forumPosts = [
   {
     id: 1,

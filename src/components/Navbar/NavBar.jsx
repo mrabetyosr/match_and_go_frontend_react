@@ -3,6 +3,7 @@ import './NavBar.css'; // Assuming you have a CSS file for styling
 import { useState } from 'react';
 import SignIn from '../SignIn/SignIn.jsx';
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { assets } from '../../assets/assets'; // Adjust the path as necessary
 const NavBar = ({ showSignIn, setShowSignIn }) => {
     const [menu, setMenu] = useState("home");
@@ -23,10 +24,10 @@ const NavBar = ({ showSignIn, setShowSignIn }) => {
         <div className='navbar'>
             <img src={assets.namelogo} alt="Logo" className="logo" />
             <ul className='navbar-menu'>
-                <li onClick={() => setMenu("home")} className={menu === "home" ? "active" : ""}>Home</li>
-                <li onClick={() => setMenu("find-a-job")} className={menu === "find-a-job" ? "active" : ""}>Find a job</li>
-                <li onClick={() => setMenu("find-a-company")} className={menu === "find-a-company" ? "active" : ""}>Find a company</li>
-                <li onClick={() => setMenu("forum")} className={menu === "forum" ? "active" : ""}>Forum</li>
+                <Link to="/"><li onClick={() => setMenu("home")} className={menu === "home" ? "active" : ""}>Home</li></Link>
+                <Link to="/find-job"><li onClick={() => setMenu("find-a-job")} className={menu === "find-a-job" ? "active" : ""}>Find a job</li></Link>
+                <Link to="/find-company"><li onClick={() => setMenu("find-a-company")} className={menu === "find-a-company" ? "active" : ""}>Find a company</li></Link>
+                <Link to="/forum"><li onClick={() => setMenu("forum")} className={menu === "forum" ? "active" : ""}>Forum</li></Link>
             </ul>
             <div className="navbar-right">
                 <ul className='navbar-right-menu'>
