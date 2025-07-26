@@ -19,6 +19,15 @@ import candidaturesection from './candidatureSection.png';
 import findjob1 from './findjob1.png';
 import test from './test.png';
 
+import claraPhoto from './user1.avif';
+import yassinePhoto from './user2.avif';
+import fatimaPhoto from './user3.avif';
+import leoPhoto from './user4.jpg';
+import amiraPhoto from './user5.jpg';
+import matchgorforum from './matchgorforum.png';
+import sideimage from './sideimage.jpg'
+
+
 
 export const assets = {
     namelogo,
@@ -29,7 +38,9 @@ export const assets = {
     findjob,
     candidaturesection,
     findjob1,
-    test
+    test,
+    matchgorforum,
+    sideimage
 
 }
 
@@ -101,4 +112,56 @@ export const companies = [
   jobSlots: 2
 }
   
+];
+export const forumPosts = [
+  {
+    id: 1,
+    firstName: 'Yosr',
+    lastName: 'Mrabet',
+    userPhoto: claraPhoto,
+    role: 'Tech Recruiter - Google',
+    content: 'We’re hiring junior full-stack devs 🚀! Drop your CVs!',
+    likes: 120,
+    comments: 45,
+  },
+  {
+    id: 2,
+    firstName: 'Ali',
+    lastName: 'Ben Salah',
+    userPhoto: yassinePhoto,
+    role: 'HR Manager - Orange',
+    content: 'Great CVs coming from Tunisia 🇹🇳 this year! Keep it up.',
+    likes: 98,
+    comments: 34,
+  },
+  {
+    id: 3,
+    firstName: 'Julie',
+    lastName: 'Moreau',
+    userPhoto: fatimaPhoto,
+    role: 'Talent Acquisition - Capgemini',
+    content: 'Looking for fresh UI/UX designers for freelance projects 💼.',
+    likes: 87,
+    comments: 28,
+  },
+  {
+    id: 4,
+    firstName: 'Omar',
+    lastName: 'Guesmi',
+    userPhoto: leoPhoto,
+    role: 'Lead Recruiter - DevCore',
+    content: 'Thanks to everyone who applied! You’re amazing 🔥.',
+    likes: 75,
+    comments: 20,
+  },
+  {
+    id: 5,
+    firstName: 'Lina',
+    lastName: 'Kacem',
+    userPhoto: amiraPhoto,
+    role: 'Recruiter - Ubisoft',
+    content: 'Game developer positions now open 🎮! DM me for details.',
+    likes: 68,
+    comments: 19,
+  },
 ];

@@ -1,0 +1,238 @@
+/* --- Section principale --- */
+.forum-section {
+  padding: 4rem 1rem;
+  background-color: #f9fafb;
+  position: relative;
+}
+
+.forum-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  padding: 1rem;
+}
+
+/* --- Image quote modifiée --- */
+.quote-image {
+  position: absolute;
+  top: -48px;
+  right: -70px;
+  width: 200px;
+  opacity: 0.1;
+  transform: rotate(25deg);
+  z-index: 0;
+}
+
+/* --- En-tête forum --- */
+.forum-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.forum-brand {
+  width: 300px; /* Ajuste en fonction de la taille souhaitée */
+  height: auto;
+  display: block;
+  margin-bottom: 0.5rem;
+  object-fit: contain; /* pour que l'image garde ses proportions */
+}
+
+
+
+.forum-section-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #222;
+  text-align: center;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+/* Ligne décorative sous le titre */
+.forum-section-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: #000;
+  margin: 15px auto 0;
+  border-radius: 2px;
+}
+
+/* --- Flèches de défilement --- */
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  background-color: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
+  border-radius: 50%;
+  width: 48px;
+  top: 60%;
+  height: 48px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.scroll-btn:hover {
+  background-color: #000000;
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.scroll-btn.left {
+  left: -60px;
+}
+
+.scroll-btn.right {
+  right: -60px;
+}
+
+/* --- Scroll wrapper --- */
+.forum-posts-wrapper {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 1rem 0;
+}
+
+.forum-posts-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Container de posts --- */
+.forum-posts-container {
+  display: flex;
+  gap: 24px;
+  transition: transform 0.5s ease-in-out;
+  will-change: transform;
+}
+
+/* --- Carte de post --- */
+.forum-post-card {
+  flex: 0 0 calc(100% / 3 - 16px);
+  scroll-snap-align: start;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* --- Infos utilisateur --- */
+.forum-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.forum-user-photo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #27ae60;
+}
+
+.forum-user-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #17252a;
+  margin: 0;
+}
+
+.forum-user-role {
+  font-size: 0.75rem;
+  color: #ffffff;
+  background-color: #27ae60;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+  margin-top: 4px;
+  display: inline-block;
+}
+
+/* --- Contenu du post --- */
+.forum-post-content {
+  font-size: 1rem;
+  color: #333;
+  padding-left: 12px;
+  border-left: 3px solid #27ae60;
+  margin: 0;
+  line-height: 1.6;
+  font-style: normal;
+}
+
+/* --- Réactions --- */
+.forum-post-reactions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+  font-size: 0.9rem;
+  color: #555;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+  margin-top: auto;
+}
+
+/* --- Pagination --- */
+.pagination-dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  gap: 10px;
+}
+
+.pagination-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ccc;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination-dot:hover {
+  transform: scale(1.2);
+  background: #3aafa9;
+}
+
+.pagination-dot.active {
+  background: #2b7a78;
+  width: 14px;
+  height: 14px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .forum-post-card {
+    flex: 0 0 calc(100% / 2 - 16px);
+  }
+}
+
+@media (max-width: 768px) {
+  .forum-post-card {
+    flex: 0 0 100%;
+  }
+
+  .forum-header {
+    margin-bottom: 1rem;
+  }
+
+  .scroll-btn.left {
+    left: 5px;
+  }
+
+  .scroll-btn.right {
+    right: 5px;
+  }
+}
+

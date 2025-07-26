@@ -1,0 +1,160 @@
+/* Main container */
+.footer {
+  background-color: #000;
+  color: #fff;
+  padding: 3rem 1.5rem;
+  font-family: Arial, sans-serif;
+}
+
+/* Grid layout for 4 columns */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: repeat(4, 1fr);
+    padding: 3rem 5rem;
+  }
+}
+
+/* Logo section */
+.footer-logo h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Social media icons */
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  font-size: 1.25rem;
+  color: white;
+}
+
+.social-icons a,
+.social-icons svg {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover,
+.social-icons svg:hover {
+  color: #00C853;
+}
+
+/* Section headers */
+.footer-section h3,
+.footer-newsletter h3 {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+/* List items */
+.footer-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.footer-section li {
+  font-size: 0.875rem;
+  color: #ccc;
+  margin-bottom: 0.25rem;
+  cursor: pointer;
+}
+
+.footer-section li:hover {
+  color: #00C853;
+}
+
+/* Newsletter text */
+.footer-newsletter p {
+  font-size: 0.875rem;
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+
+/* Newsletter input and button */
+.newsletter-form {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.newsletter-form input[type="email"] {
+  flex-grow: 1;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 0.375rem 0 0 0.375rem;
+  font-size: 14px;
+  color: black;
+}
+
+.newsletter-form button {
+  background-color: #00C853;
+  color: black;
+  font-weight: 600;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0 0.375rem 0.375rem 0;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.newsletter-form button:hover {
+  opacity: 0.9;
+}
+
+/* Newsletter unsubscribe line */
+.footer-newsletter .unsubscribe {
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+.footer-newsletter .unsubscribe a {
+  color: #ccc;
+  text-decoration: underline;
+}
+
+/* Divider line */
+.footer-divider {
+  margin: 2rem 0;
+  border-top: 1px solid #444;
+}
+
+/* Bottom legal + country */
+.footer-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #999;
+}
+
+@media (min-width: 1024px) {
+  .footer-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-links span {
+  cursor: pointer;
+}
+
+.footer-links span:hover {
+  color: #00C853;
+}
+
+.language {
+  font-size: 0.875rem;
+}
