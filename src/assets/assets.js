@@ -54,16 +54,30 @@ export const companies = [
     cover: orangecover,
     description: "Orange Tunisie is a major telecommunications company offering innovative mobile, internet, and digital services to individuals and businesses across Tunisia.",
     location: "Tunis, Tunisia",
-    category: "Tech"
+    category: "Tech",
+    founded: 2010,
+    size: "1001-5000 employees",
+    website: "https://www.orange.tn",
+    email: "hr@orange.tn",
+     socialLinks: {
+      linkedin: "https://linkedin.com/company/orange-tunisie"
+    }
   },
   {
     id: 2,
     name: "Sofrecom",
     logo: sofrecomlogo,
     cover: sofrecomcover,
-    description: "Sofrecom is a consulting company specializing in telecommunications.",
+    description: "Sofrecom is an international consulting and engineering company that specializes in telecommunications and digital transformation. Sofrecom leverages over 50 years of experience to support telecom operators, governments, and businesses.",
     location: "Tunis, Tunisia",
-    category: "Tech"
+    category: "Tech",
+    founded: 2005,
+    size: "201-500 employees",
+    website: "https://www.sofrecom.com",
+    email: "careers@sofrecom.com",
+    socialLinks: {
+      linkedin: "https://linkedin.com/company/sofrecom"
+    }
   },
   // ...other companies
 ];
@@ -78,8 +92,10 @@ export const jobs = [
     jobSalary: 3500,
     jobSlots: 4,
     jobDate: "2025-07-15",
+    applicationDeadline: "2025-08-10",
     experience: "3+ years",
     education: "Bachelor's Degree in Computer Networks",
+    languages: ["French", "English"],
     skills: ["Cisco", "Routing", "Switching", "Linux", "Communication"],
     description: "As a Network Engineer, you will be responsible for designing, implementing, and managing the company’s network infrastructure.",
     responsibilities: [
@@ -93,25 +109,65 @@ export const jobs = [
       "3+ years experience in networking",
       "Knowledge of Cisco equipment",
       "Strong problem-solving skills",
-    ]
+    ],
+    benefits: ["Health Insurance", "Paid Vacation", "Annual Bonus"],
   },
   {
     id: 2,
     companyId: 1, // Orange Tunisie
     jobTitle: "Digital Marketing Specialist",
     jobType: "Internship",
-    jobSalary: 1200,
+    remote: true,
+    jobSalary: 0,
+    duration: "3 months",
     jobSlots: 2,
-    jobDate: "2025-07-20"
+    jobDate: "2025-07-20",
+    applicationDeadline: "2025-08-05",
+    experience: "No experience required",
+    education: "Bachelor's in Marketing or Communication",
+    languages: ["French", "English"],
+    skills: ["SEO", "Google Ads", "Content Creation"],
+    tags: ["Internship", "Marketing", "Social Media"],
+    description: "You will assist the marketing team in online campaign management, content creation, and social media optimization.",
+    responsibilities: [
+    "Assist with digital marketing campaigns",
+    "Monitor and report on traffic and engagement",
+    "Support SEO and paid ads initiatives"
+  ],
+    requirements: [
+    "Student or recent graduate in marketing",
+    "Basic knowledge of SEO & social media tools",
+    "Strong writing skills"
+  ],
+    benefits: ["Remote Work", "Flexible Hours"]
   },
   {
     id: 3,
     companyId: 2, // Sofrecom
     jobTitle: "Frontend Developer",
     jobType: "Full-time",
+    remote: true,
     jobSalary: 3000,
     jobSlots: 3,
-    jobDate: "2025-07-26"
+    jobDate: "2025-07-26",
+    applicationDeadline: "2025-08-15",
+     experience: "2+ years",
+    education: "Bachelor's in Computer Science or related field",
+    languages: ["English"],
+    skills: ["React", "JavaScript", "HTML", "CSS", "Git"],
+    tags: ["Frontend", "React", "UI/UX"],
+    description: "As a Frontend Developer, you will build dynamic and responsive web applications for various telecom projects.",
+    responsibilities: [
+      "Develop new user-facing features",
+      "Ensure the technical feasibility of UI/UX designs",
+      "Optimize applications for speed and scalability"
+    ],
+    requirements: [
+      "2+ years of frontend development experience",
+      "Strong knowledge of React and JavaScript",
+      "Experience with version control (Git)"
+    ],
+    benefits: ["Remote Days", "Flexible Schedule", "Training Budget"]
   },
   // ...other jobs
 ];

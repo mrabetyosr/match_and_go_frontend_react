@@ -6,6 +6,7 @@ import { faBookmark as solidBookmark } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as regularBookmark } from '@fortawesome/free-regular-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 
 
