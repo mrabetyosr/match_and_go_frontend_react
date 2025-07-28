@@ -253,6 +253,12 @@
   justify-content: space-between;
   align-items: center;
 }
+.footer-actions {
+  display: flex;
+  gap: 8px; /* controls spacing between button and bookmark */
+  align-items: center;
+}
+
 
 .salary {
   font-size: 15px;
@@ -418,4 +424,21 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
+}
+.bookmark-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  margin-left: 10px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.bookmark-btn.active {
+  color: #ff3d5a; /* Instagram-style red when saved */
+}
+
+.bookmark-btn:hover {
+  transform: scale(1.2);
 }

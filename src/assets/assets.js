@@ -73,9 +73,27 @@ export const jobs = [
     companyId: 1, // Orange Tunisie
     jobTitle: "Network Engineer",
     jobType: "Full-time",
+    contractType: "Permanent",
+    remote: false,
     jobSalary: 3500,
     jobSlots: 4,
-    jobDate: "2025-07-15"
+    jobDate: "2025-07-15",
+    experience: "3+ years",
+    education: "Bachelor's Degree in Computer Networks",
+    skills: ["Cisco", "Routing", "Switching", "Linux", "Communication"],
+    description: "As a Network Engineer, you will be responsible for designing, implementing, and managing the company’s network infrastructure.",
+    responsibilities: [
+      "Design and maintain network systems",
+      "Monitor network performance and security",
+      "Collaborate with IT teams",
+      "Troubleshoot network issues",
+    ],
+    requirements: [
+      "Bachelor’s degree in a relevant field",
+      "3+ years experience in networking",
+      "Knowledge of Cisco equipment",
+      "Strong problem-solving skills",
+    ]
   },
   {
     id: 2,

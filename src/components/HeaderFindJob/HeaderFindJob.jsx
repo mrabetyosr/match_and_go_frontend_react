@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './HeaderFindJob.css';
 import { companies, jobs } from '../../assets/assets';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookmark as solidBookmark } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as regularBookmark } from '@fortawesome/free-regular-svg-icons';
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+
+
 
 // ✅ Helper function to calculate time since job was posted
 const timeSincePost = (jobDate) => {
@@ -33,6 +40,7 @@ const HeaderFindJob = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 3;
+  const [savedJobs, setSavedJobs] = useState([]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -46,6 +54,7 @@ const HeaderFindJob = () => {
       const company = companies.find(c => c.id === job.companyId);
       return { ...job, company };
     });
+
 
     const filtered = enrichedJobs.filter(job => {
       const keywordMatch =
@@ -119,6 +128,15 @@ const HeaderFindJob = () => {
       default: return '📋';
     }
   };
+  //save job offer function
+  const toggleSaveJob = (jobId) => {
+  setSavedJobs((prev) =>
+    prev.includes(jobId) ? prev.filter((id) => id !== jobId) : [...prev, jobId]
+  );
+};
+//naviagte details page
+const navigate = useNavigate();
+
 
   return (
     <div className="header-container">
@@ -235,7 +253,23 @@ const HeaderFindJob = () => {
                     <div>
                       <div className="salary">{job.jobSalary.toLocaleString()} TND /month</div>
                     </div>
-                    <button className="apply-button">More Details</button>
+                    <button
+                    className="apply-button"
+                    onClick={() => navigate(`/find-job/details/${job.id}`)}
+                    >
+                      More Details
+                    </button>
+
+                    
+                    <button
+                     className={`bookmark-btn ${savedJobs.includes(job.id) ? 'active' : ''}`}
+                      onClick={() => toggleSaveJob(job.id)}
+                      title={savedJobs.includes(job.id) ? 'Unsave' : 'Save'}
+                    >
+                    <FontAwesomeIcon icon={savedJobs.includes(job.id) ? solidBookmark : regularBookmark} />
+                    </button>
+
+
                   </div>
                 </div>
               ))}

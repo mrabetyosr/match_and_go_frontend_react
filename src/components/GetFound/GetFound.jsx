@@ -14,10 +14,10 @@ const GetFound = () => {
       className="get-found-container"
       style={{
         backgroundImage: `url(${assets.GetFound})`,
-        backgroundSize: '90%',
-        backgroundPosition: 'center',
+        backgroundSize: '70%',
+        backgroundPosition: '80% center',
         backgroundRepeat: 'no-repeat',
-        minHeight: '100vh', // optional: ensures the image covers the full view height
+        minHeight: '50vh', // optional: ensures the image covers the full view height
       }}
     >
       <div className="content-wrapper">
