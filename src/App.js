@@ -11,6 +11,7 @@ import JobDetails from './components/JobDetails/JobDetails.jsx';
 import { useState } from 'react';
 
 
+
 const App = () => {
       const [showSignIn, setShowSignIn] = useState(false);
   return (
@@ -20,7 +21,7 @@ const App = () => {
         <Route path='/' element={<Home/>} />
         <Route path='/find-job' element={<FindJob />}/>
          <Route path="/find-job/details/:id" element={<JobDetails />} />
-       
+        
 
 
       </Routes>

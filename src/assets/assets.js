@@ -27,6 +27,9 @@ import amiraPhoto from './user5.jpg';
 import matchgorforum from './matchgorforum.png';
 import sideimage from './sideimage.jpg'
 import GetFound from './GetFound.png';
+import user1 from './user1.jpg';
+import user2 from './user2.jpg';
+import user3 from './user3.jpg';
 
 
 
@@ -224,4 +227,52 @@ export const forumPosts = [
     likes: 68,
     comments: 19,
   },
+];
+export const users = [
+  {
+    id: 1,
+    name: "Sarah Williams",
+    title: "Marketing Manager at Google",
+    avatar: user1
+  },
+  {
+    id: 2,
+    name: "John Smith",
+    title: "Software Engineer at Amazon",
+    avatar: user2
+  },
+  {
+    id: 3,
+    name: "Amina El Khoudri",
+    title: "Data Scientist at IBM",
+    avatar: user3
+  }
+];
+export const forum = [
+  {
+    id: 101,
+    authorId: 1,
+    content: "Great insights from our latest marketing campaign. Results exceeded expectations!",
+    image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=400&fit=crop",
+    video: null,
+    article: null,
+    likes: 245,
+    comments: 34,
+    shares: 12,
+    date: "2025-07-27",
+    isLiked: false
+  },
+  {
+    id: 102,
+    authorId: 2,
+    content: "Just shipped a new feature that improves user experience by 40%. Excited to see the impact!",
+    image: null,
+    video: null,
+    article: null,
+    likes: 89,
+    comments: 15,
+    shares: 8,
+    date: "2025-07-26",
+    isLiked: true
+  }
 ];

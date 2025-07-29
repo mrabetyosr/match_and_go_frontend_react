@@ -14,7 +14,7 @@
 .apply-job-panel {
   width: 60%;
   max-width: 800px;
-  min-width: 500px;
+  min-width: 600px;
   height: 100vh;
   background: white;
   transform: translateX(100%);

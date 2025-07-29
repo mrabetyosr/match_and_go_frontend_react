@@ -1,3 +1,4 @@
+// 🟢 Updated HeaderFindJob Component with extra info like education, experience, LinkedIn, website, remote badge
 import React, { useState, useEffect } from 'react';
 import './HeaderFindJob.css';
 import { companies, jobs } from '../../assets/assets';
@@ -5,24 +6,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark as solidBookmark } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as regularBookmark } from '@fortawesome/free-regular-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 
-
-
-// ✅ Helper function to calculate time since job was posted
 const timeSincePost = (jobDate) => {
   const now = new Date();
   const posted = new Date(jobDate);
   const diffInMs = now - posted;
   const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
-
   if (diffInMinutes < 1) return 'Just now';
   if (diffInMinutes < 60) return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
-
   const diffInHours = Math.floor(diffInMinutes / 60);
   if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
-
   const diffInDays = Math.floor(diffInHours / 24);
   return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
 };
@@ -37,11 +30,10 @@ const HeaderFindJob = () => {
   const [showJobTypes, setShowJobTypes] = useState(false);
   const [results, setResults] = useState([]);
   const [sortOption, setSortOption] = useState('');
-
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 3;
   const [savedJobs, setSavedJobs] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -56,52 +48,39 @@ const HeaderFindJob = () => {
       return { ...job, company };
     });
 
-
     const filtered = enrichedJobs.filter(job => {
       const keywordMatch =
         job.jobTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
         job.company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         job.company.description.toLowerCase().includes(searchTerm.toLowerCase());
-
       const locationMatch = locationFilter === '' ||
         job.company.location.toLowerCase().includes(locationFilter.toLowerCase());
-
       const jobTypeMatch = jobTypeFilter.length === 0 ||
         jobTypeFilter.includes(job.jobType.toLowerCase());
-
       return keywordMatch && locationMatch && jobTypeMatch;
     });
 
     const sorted = [...filtered].sort((a, b) => {
       const dateA = new Date(a.jobDate);
       const dateB = new Date(b.jobDate);
-
       switch (sortOption) {
-        case 'salary':
-          return b.jobSalary - a.jobSalary;
-        case 'date':
-          return dateB - dateA;
+        case 'salary': return b.jobSalary - a.jobSalary;
+        case 'date': return dateB - dateA;
         case 'salary-date':
-          if (b.jobSalary !== a.jobSalary) {
-            return b.jobSalary - a.jobSalary;
-          } else {
-            return dateB - dateA;
-          }
-        default:
-          return 0;
+          return b.jobSalary !== a.jobSalary
+            ? b.jobSalary - a.jobSalary
+            : dateB - dateA;
+        default: return 0;
       }
     });
 
     setResults(sorted);
   }, [searchTerm, locationFilter, jobTypeFilter, sortOption]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [results]);
+  useEffect(() => { setCurrentPage(1); }, [results]);
 
   const indexOfLastJob = currentPage * jobsPerPage;
-  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-  const currentJobs = results.slice(indexOfFirstJob, indexOfLastJob);
+  const currentJobs = results.slice(indexOfLastJob - jobsPerPage, indexOfLastJob);
   const totalPages = Math.ceil(results.length / jobsPerPage);
 
   const toggleJobType = (type) => {
@@ -129,15 +108,12 @@ const HeaderFindJob = () => {
       default: return '📋';
     }
   };
-  //save job offer function
-  const toggleSaveJob = (jobId) => {
-  setSavedJobs((prev) =>
-    prev.includes(jobId) ? prev.filter((id) => id !== jobId) : [...prev, jobId]
-  );
-};
-//naviagte details page
-const navigate = useNavigate();
 
+  const toggleSaveJob = (jobId) => {
+    setSavedJobs(prev =>
+      prev.includes(jobId) ? prev.filter(id => id !== jobId) : [...prev, jobId]
+    );
+  };
 
   return (
     <div className="header-container">
@@ -145,7 +121,6 @@ const navigate = useNavigate();
         Find the job with the right <span className="highlighted-word">{rotatingWords[index]}</span>
       </h1>
 
-      {/* Search Bar */}
       <div className="search-bar">
         <input
           type="text"
@@ -183,9 +158,6 @@ const navigate = useNavigate();
         </div>
       </div>
 
-      
-
-      {/* Results */}
       <div className="results-container">
         {results.length === 0 ? (
           <div className="no-results">
@@ -200,89 +172,79 @@ const navigate = useNavigate();
               <p className="results-subtitle">Showing results for your search criteria</p>
             </div>
 
-{/* Sort Dropdown (outside search bar) */}
-      <div className="sort-controls">
-        <label htmlFor="sort-select">Sort by:</label>
-        <select
-          id="sort-select"
-          className="sort-dropdown"
-          onChange={(e) => setSortOption(e.target.value)}
-        >
-          <option value="">Default</option>
-          <option value="salary">Highest Salary</option>
-          <option value="date">Newest Jobs</option>
-          <option value="salary-date">Highest Salary & Newest</option>
-        </select>
-      </div>
+            <div className="sort-controls">
+              <label htmlFor="sort-select">Sort by:</label>
+              <select
+                id="sort-select"
+                className="sort-dropdown"
+                onChange={(e) => setSortOption(e.target.value)}
+              >
+                <option value="">Default</option>
+                <option value="salary">Highest Salary</option>
+                <option value="date">Newest Jobs</option>
+                <option value="salary-date">Highest Salary & Newest</option>
+              </select>
+            </div>
+
             <div className="job-cards-grid">
               {currentJobs.map((job) => (
                 <div key={job.id} className="job-card">
                   <div className="cover-wrapper">
-                    <img
-                      src={job.company.cover}
-                      alt={`${job.company.name} cover`}
-                      className="cover-img"
-                    />
+                    <img src={job.company.cover} alt={`${job.company.name} cover`} className="cover-img" />
                   </div>
 
                   <div className="company-section">
                     <div className="logo-wrapper">
-                      <img
-                        src={job.company.logo}
-                        alt={`${job.company.name} logo`}
-                        className="company-logo"
-                      />
+                      <img src={job.company.logo} alt={`${job.company.name} logo`} className="company-logo" />
                     </div>
                     <div>
                       <h3 className="company-name">{job.company.name}</h3>
                       <div className="company-location">📍 {job.company.location}</div>
+                      <div className="company-meta">🏢 {job.company.category} | 👥 {job.company.size}</div>
                     </div>
                   </div>
 
                   <div className="job-content">
                     <h4 className="job-title">{job.jobTitle}</h4>
                     <div className="job-meta">
-                      <span className={`job-type-badge ${getJobTypeClass(job.jobType)}`}>
-                        {getJobTypeIcon(job.jobType)} {job.jobType}
-                      </span>
+                      <span className={`job-type-badge ${getJobTypeClass(job.jobType)}`}>{getJobTypeIcon(job.jobType)} {job.jobType}</span>
+                      {job.remote && <span className="remote-badge">🏠 Remote</span>}
                       <span className="slots-badge">👥 {job.jobSlots} slot{job.jobSlots !== 1 ? 's' : ''}</span>
                       <span className="posted-time">📅 {timeSincePost(job.jobDate)}</span>
+                    </div>
+                    <div className="job-quick-reqs">
+                      🎓 {job.education} | 🧠 {job.experience}
                     </div>
                   </div>
 
                   <div className="job-footer">
-                    <div>
-                      <div className="salary">{job.jobSalary.toLocaleString()} TND /month</div>
+                    <div className="salary">{job.jobSalary.toLocaleString()} TND /month</div>
+                    <div className="footer-actions">
+                      <button className="apply-button" onClick={() => navigate(`/find-job/details/${job.id}`)}>More Details</button>
+                      <button
+                        className={`bookmark-btn ${savedJobs.includes(job.id) ? 'active' : ''}`}
+                        onClick={() => toggleSaveJob(job.id)}
+                        title={savedJobs.includes(job.id) ? 'Click to Unsave' : 'Click to Save'}
+                      >
+                        <FontAwesomeIcon icon={savedJobs.includes(job.id) ? solidBookmark : regularBookmark} />
+                      </button>
                     </div>
-                    <button
-                    className="apply-button"
-                    onClick={() => navigate(`/find-job/details/${job.id}`)}
-                    >
-                      More Details
-                    </button>
-
-                    
-                    <button
-                     className={`bookmark-btn ${savedJobs.includes(job.id) ? 'active' : ''}`}
-                      onClick={() => toggleSaveJob(job.id)}
-                      title={savedJobs.includes(job.id) ? 'Unsave' : 'Save'}
-                    >
-                    <FontAwesomeIcon icon={savedJobs.includes(job.id) ? solidBookmark : regularBookmark} />
-                    </button>
-
-
                   </div>
+
+                  {job.company.website && (
+                    <div className="company-links">
+                      <a href={job.company.website} target="_blank" rel="noopener noreferrer">🌐 Website</a>
+                      {job.company.socialLinks?.linkedin && (
+                        <a href={job.company.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">🔗 LinkedIn</a>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
 
-            {/* Pagination */}
             <div className="pagination">
-              <button
-                className="prev"
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              />
+              <button className="prev" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} />
               {[...Array(totalPages)].map((_, idx) => (
                 <button
                   key={idx + 1}
@@ -292,11 +254,7 @@ const navigate = useNavigate();
                   {idx + 1}
                 </button>
               ))}
-              <button
-                className="next"
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-              />
+              <button className="next" onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} />
             </div>
           </>
         )}
