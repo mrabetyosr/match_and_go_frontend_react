@@ -1,8 +1,40 @@
 import React from 'react';
 import './SignIn.css';
 import { assets } from '../../assets/assets'; // Assure-toi que assets.sideimage est bien défini
+import { useState } from 'react';
 
 const SignIn = ({ onClose }) => {
+  const [email, setEmail] = useState("");  // ⚡ Utiliser email
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("http://localhost:7001/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Login failed");
+        return;
+      }
+
+      // Sauvegarde du token JWT
+      localStorage.setItem("token", data.token);
+
+      alert("✅ Login success!");
+      onClose(); // fermer la modal
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong");
+    }
+  };
   return (
     <div className="signin-container">
       <div className="signin-card">
@@ -19,9 +51,14 @@ const SignIn = ({ onClose }) => {
           <img src={assets.namelogo} alt="Logo" className="signin-logo" />
           <h2 className="signin-title">Welcome Back</h2>
 
-          <form className="signin-form">
-            <input type="text" placeholder="Username" />
-            <input type="password" placeholder="Password" />
+          <form className="signin-form"onSubmit={handleSubmit}>
+            <input type="email" placeholder="Email" value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required/>
+            <input type="password" placeholder="Password" value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required />
+               {error && <p style={{ color: "red" }}>{error}</p>}
             <div className="form-links">
               <a href="#" className="forgot-link">Forgot your password?</a>
             </div>
