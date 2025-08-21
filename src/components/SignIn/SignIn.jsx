@@ -2,6 +2,8 @@ import React from 'react';
 import './SignIn.css';
 import { assets } from '../../assets/assets'; // Assure-toi que assets.sideimage est bien défini
 import { useState } from 'react';
+import { Link } from 'react-router-dom'; // Import de Link pour la navigation
+
 
 const SignIn = ({ onClose }) => {
   const [email, setEmail] = useState("");  // ⚡ Utiliser email
@@ -60,7 +62,7 @@ const SignIn = ({ onClose }) => {
               required />
                {error && <p style={{ color: "red" }}>{error}</p>}
             <div className="form-links">
-              <a href="#" className="forgot-link">Forgot your password?</a>
+              <Link to="/forgot-password" className="forgot-link">Forgot your password? </Link>
             </div>
             <button type="submit">Login</button>
           </form>
@@ -82,7 +84,7 @@ const SignIn = ({ onClose }) => {
           </div>
 
           <div className="signup-link">
-            Don’t have an account? <a href="#">Join here</a>
+            Don’t have an account? <Link to="/signup">Join here</Link>
           </div>
 
           <p className="terms-text">
