@@ -3,6 +3,7 @@ import './NavBar.css';
 import SignIn from '../SignIn/SignIn.jsx';
 import { Link } from 'react-router-dom';
 import { assets } from '../../assets/assets';
+import 'react-toastify/dist/ReactToastify.css';
 
 const NavBar = ({ showSignIn, setShowSignIn }) => {
   const [menu, setMenu] = useState("home");
@@ -23,11 +24,15 @@ const NavBar = ({ showSignIn, setShowSignIn }) => {
   }, [showSignIn]);
 
   // Fonction logout
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
-    alert("🚪 Logged out successfully!");
-  };
+const handleLogout = () => {
+  
+  localStorage.removeItem("token");
+  setIsLoggedIn(false);
+  //toast.info("🚪 Logged out successfully!");
+};
+
+
+
 
   return (
     <>

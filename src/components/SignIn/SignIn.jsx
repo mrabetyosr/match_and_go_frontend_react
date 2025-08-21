@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import './SignIn.css';
 import { assets } from '../../assets/assets';
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,19 +21,21 @@ const SignIn = ({ onClose }) => {
 
       const data = await res.json();
 
+    
       if (!res.ok) {
-        setError(data.message || "Login failed");
+        toast.error(data.message || "Login failed");
         return;
       }
 
-      // Sauvegarde du token JWT
       localStorage.setItem("token", data.token);
 
-      alert("✅ Login success!");
-      onClose(true); // ⚡ dire à NavBar que login est réussi
+  
+      toast.success("✅ Login success!");
+      setTimeout(() => onClose(true), 800);
+
     } catch (err) {
       console.error(err);
-      setError("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
 
@@ -41,24 +44,31 @@ const SignIn = ({ onClose }) => {
       <div className="signin-card">
         <button className="close-btn" onClick={() => onClose(false)}>✕</button>
 
+        {/* Partie gauche avec image */}
         <div className="signin-left">
           <img src={assets.sideimage} alt="Illustration" className="signin-image" />
         </div>
 
+        {/* Partie droite avec formulaire */}
         <div className="signin-right">
           <img src={assets.namelogo} alt="Logo" className="signin-logo" />
           <h2 className="signin-title">Welcome Back</h2>
 
           <form className="signin-form" onSubmit={handleSubmit}>
             <input 
-              type="email" placeholder="Email" value={email}
-              onChange={(e) => setEmail(e.target.value)} required 
+              type="email" 
+              placeholder="Email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)} 
+              required 
             />
             <input 
-              type="password" placeholder="Password" value={password}
-              onChange={(e) => setPassword(e.target.value)} required 
+              type="password" 
+              placeholder="Password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
             />
-            {error && <p style={{ color: "red" }}>{error}</p>}
 
             <div className="form-links">
               <Link to="/forgot-password" className="forgot-link">Forgot your password?</Link>
@@ -68,6 +78,20 @@ const SignIn = ({ onClose }) => {
           </form>
         </div>
       </div>
+
+      {/* ⚡ Container pour les toasts */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };
