@@ -1,0 +1,41 @@
+.company-text {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.company-text .signup-link {
+  color: #e3342f;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.company-text .signup-link:hover {
+  color: #b71c1c;
+}
+/* Style du select (liste déroulante) */
+.signin-form select {
+  width: 100%;
+  padding: 10px 12px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+  appearance: none; /* supprime le style natif sur certains navigateurs */
+  cursor: pointer;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.signin-form select:focus {
+  border-color: #2ecc71;
+  box-shadow: 0 0 5px rgba(12, 79, 3, 0.5);
+  outline: none;
+}
+
+.signin-form select option {
+  padding: 8px;
+  font-size: 14px;
+}
