@@ -235,3 +235,14 @@
     font-size: 1.3rem;
   }
 }
+.signup-link {
+  color: #e3342f; /* rouge */
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer; /* montre que c'est cliquable */
+  transition: color 0.2s ease;
+}
+
+.signup-link:hover {
+  color: #b71c1c; /* devient plus foncé au survol */
+}

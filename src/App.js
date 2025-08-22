@@ -9,6 +9,8 @@ import ScrollToTopButton from './components/ScrollToTopButton/ScrollToTopButton.
 import FindJob from './pages/FindJob/FindJob.jsx';
 import JobDetails from './components/JobDetails/JobDetails.jsx';
 import { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -16,6 +18,18 @@ const App = () => {
       const [showSignIn, setShowSignIn] = useState(false);
   return (
     <div className='app'>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
 <NavBar showSignIn={showSignIn} setShowSignIn={setShowSignIn} />     
  <Routes>
         <Route path='/' element={<Home/>} />
