@@ -11,6 +11,7 @@ import JobDetails from './components/JobDetails/JobDetails.jsx';
 import { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Application from './pages/application/application.jsx';
 
 
 
@@ -35,6 +36,7 @@ const App = () => {
         <Route path='/' element={<Home/>} />
         <Route path='/find-job' element={<FindJob />}/>
          <Route path="/find-job/details/:id" element={<JobDetails />} />
+          <Route path="/applications" element={<Application />} />
         
 
 

@@ -46,7 +46,11 @@ const handleLogout = () => {
         </ul>
         <div className="navbar-right">
           <ul className='navbar-right-menu'>
-            <li onClick={() => setMenu("applications")} className={menu === "applications" ? "active" : ""}>Applications</li>
+              <Link to="/applications">
+              <li onClick={() => setMenu("applications")} className={menu === "applications" ? "active" : ""}>
+                Applications
+              </li>
+              </Link>
             <li>
               {isLoggedIn ? (
                 <button className="signin-btn" onClick={handleLogout}>Log out</button>
