@@ -1,31 +1,61 @@
+// DisplayCampanies.jsx
 import React, { useEffect, useRef, useState } from 'react';
 import './DisplayCampanies.css';
 
 const DisplayCampanies = ({ category }) => {
   const [companies, setCompanies] = useState([]);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
   const scrollContainerRef = useRef(null);
 
-  // Charger les entreprises depuis ton backend
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        let url = "http://localhost:7001/api/users/getAllCompany"; 
+        let url = "http://localhost:7001/api/users/getAllCompany";
+        
         if (category && category !== "All") {
           url = `http://localhost:7001/api/users/getCompaniesByCategory/${category}`;
         }
-
+        
         const response = await fetch(url);
         const data = await response.json();
-        
-        // ton backend retourne { companies: [...] }
+                
         setCompanies(data.companies || []);
       } catch (err) {
-        console.error("Erreur lors du chargement des entreprises :", err);
+        console.error("Error loading companies:", err);
       }
     };
 
     fetchCompanies();
   }, [category]);
+
+  const updateArrowVisibility = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const { scrollLeft, scrollWidth, clientWidth } = container;
+    
+    setShowLeftArrow(scrollLeft > 0);
+    setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 1);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(updateArrowVisibility, 100);
+    return () => clearTimeout(timer);
+  }, [companies]);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    container.addEventListener('scroll', updateArrowVisibility);
+    window.addEventListener('resize', updateArrowVisibility);
+
+    return () => {
+      container.removeEventListener('scroll', updateArrowVisibility);
+      window.removeEventListener('resize', updateArrowVisibility);
+    };
+  }, []);
 
   const scrollLeft = () => {
     scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' });
@@ -35,43 +65,70 @@ const DisplayCampanies = ({ category }) => {
     scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' });
   };
 
+  if (!companies || companies.length === 0) {
+    return (
+      <div className="no-companies">
+        <p>No companies found for this category.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="scroll-wrapper">
-      <button className="scroll-arrow left" onClick={scrollLeft}>{'<'}</button>
+      {showLeftArrow && (
+        <button className="scroll-arrow left" onClick={scrollLeft}>
+          {'<'}
+        </button>
+      )}
+      
       <div className="company-list-horizontal" ref={scrollContainerRef}>
         {companies.map(company => (
           <div key={company._id} className="company-card">
-            {/* Cover image */}
             <img 
-              src={`http://localhost:7001/images/${company.cover_User}`} 
-              alt="cover" 
-              className="company-cover" 
+              src={`http://localhost:7001/images/${company.cover_User}`}
+              alt="cover"
+              className="company-cover"
             />
-
+            
             <div className="company-content">
-              {/* Logo */}
               <img 
-                src={`http://localhost:7001/images/${company.image_User}`} 
-                alt="logo" 
-                className="company-logo" 
+                src={`http://localhost:7001/images/${company.image_User}`}
+                alt="logo"
+                className="company-logo"
               />
               
               <h2>{company.username}</h2>
-              <p>{company.companyInfo?.description}</p>
-              <p><strong>Location:</strong> {company.companyInfo?.location}</p>
-              <p><strong>Founded:</strong> {company.companyInfo?.founded}</p>
-              <p><strong>Employees:</strong> {company.companyInfo?.size}</p>
-              <p>
-                <strong>Website:</strong>{' '}
-                <a href={company.companyInfo?.website} target="_blank" rel="noopener noreferrer">
-                  {company.companyInfo?.website}
-                </a>
-              </p>
+              
+              {company.companyInfo?.description && (
+                <p>{company.companyInfo.description}</p>
+              )}
+              {company.companyInfo?.location && (
+                <p><strong>Location:</strong> {company.companyInfo.location}</p>
+              )}
+              {company.companyInfo?.founded && (
+                <p><strong>Founded:</strong> {company.companyInfo.founded}</p>
+              )}
+              {company.companyInfo?.size && (
+                <p><strong>Employees:</strong> {company.companyInfo.size}</p>
+              )}
+              {company.companyInfo?.website && (
+                <p>
+                  <strong>Website:</strong>{' '}
+                  <a href={company.companyInfo.website} target="_blank" rel="noopener noreferrer">
+                    {company.companyInfo.website}
+                  </a>
+                </p>
+              )}
             </div>
           </div>
         ))}
       </div>
-      <button className="scroll-arrow right" onClick={scrollRight}>{'>'}</button>
+      
+      {showRightArrow && (
+        <button className="scroll-arrow right" onClick={scrollRight}>
+          {'>'}
+        </button>
+      )}
     </div>
   );
 };

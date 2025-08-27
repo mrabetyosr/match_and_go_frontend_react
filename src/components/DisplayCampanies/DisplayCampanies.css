@@ -37,7 +37,7 @@
 
 .company-cover {
   width: 100%;
-  height: 120px;
+  height: 150px;
   object-fit: cover;
 }
 
@@ -49,9 +49,11 @@
   width: 80px;
   height: 80px;
   object-fit: contain;
+  margin-top: -50px; /* remonte le logo de 10px */
   margin-bottom: 12px;
   border-radius: 12px;
 }
+
 
 .company-content h2 {
   font-size: 18px;
@@ -97,3 +99,15 @@
   right: 0;
 }
 
+/* Style for "No companies found" message */
+.no-companies {
+  text-align: center;
+  padding: 50px 20px;
+  font-size: 18px;
+  color: #555;
+  font-weight: 500;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  margin: 20px auto;
+  max-width: 600px;
+}
