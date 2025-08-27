@@ -1,7 +1,5 @@
-// 🟢 Updated HeaderFindJob Component with extra info like education, experience, LinkedIn, website, remote badge
 import React, { useState, useEffect } from 'react';
 import './HeaderFindJob.css';
-import { companies, jobs } from '../../assets/assets';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark as solidBookmark } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as regularBookmark } from '@fortawesome/free-regular-svg-icons';
@@ -35,6 +33,7 @@ const HeaderFindJob = () => {
   const [savedJobs, setSavedJobs] = useState([]);
   const navigate = useNavigate();
 
+  // Rotating words animation
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex(prev => (prev + 1) % rotatingWords.length);
@@ -42,69 +41,83 @@ const HeaderFindJob = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // 🔹 Fetch jobs from backend
   useEffect(() => {
-    const enrichedJobs = jobs.map(job => {
-      const company = companies.find(c => c.id === job.companyId);
-      return { ...job, company };
-    });
+    const fetchJobs = async () => {
+      try {
+        const res = await fetch('http://localhost:7001/api/offers/allOffers');
+        const data = await res.json();
 
-    const filtered = enrichedJobs.filter(job => {
-      const keywordMatch =
-        job.jobTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.company.description.toLowerCase().includes(searchTerm.toLowerCase());
-      const locationMatch = locationFilter === '' ||
-        job.company.location.toLowerCase().includes(locationFilter.toLowerCase());
-      const jobTypeMatch = jobTypeFilter.length === 0 ||
-        jobTypeFilter.includes(job.jobType.toLowerCase());
-      return keywordMatch && locationMatch && jobTypeMatch;
-    });
+        const enriched = data.map(job => ({
+          ...job,
+          company: {
+            name: job.companyId.username,
+            logo: `http://localhost:7001/images/${job.companyId.image_User}`,
+            cover: `http://localhost:7001/images/${job.companyId.cover_User}`,
+            location: job.companyId.companyInfo?.location || '',
+            category: job.companyId.companyInfo?.category || '',
+            size: job.companyId.companyInfo?.size || '',
+            website: job.companyId.companyInfo?.website || '',
+            socialLinks: job.companyId.companyInfo?.socialLinks || {}
+          }
+        }));
 
-    const sorted = [...filtered].sort((a, b) => {
-      const dateA = new Date(a.jobDate);
-      const dateB = new Date(b.jobDate);
-      switch (sortOption) {
-        case 'salary': return b.jobSalary - a.jobSalary;
-        case 'date': return dateB - dateA;
-        case 'salary-date':
-          return b.jobSalary !== a.jobSalary
-            ? b.jobSalary - a.jobSalary
-            : dateB - dateA;
-        default: return 0;
+        setResults(enriched);
+      } catch (err) {
+        console.error(err);
       }
-    });
+    };
 
-    setResults(sorted);
-  }, [searchTerm, locationFilter, jobTypeFilter, sortOption]);
+    fetchJobs();
+  }, []);
 
-  useEffect(() => { setCurrentPage(1); }, [results]);
+  // Filter and sort results
+  const filteredResults = results.filter(job => {
+    const keywordMatch =
+      job.jobTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.company.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const locationMatch =
+      locationFilter === '' ||
+      job.company.location.toLowerCase().includes(locationFilter.toLowerCase());
+    const jobTypeMatch =
+      jobTypeFilter.length === 0 ||
+      jobTypeFilter.includes(job.jobType);
+    return keywordMatch && locationMatch && jobTypeMatch;
+  }).sort((a, b) => {
+    switch (sortOption) {
+      case 'salary': return b.jobSalary - a.jobSalary;
+      case 'date': return new Date(b.jobDate) - new Date(a.jobDate);
+      case 'salary-date':
+        return b.jobSalary !== a.jobSalary
+          ? b.jobSalary - a.jobSalary
+          : new Date(b.jobDate) - new Date(a.jobDate);
+      default: return 0;
+    }
+  });
 
-  const indexOfLastJob = currentPage * jobsPerPage;
-  const currentJobs = results.slice(indexOfLastJob - jobsPerPage, indexOfLastJob);
-  const totalPages = Math.ceil(results.length / jobsPerPage);
+  const totalPages = Math.ceil(filteredResults.length / jobsPerPage);
+  const currentJobs = filteredResults.slice((currentPage - 1) * jobsPerPage, currentPage * jobsPerPage);
 
   const toggleJobType = (type) => {
     setJobTypeFilter(prev =>
-      prev.includes(type)
-        ? prev.filter(t => t !== type)
-        : [...prev, type]
+      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
     );
   };
 
   const getJobTypeClass = (jobType) => {
-    switch (jobType.toLowerCase()) {
-      case 'full-time': return 'job-type-full-time';
-      case 'part-time': return 'job-type-part-time';
-      case 'internship': return 'job-type-internship';
+    switch (jobType) {
+      case 'FullTime': return 'job-type-full-time';
+      case 'PartTime': return 'job-type-part-time';
+      case 'Internship': return 'job-type-internship';
       default: return '';
     }
   };
 
   const getJobTypeIcon = (jobType) => {
-    switch (jobType.toLowerCase()) {
-      case 'full-time': return '💼';
-      case 'part-time': return '⏰';
-      case 'internship': return '🎓';
+    switch (jobType) {
+      case 'FullTime': return '💼';
+      case 'PartTime': return '⏰';
+      case 'Internship': return '🎓';
       default: return '📋';
     }
   };
@@ -124,7 +137,7 @@ const HeaderFindJob = () => {
       <div className="search-bar">
         <input
           type="text"
-          placeholder="Search by job, keyword, or company"
+          placeholder="Search by job or company"
           className="search-input"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -142,13 +155,13 @@ const HeaderFindJob = () => {
           </div>
           {showJobTypes && (
             <div className="job-type-checkboxes">
-              {["Internship", "Full-time", "Part-time"].map(type => (
+              {["Internship", "FullTime", "PartTime"].map(type => (
                 <label key={type}>
                   <input
                     type="checkbox"
-                    value={type.toLowerCase()}
-                    checked={jobTypeFilter.includes(type.toLowerCase())}
-                    onChange={() => toggleJobType(type.toLowerCase())}
+                    value={type}
+                    checked={jobTypeFilter.includes(type)}
+                    onChange={() => toggleJobType(type)}
                   />
                   {type}
                 </label>
@@ -159,7 +172,7 @@ const HeaderFindJob = () => {
       </div>
 
       <div className="results-container">
-        {results.length === 0 ? (
+        {filteredResults.length === 0 ? (
           <div className="no-results">
             <div className="no-results-icon">🔍</div>
             <h3 className="no-results-title">No jobs found</h3>
@@ -167,28 +180,9 @@ const HeaderFindJob = () => {
           </div>
         ) : (
           <>
-            <div className="results-header">
-              <h2 className="results-title">{results.length} Job{results.length !== 1 ? 's' : ''} Found</h2>
-              <p className="results-subtitle">Showing results for your search criteria</p>
-            </div>
-
-            <div className="sort-controls">
-              <label htmlFor="sort-select">Sort by:</label>
-              <select
-                id="sort-select"
-                className="sort-dropdown"
-                onChange={(e) => setSortOption(e.target.value)}
-              >
-                <option value="">Default</option>
-                <option value="salary">Highest Salary</option>
-                <option value="date">Newest Jobs</option>
-                <option value="salary-date">Highest Salary & Newest</option>
-              </select>
-            </div>
-
             <div className="job-cards-grid">
-              {currentJobs.map((job) => (
-                <div key={job.id} className="job-card">
+              {currentJobs.map(job => (
+                <div key={job._id} className="job-card">
                   <div className="cover-wrapper">
                     <img src={job.company.cover} alt={`${job.company.name} cover`} className="cover-img" />
                   </div>
@@ -207,26 +201,28 @@ const HeaderFindJob = () => {
                   <div className="job-content">
                     <h4 className="job-title">{job.jobTitle}</h4>
                     <div className="job-meta">
-                      <span className={`job-type-badge ${getJobTypeClass(job.jobType)}`}>{getJobTypeIcon(job.jobType)} {job.jobType}</span>
+                      <span className={`job-type-badge ${getJobTypeClass(job.jobType)}`}>
+                        {getJobTypeIcon(job.jobType)} {job.jobType}
+                      </span>
                       {job.remote && <span className="remote-badge">🏠 Remote</span>}
                       <span className="slots-badge">👥 {job.jobSlots} slot{job.jobSlots !== 1 ? 's' : ''}</span>
                       <span className="posted-time">📅 {timeSincePost(job.jobDate)}</span>
                     </div>
                     <div className="job-quick-reqs">
-                      🎓 {job.education} | 🧠 {job.experience}
+                      🎓 {job.education || 'N/A'} | 🧠 {job.experience || 'N/A'}
                     </div>
                   </div>
 
                   <div className="job-footer">
-                    <div className="salary">{job.jobSalary.toLocaleString()} TND /month</div>
+                    <div className="salary">{job.jobSalary?.toLocaleString()} TND /month</div>
                     <div className="footer-actions">
-                      <button className="apply-button" onClick={() => navigate(`/find-job/details/${job.id}`)}>More Details</button>
+                      <button className="apply-button" onClick={() => navigate(`/find-job/details/${job._id}`)}>More Details</button>
                       <button
-                        className={`bookmark-btn ${savedJobs.includes(job.id) ? 'active' : ''}`}
-                        onClick={() => toggleSaveJob(job.id)}
-                        title={savedJobs.includes(job.id) ? 'Click to Unsave' : 'Click to Save'}
+                        className={`bookmark-btn ${savedJobs.includes(job._id) ? 'active' : ''}`}
+                        onClick={() => toggleSaveJob(job._id)}
+                        title={savedJobs.includes(job._id) ? 'Click to Unsave' : 'Click to Save'}
                       >
-                        <FontAwesomeIcon icon={savedJobs.includes(job.id) ? solidBookmark : regularBookmark} />
+                        <FontAwesomeIcon icon={savedJobs.includes(job._id) ? solidBookmark : regularBookmark} />
                       </button>
                     </div>
                   </div>
@@ -244,7 +240,7 @@ const HeaderFindJob = () => {
             </div>
 
             <div className="pagination">
-              <button className="prev" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} />
+              <button className="prev" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1}>Prev</button>
               {[...Array(totalPages)].map((_, idx) => (
                 <button
                   key={idx + 1}
@@ -254,7 +250,7 @@ const HeaderFindJob = () => {
                   {idx + 1}
                 </button>
               ))}
-              <button className="next" onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} />
+              <button className="next" onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>Next</button>
             </div>
           </>
         )}
