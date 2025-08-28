@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ApplyJob.css';
-
-import { useState } from 'react';
 
 const ApplyJob = ({ isOpen, onClose, job, company }) => {
   const [formData, setFormData] = useState({
@@ -26,18 +24,49 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.agreeToTerms) {
       alert('Please agree to the terms of service');
       return;
     }
 
-    console.log('Application submitted:', formData);
-    // Handle form submission here
-    alert('Application submitted successfully!');
-    onClose();
+    try {
+      const token = localStorage.getItem("token"); // récupère le token JWT
+      if (!token) {
+        alert("You must be logged in to apply.");
+        return;
+      }
+
+      const data = new FormData();
+      data.append("cv", formData.resume);
+      if (formData.motivationLetter) data.append("motivationLetter", formData.motivationLetter);
+      data.append("linkedin", formData.linkedinUrl);
+      data.append("github", formData.githubUrl);
+      data.append("phoneNumber", formData.telephone);
+      data.append("location", formData.currentLocation);
+      data.append("dateOfBirth", formData.dateOfBirth);
+
+      const response = await fetch(`http://localhost:7001/api/applications/${job._id}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: data
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        alert(result.message || "Error submitting application");
+      } else {
+        alert("Application submitted successfully!");
+        onClose();
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong.");
+    }
   };
 
   const handleBackdropClick = (e) => {
@@ -53,9 +82,7 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
       <div className={`apply-job-panel ${isOpen ? 'open' : ''}`}>
         <div className="apply-job-header">
           <h2>Apply for {job?.jobTitle}</h2>
-          <button className="close-btn" onClick={onClose}>
-            ×
-          </button>
+          <button className="close-btn" onClick={onClose}>×</button>
         </div>
 
         <div className="apply-job-content">
@@ -63,7 +90,6 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
             {/* Personal Information */}
             <section className="form-section">
               <h3>Personal Information</h3>
-              
               <div className="form-row">
                 <div className="form-group">
                   <label htmlFor="firstName">First Name *</label>
@@ -143,7 +169,6 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
             {/* Your Profile */}
             <section className="form-section">
               <h3>Your Profile</h3>
-              
               <div className="form-group">
                 <label htmlFor="resume">Upload Your Resume *</label>
                 <div className="file-upload">

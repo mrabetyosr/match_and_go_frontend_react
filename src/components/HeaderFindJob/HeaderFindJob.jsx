@@ -29,7 +29,7 @@ const HeaderFindJob = () => {
   const [jobTypeFilter, setJobTypeFilter] = useState([])
   const [showJobTypes, setShowJobTypes] = useState(false)
   const [results, setResults] = useState([])
-  const [sortOption, setSortOption] = useState("")
+  const [sortOption] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const jobsPerPage = 3
   const [savedJobs, setSavedJobs] = useState([])

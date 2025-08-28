@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import ApplyJob from '../ApplyJob/ApplyJob.jsx';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import SignIn from '../SignIn/SignIn.jsx';
+
 
 const JobDetails = () => {
   const { id } = useParams();
