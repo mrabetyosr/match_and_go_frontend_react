@@ -1,46 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './JobDetails.css';
 import { useParams } from 'react-router-dom';
-import { jobs, companies } from '../../assets/assets';
 import ApplyJob from '../ApplyJob/ApplyJob.jsx';
+import axios from 'axios';
 
 
 const JobDetails = () => {
   const { id } = useParams();
-  const jobId = parseInt(id);
-  const job = jobs.find(j => j.id === jobId);
-  const company = companies.find(c => c.id === job?.companyId);
+  const [job, setJob] = useState(null);
+  const [company, setCompany] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [showApplicationForm, setShowApplicationForm] = useState(false);
 
-  if (!job || !company) return <p>Job not found.</p>;
+  useEffect(() => {
+    const fetchJobDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:7001/api/offers/${id}`);
+        const offer = response.data;
+        setJob(offer);
+        setCompany(offer.companyId); // populate company info depuis backend
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to fetch job details.');
+        setLoading(false);
+      }
+    };
 
-  const handleApplyNow = () => {
-    setShowApplicationForm(true);
-  };
+    fetchJobDetails();
+  }, [id]);
 
-  const handleCloseApplication = () => {
-    setShowApplicationForm(false);
-  };
+  const handleApplyNow = () => setShowApplicationForm(true);
+  const handleCloseApplication = () => setShowApplicationForm(false);
+
+  if (loading) return <p>Loading...</p>;
+  if (error || !job || !company) return <p>{error || 'Job not found.'}</p>;
 
   return (
     <div className="job-details-container">
-      <img
-        src={company.cover}
-        alt={`${company.name} cover`}
-      />
+      <img src={company.cover} alt={`${company.username} cover`} />
 
       <div>
         {/* Sidebar */}
         <div className="sidebar">
           <div className="company-header">
-            <img 
-              src={company.logo} 
-              alt={`${company.name} logo`} 
-            />
-            <h2>{company.name}</h2>
+            <img src={company.image_User} alt={`${company.username} logo`} />
+            <h2>{company.username}</h2>
             <div className="company-info">
-              <p>{company.location}</p>
-              <p>{company.category}</p>
+              <p>{company.companyInfo?.location || 'N/A'}</p>
+              <p>{company.companyInfo?.category || 'N/A'}</p>
             </div>
           </div>
 
@@ -53,14 +61,12 @@ const JobDetails = () => {
             <div className="summary-item">
               <span className="summary-label">Location</span>
               <span className="summary-value">
-                {company.location} {job.remote && "(Remote)"}
+                {company.companyInfo?.location} {job.remote && "(Remote)"}
               </span>
             </div>
             <div className="summary-item">
               <span className="summary-label">Salary</span>
-              <span className="summary-value">
-                {job.jobSalary ? `${job.jobSalary} TND/month` : 'N/A'}
-              </span>
+              <span className="summary-value">{job.jobSalary ? `${job.jobSalary} TND/month` : 'N/A'}</span>
             </div>
             <div className="summary-item">
               <span className="summary-label">Experience</span>
@@ -72,9 +78,7 @@ const JobDetails = () => {
             </div>
             <div className="summary-item">
               <span className="summary-label">Posted</span>
-              <span className="summary-value">
-                {new Date(job.jobDate).toDateString()}
-              </span>
+              <span className="summary-value">{new Date(job.jobDate).toDateString()}</span>
             </div>
           </div>
 
@@ -95,7 +99,7 @@ const JobDetails = () => {
 
           <section>
             <h3>Skills & Expertise</h3>
-            {job.skills && job.skills.length > 0 ? (
+            {job.skills?.length ? (
               <div className="skills-container">
                 {job.skills.map((skill, index) => (
                   <span key={index} className="skill-tag">{skill}</span>
@@ -108,12 +112,8 @@ const JobDetails = () => {
 
           <section>
             <h3>Key Responsibilities</h3>
-            {job.responsibilities && job.responsibilities.length > 0 ? (
-              <ul>
-                {job.responsibilities.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-              </ul>
+            {job.responsibilities?.length ? (
+              <ul>{job.responsibilities.map((item, idx) => <li key={idx}>{item}</li>)}</ul>
             ) : (
               <p className="no-data">No responsibilities listed.</p>
             )}
@@ -121,12 +121,8 @@ const JobDetails = () => {
 
           <section>
             <h3>Requirements</h3>
-            {job.requirements && job.requirements.length > 0 ? (
-              <ul>
-                {job.requirements.map((req, index) => (
-                  <li key={index}>{req}</li>
-                ))}
-              </ul>
+            {job.requirements?.length ? (
+              <ul>{job.requirements.map((req, idx) => <li key={idx}>{req}</li>)}</ul>
             ) : (
               <p className="no-data">No requirements listed.</p>
             )}
