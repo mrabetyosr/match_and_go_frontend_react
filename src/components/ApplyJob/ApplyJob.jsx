@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ApplyJob.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ApplyJob = ({ isOpen, onClose, job, company }) => {
   const [formData, setFormData] = useState({
@@ -16,7 +18,7 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
     agreeToTerms: false
   });
 
-  // Récupérer les infos de l'utilisateur connecté
+  // Fetch logged-in user's email
   useEffect(() => {
     if (isOpen) {
       const fetchUser = async () => {
@@ -25,16 +27,15 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
           if (!token) return;
 
           const res = await fetch("http://localhost:7001/api/users/me", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           });
 
-          if (!res.ok) return;
+          if (!res.ok) throw new Error("Failed to fetch user");
           const user = await res.json();
           setFormData(prev => ({ ...prev, email: user.email || '' }));
         } catch (err) {
           console.error(err);
+          toast.error("Unable to fetch your information");
         }
       };
       fetchUser();
@@ -53,14 +54,14 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
     e.preventDefault();
 
     if (!formData.agreeToTerms) {
-      alert('Please agree to the terms of service');
+      toast.warning("Please agree to the terms of service");
       return;
     }
 
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        alert("You must be logged in to apply.");
+        toast.error("You must be logged in to apply");
         return;
       }
 
@@ -75,216 +76,149 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
 
       const response = await fetch(`http://localhost:7001/api/applications/${job._id}`, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
         body: data
       });
 
       const result = await response.json();
       if (!response.ok) {
-        alert(result.message || "Error submitting application");
+        toast.error(result.message || "Error submitting application");
       } else {
-        alert("Application submitted successfully!");
+        toast.success("Application submitted successfully!");
         onClose();
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong.");
+      toast.error("Something went wrong");
     }
   };
 
   const handleBackdropClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
+    if (e.target === e.currentTarget) onClose();
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="apply-job-overlay" onClick={handleBackdropClick}>
-      <div className={`apply-job-panel ${isOpen ? 'open' : ''}`}>
-        <div className="apply-job-header">
-          <h2>Apply for {job?.jobTitle}</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
-        </div>
+    <>
+      <div className="apply-job-overlay" onClick={handleBackdropClick}>
+        <div className={`apply-job-panel ${isOpen ? 'open' : ''}`}>
+          <div className="apply-job-header">
+            <h2>Apply for {job?.jobTitle}</h2>
+            <button className="close-btn" onClick={onClose}>×</button>
+          </div>
 
-        <div className="apply-job-content">
-          <form onSubmit={handleSubmit}>
-            {/* Personal Information */}
-            <section className="form-section">
-              <h3>Personal Information</h3>
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="firstName">First Name *</label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="lastName">Last Name *</label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="telephone">Telephone Number *</label>
-                  <input
-                    type="tel"
-                    id="telephone"
-                    name="telephone"
-                    value={formData.telephone}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="email">Email Address *</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="currentLocation">Current Living Location *</label>
-                  <input
-                    type="text"
-                    id="currentLocation"
-                    name="currentLocation"
-                    value={formData.currentLocation}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="dateOfBirth">Date of Birth *</label>
-                  <input
-                    type="date"
-                    id="dateOfBirth"
-                    name="dateOfBirth"
-                    value={formData.dateOfBirth}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-              </div>
-            </section>
-
-            {/* Your Profile */}
-            <section className="form-section">
-              <h3>Your Profile</h3>
-              <div className="form-group">
-                <label htmlFor="resume">Upload Your Resume *</label>
-                <div className="file-upload">
-                  <input
-                    type="file"
-                    id="resume"
-                    name="resume"
-                    onChange={handleInputChange}
-                    accept=".pdf,.doc,.docx"
-                    required
-                  />
-                  <div className="file-upload-placeholder">
-                    {formData.resume ? formData.resume.name : 'Choose file or drag and drop'}
+          <div className="apply-job-content">
+            <form onSubmit={handleSubmit}>
+              {/* Personal Information */}
+              <section className="form-section">
+                <h3>Personal Information</h3>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="firstName">First Name *</label>
+                    <input type="text" id="firstName" name="firstName"
+                      value={formData.firstName} onChange={handleInputChange} required />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="lastName">Last Name *</label>
+                    <input type="text" id="lastName" name="lastName"
+                      value={formData.lastName} onChange={handleInputChange} required />
                   </div>
                 </div>
-              </div>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="linkedinUrl">LinkedIn Profile URL</label>
-                  <input
-                    type="url"
-                    id="linkedinUrl"
-                    name="linkedinUrl"
-                    value={formData.linkedinUrl}
-                    onChange={handleInputChange}
-                    placeholder="https://linkedin.com/in/yourprofile"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="githubUrl">GitHub Profile URL</label>
-                  <input
-                    type="url"
-                    id="githubUrl"
-                    name="githubUrl"
-                    value={formData.githubUrl}
-                    onChange={handleInputChange}
-                    placeholder="https://github.com/yourusername"
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="motivationLetter">Letter of Motivation</label>
-                <div className="file-upload">
-                  <input
-                    type="file"
-                    id="motivationLetter"
-                    name="motivationLetter"
-                    onChange={handleInputChange}
-                    accept=".pdf,.doc,.docx"
-                  />
-                  <div className="file-upload-placeholder">
-                    {formData.motivationLetter ? formData.motivationLetter.name : 'Choose file or drag and drop (Optional)'}
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="telephone">Phone Number *</label>
+                    <input type="tel" id="telephone" name="telephone"
+                      value={formData.telephone} onChange={handleInputChange} required />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="email">Email *</label>
+                    <input type="email" id="email" name="email"
+                      value={formData.email} onChange={handleInputChange} required />
                   </div>
                 </div>
-              </div>
-            </section>
 
-            {/* Terms of Service */}
-            <section className="form-section">
-              <div className="terms-section">
-                <label className="checkbox-container">
-                  <input
-                    type="checkbox"
-                    name="agreeToTerms"
-                    checked={formData.agreeToTerms}
-                    onChange={handleInputChange}
-                    required
-                  />
-                  <span className="checkmark"></span>
-                  <span className="terms-text">
-                    I agree to the <a href="#" target="_blank">Terms of Service</a> and consent to the processing of my personal data for recruitment purposes.
-                  </span>
-                </label>
-              </div>
-            </section>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="currentLocation">Current Location *</label>
+                    <input type="text" id="currentLocation" name="currentLocation"
+                      value={formData.currentLocation} onChange={handleInputChange} required />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="dateOfBirth">Date of Birth *</label>
+                    <input type="date" id="dateOfBirth" name="dateOfBirth"
+                      value={formData.dateOfBirth} onChange={handleInputChange} required />
+                  </div>
+                </div>
+              </section>
 
-            {/* Submit Button */}
-            <div className="form-actions">
-              <button type="button" className="btn-cancel" onClick={onClose}>
-                Cancel
-              </button>
-              <button type="submit" className="btn-submit">
-                Submit Application
-              </button>
-            </div>
-          </form>
+              {/* Profile */}
+              <section className="form-section">
+                <h3>Your Profile</h3>
+                <div className="form-group">
+                  <label htmlFor="resume">Upload Resume *</label>
+                  <div className="file-upload">
+                    <input type="file" id="resume" name="resume"
+                      onChange={handleInputChange} accept=".pdf,.doc,.docx" required />
+                    <div className="file-upload-placeholder">
+                      {formData.resume ? formData.resume.name : 'Choose file or drag and drop'}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="linkedinUrl">LinkedIn</label>
+                    <input type="url" id="linkedinUrl" name="linkedinUrl"
+                      value={formData.linkedinUrl} onChange={handleInputChange}
+                      placeholder="https://linkedin.com/in/yourprofile" />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="githubUrl">GitHub</label>
+                    <input type="url" id="githubUrl" name="githubUrl"
+                      value={formData.githubUrl} onChange={handleInputChange}
+                      placeholder="https://github.com/yourusername" />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="motivationLetter">Motivation Letter</label>
+                  <div className="file-upload">
+                    <input type="file" id="motivationLetter" name="motivationLetter"
+                      onChange={handleInputChange} accept=".pdf,.doc,.docx" />
+                    <div className="file-upload-placeholder">
+                      {formData.motivationLetter ? formData.motivationLetter.name : 'Choose file (optional)'}
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Terms */}
+              <section className="form-section">
+                <div className="terms-section">
+                  <label className="checkbox-container">
+                    <input type="checkbox" name="agreeToTerms"
+                      checked={formData.agreeToTerms} onChange={handleInputChange} required />
+                    <span className="checkmark"></span>
+                    <span className="terms-text">
+                      I agree to the <a href="#" target="_blank">Terms of Service</a> and consent to data processing.
+                    </span>
+                  </label>
+                </div>
+              </section>
+
+              <div className="form-actions">
+                <button type="button" className="btn-cancel" onClick={onClose}>Cancel</button>
+                <button type="submit" className="btn-submit">Submit</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
   );
 };
 
