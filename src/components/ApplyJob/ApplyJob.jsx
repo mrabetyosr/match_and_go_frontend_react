@@ -4,7 +4,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ApplyJob = ({ isOpen, onClose, job, company }) => {
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     firstName: '',
     lastName: '',
     telephone: '',
@@ -16,30 +16,47 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
     githubUrl: '',
     motivationLetter: null,
     agreeToTerms: false
-  });
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
+
+  // Fonction pour reset + fermer
+  const handleClose = () => {
+    setFormData(initialFormData);
+    onClose();
+  };
 
   // Fetch logged-in user's email
   useEffect(() => {
-    if (isOpen) {
-      const fetchUser = async () => {
-        try {
-          const token = localStorage.getItem("token");
-          if (!token) return;
+    if (!isOpen) return;
 
-          const res = await fetch("http://localhost:7001/api/users/me", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+    // Reset form à l'ouverture
+    setFormData(initialFormData);
 
-          if (!res.ok) throw new Error("Failed to fetch user");
-          const user = await res.json();
-          setFormData(prev => ({ ...prev, email: user.email || '' }));
-        } catch (err) {
-          console.error(err);
-          toast.error("Unable to fetch your information");
+    const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return; // pas de token → on arrête
+
+      try {
+        const res = await fetch("http://localhost:7001/api/users/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (res.status === 401) {
+          localStorage.removeItem("token"); // token expiré
+          return;
         }
-      };
-      fetchUser();
-    }
+
+        if (!res.ok) return;
+
+        const user = await res.json();
+        setFormData(prev => ({ ...prev, email: user.email || '' }));
+      } catch (err) {
+        console.error("Error fetching user:", err);
+      }
+    };
+
+    fetchUser();
   }, [isOpen]);
 
   const handleInputChange = (e) => {
@@ -85,7 +102,7 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
         toast.error(result.message || "Error submitting application");
       } else {
         toast.success("Application submitted successfully!");
-        onClose();
+        handleClose(); // reset + fermer
       }
     } catch (err) {
       console.error(err);
@@ -94,7 +111,7 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
   };
 
   const handleBackdropClick = (e) => {
-    if (e.target === e.currentTarget) onClose();
+    if (e.target === e.currentTarget) handleClose();
   };
 
   if (!isOpen) return null;
@@ -105,7 +122,7 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
         <div className={`apply-job-panel ${isOpen ? 'open' : ''}`}>
           <div className="apply-job-header">
             <h2>Apply for {job?.jobTitle}</h2>
-            <button className="close-btn" onClick={onClose}>×</button>
+            <button className="close-btn" onClick={handleClose}>×</button>
           </div>
 
           <div className="apply-job-content">
@@ -209,7 +226,7 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
               </section>
 
               <div className="form-actions">
-                <button type="button" className="btn-cancel" onClick={onClose}>Cancel</button>
+                <button type="button" className="btn-cancel" onClick={handleClose}>Cancel</button>
                 <button type="submit" className="btn-submit">Submit</button>
               </div>
             </form>
