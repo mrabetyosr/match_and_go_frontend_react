@@ -38,13 +38,19 @@ const JobDetails = () => {
 
   return (
     <div className="job-details-container">
-      <img src={company.cover} alt={`${company.username} cover`} />
+      <img 
+  src={`http://localhost:7001/images/${company.cover_User}`} 
+  alt={`${company.username} cover`} 
+/>
 
       <div>
         {/* Sidebar */}
         <div className="sidebar">
           <div className="company-header">
-            <img src={company.image_User} alt={`${company.username} logo`} />
+            <img 
+  src={`http://localhost:7001/images/${company.image_User}`} 
+  alt={`${company.username} logo`} 
+/>
             <h2>{company.username}</h2>
             <div className="company-info">
               <p>{company.companyInfo?.location || 'N/A'}</p>
