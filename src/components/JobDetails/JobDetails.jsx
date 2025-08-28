@@ -3,7 +3,8 @@ import './JobDetails.css';
 import { useParams } from 'react-router-dom';
 import ApplyJob from '../ApplyJob/ApplyJob.jsx';
 import axios from 'axios';
-
+import { toast } from 'react-toastify';
+import SignIn from '../SignIn/SignIn.jsx';
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -12,6 +13,7 @@ const JobDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showApplicationForm, setShowApplicationForm] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
 
   useEffect(() => {
     const fetchJobDetails = async () => {
@@ -19,7 +21,7 @@ const JobDetails = () => {
         const response = await axios.get(`http://localhost:7001/api/offers/${id}`);
         const offer = response.data;
         setJob(offer);
-        setCompany(offer.companyId); // populate company info depuis backend
+        setCompany(offer.companyId);
         setLoading(false);
       } catch (err) {
         setError('Failed to fetch job details.');
@@ -30,8 +32,20 @@ const JobDetails = () => {
     fetchJobDetails();
   }, [id]);
 
-  const handleApplyNow = () => setShowApplicationForm(true);
+  const handleApplyNow = () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.warning("⚠️ You need to sign in first!");
+      setShowSignIn(true); // ouvre le modal SignIn
+      return;
+    }
+
+    setShowApplicationForm(true);
+  };
+
   const handleCloseApplication = () => setShowApplicationForm(false);
+  const handleCloseSignIn = () => setShowSignIn(false);
 
   if (loading) return <p>Loading...</p>;
   if (error || !job || !company) return <p>{error || 'Job not found.'}</p>;
@@ -39,18 +53,18 @@ const JobDetails = () => {
   return (
     <div className="job-details-container">
       <img 
-  src={`http://localhost:7001/images/${company.cover_User}`} 
-  alt={`${company.username} cover`} 
-/>
+        src={`http://localhost:7001/images/${company.cover_User}`} 
+        alt={`${company.username} cover`} 
+      />
 
       <div>
         {/* Sidebar */}
         <div className="sidebar">
           <div className="company-header">
             <img 
-  src={`http://localhost:7001/images/${company.image_User}`} 
-  alt={`${company.username} logo`} 
-/>
+              src={`http://localhost:7001/images/${company.image_User}`} 
+              alt={`${company.username} logo`} 
+            />
             <h2>{company.username}</h2>
             <div className="company-info">
               <p>{company.companyInfo?.location || 'N/A'}</p>
@@ -143,6 +157,8 @@ const JobDetails = () => {
         job={job}
         company={company}
       />
+
+      
     </div>
   );
 };
