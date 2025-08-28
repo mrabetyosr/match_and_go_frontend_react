@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ApplyJob.css';
 
 const ApplyJob = ({ isOpen, onClose, job, company }) => {
@@ -15,6 +15,31 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
     motivationLetter: null,
     agreeToTerms: false
   });
+
+  // Récupérer les infos de l'utilisateur connecté
+  useEffect(() => {
+    if (isOpen) {
+      const fetchUser = async () => {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) return;
+
+          const res = await fetch("http://localhost:7001/api/users/me", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (!res.ok) return;
+          const user = await res.json();
+          setFormData(prev => ({ ...prev, email: user.email || '' }));
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      fetchUser();
+    }
+  }, [isOpen]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -33,7 +58,7 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
     }
 
     try {
-      const token = localStorage.getItem("token"); // récupère le token JWT
+      const token = localStorage.getItem("token");
       if (!token) {
         alert("You must be logged in to apply.");
         return;
