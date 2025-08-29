@@ -12,12 +12,17 @@ import "./application.css";
 const Application = () => {
   const [offers, setOffers] = useState([]);
   const [showAddOffer, setShowAddOffer] = useState(false);
-  const [showEditOffer, setShowEditOffer] = useState(false); // Nouvel état
-  const [editingOffer, setEditingOffer] = useState(null); // Offre en cours d'édition
+  const [showEditOffer, setShowEditOffer] = useState(false);
+  const [editingOffer, setEditingOffer] = useState(null);
   const [showAddQuiz, setShowAddQuiz] = useState(false);
   const [currentOfferId, setCurrentOfferId] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState(null);
+  
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [offersPerPage] = useState(3);
+  
   const [stats, setStats] = useState({
     totalOffers: 0,
     activeOffers: 0,
@@ -64,24 +69,86 @@ const Application = () => {
       );
       
       setStats({ totalOffers, activeOffers, totalQuizzes });
+      
+      // Reset to first page if current page is out of bounds
+      const totalPages = Math.ceil(res.data.offers.length / offersPerPage);
+      if (currentPage > totalPages && totalPages > 0) {
+        setCurrentPage(1);
+      }
     } catch {
       toast.error("Failed to fetch offers");
     }
   };
 
-  // Nouvelle fonction pour gérer l'édition
+  // Pagination calculations
+  const totalPages = Math.ceil(offers.length / offersPerPage);
+  const indexOfLastOffer = currentPage * offersPerPage;
+  const indexOfFirstOffer = indexOfLastOffer - offersPerPage;
+  const currentOffers = offers.slice(indexOfFirstOffer, indexOfLastOffer);
+
+  // Pagination handlers
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxVisiblePages = 5;
+    
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pageNumbers.push(i);
+        }
+        pageNumbers.push('...');
+        pageNumbers.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pageNumbers.push(1);
+        pageNumbers.push('...');
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pageNumbers.push(i);
+        }
+      } else {
+        pageNumbers.push(1);
+        pageNumbers.push('...');
+        pageNumbers.push(currentPage - 1);
+        pageNumbers.push(currentPage);
+        pageNumbers.push(currentPage + 1);
+        pageNumbers.push('...');
+        pageNumbers.push(totalPages);
+      }
+    }
+    
+    return pageNumbers;
+  };
+
   const handleEditOffer = (offer) => {
     setEditingOffer(offer);
     setShowEditOffer(true);
   };
 
-  // Fonction pour fermer le modal d'édition
   const handleCloseEditOffer = () => {
     setShowEditOffer(false);
     setEditingOffer(null);
   };
 
-  // Ancienne fonction mise à jour (gardée pour compatibilité avec le menu)
   const handleUpdateOffer = async (id) => {
     const offer = offers.find(o => o._id === id);
     if (offer) {
@@ -89,48 +156,45 @@ const Application = () => {
     }
   };
 
- const handleDeleteOffer = async (id) => {
-  // Afficher un toast de confirmation personnalisé
-  toast.info(
-    <div>
-      <p>Do you really want to delete this offer?</p>
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-        <button
-          onClick={async () => {
-            try {
-              await axios.delete(`http://localhost:7001/api/offers/delete/${id}`, {
-                headers: { Authorization: `Bearer ${token}` }
-              });
-              toast.dismiss(); // fermer le toast de confirmation
-              toast.success("Offer deleted successfully");
-              fetchOffers();
-            } catch {
-              toast.error("Failed to delete offer");
-            }
-          }}
-          style={{ background: "red", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px" }}
-        >
-          Yes
-        </button>
-        <button
-          onClick={() => toast.dismiss()} // fermer le toast sans supprimer
-          style={{ background: "gray", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px" }}
-        >
-          No
-        </button>
-      </div>
-    </div>,
-    { autoClose: false }
-  );
-};
-
+  const handleDeleteOffer = async (id) => {
+    toast.info(
+      <div>
+        <p>Do you really want to delete this offer?</p>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+          <button
+            onClick={async () => {
+              try {
+                await axios.delete(`http://localhost:7001/api/offers/delete/${id}`, {
+                  headers: { Authorization: `Bearer ${token}` }
+                });
+                toast.dismiss();
+                toast.success("Offer deleted successfully");
+                fetchOffers();
+              } catch {
+                toast.error("Failed to delete offer");
+              }
+            }}
+            style={{ background: "red", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px" }}
+          >
+            Yes
+          </button>
+          <button
+            onClick={() => toast.dismiss()}
+            style={{ background: "gray", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px" }}
+          >
+            No
+          </button>
+        </div>
+      </div>,
+      { autoClose: false }
+    );
+  };
 
   const handleShowDetails = (offer) => {
     setSelectedOffer(offer);
     setShowDetailsModal(true);
   };
 
-  // Fonction pour fermer le modal des détails
   const handleCloseDetailsModal = () => {
     setShowDetailsModal(false);
     setSelectedOffer(null);
@@ -187,9 +251,16 @@ const Application = () => {
         </div>
       </div>
 
-      {/* Offers Grid */}
+      {/* Offers Section */}
       <div className="offers-section">
-        <h2 className="section-title">Your Job Offers</h2>
+        <div className="section-header">
+          <h2 className="section-title">Your Job Offers</h2>
+          {offers.length > 0 && (
+            <div className="offers-count">
+              Showing {indexOfFirstOffer + 1}-{Math.min(indexOfLastOffer, offers.length)} of {offers.length} offers
+            </div>
+          )}
+        </div>
         
         {offers.length === 0 ? (
           <div className="empty-state">
@@ -204,107 +275,147 @@ const Application = () => {
             </button>
           </div>
         ) : (
-          <div className="offers-grid">
-            {offers.map((offer) => (
-              <div key={offer._id} className="offer-card">
-                <div className="offer-header">
-                  <div className="offer-title-section">
-                    <h3 className="offer-title">{offer.jobTitle}</h3>
-                    <div 
-                      className="job-type-badge"
-                      style={{ backgroundColor: getJobTypeColor(offer.jobType) }}
-                    >
-                      {offer.jobType}
+          <>
+            <div className="offers-grid">
+              {currentOffers.map((offer) => (
+                <div key={offer._id} className="offer-card">
+                  <div className="offer-header">
+                    <div className="offer-title-section">
+                      <h3 className="offer-title">{offer.jobTitle}</h3>
+                      <div 
+                        className="job-type-badge"
+                        style={{ backgroundColor: getJobTypeColor(offer.jobType) }}
+                      >
+                        {offer.jobType}
+                      </div>
+                    </div>
+                    <div className="offer-menu">
+                      <button 
+                        className="menu-btn"
+                        onClick={() => handleUpdateOffer(offer._id)}
+                      >
+                        ⋯
+                      </button>
                     </div>
                   </div>
-                  <div className="offer-menu">
+
+                  <div className="offer-details">
+                    <div className="detail-item">
+                      <span className="detail-label">Slots:</span>
+                      <span className="detail-value">{offer.jobSlots}</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Remote:</span>
+                      <span className={`remote-badge ${offer.remote ? 'remote-yes' : 'remote-no'}`}>
+                        {offer.remote ? 'Yes' : 'No'}
+                      </span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Deadline:</span>
+                      <span className="detail-value">
+                        {offer.applicationDeadline ? 
+                          new Date(offer.applicationDeadline).toLocaleDateString() : 
+                          "N/A"
+                        }
+                      </span>
+                    </div>
+                    {offer.jobSalary > 0 && (
+                      <div className="detail-item">
+                        <span className="detail-label">Salary:</span>
+                        <span className="detail-value">${offer.jobSalary}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Quizzes Section */}
+                  {offer.hasQuiz && offer.quizzes && offer.quizzes.length > 0 && (
+                    <div className="quiz-section">
+                      <h4 className="quiz-title">
+                        Quizzes ({offer.quizzes.length})
+                      </h4>
+                      <div className="quiz-list">
+                        {offer.quizzes.map((quiz) => (
+                          <div key={quiz._id} className="quiz-item">
+                            <span className="quiz-name">{quiz.title}</span>
+                            <span className="quiz-questions">{quiz.nbrQuestions}Q</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  <div className="offer-actions">
                     <button 
-                      className="menu-btn"
-                      onClick={() => handleUpdateOffer(offer._id)}
+                      className="action-btn secondary"
+                      onClick={() => handleEditOffer(offer)}
                     >
-                      ⋯
+                      Edit
+                    </button>
+                    <button 
+                      className="action-btn details"
+                      onClick={() => handleShowDetails(offer)}
+                    >
+                      Details
+                    </button>
+                    <button
+                      className="action-btn primary"
+                      onClick={() => {
+                        setCurrentOfferId(offer._id);
+                        setShowAddQuiz(true);
+                      }}
+                    >
+                      Add Quiz
+                    </button>
+                    <button 
+                      className="action-btn danger"
+                      onClick={() => handleDeleteOffer(offer._id)}
+                    >
+                      Delete
                     </button>
                   </div>
                 </div>
+              ))}
+            </div>
 
-                <div className="offer-details">
-                  <div className="detail-item">
-                    <span className="detail-label">Slots:</span>
-                    <span className="detail-value">{offer.jobSlots}</span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="detail-label">Remote:</span>
-                    <span className={`remote-badge ${offer.remote ? 'remote-yes' : 'remote-no'}`}>
-                      {offer.remote ? 'Yes' : 'No'}
-                    </span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="detail-label">Deadline:</span>
-                    <span className="detail-value">
-                      {offer.applicationDeadline ? 
-                        new Date(offer.applicationDeadline).toLocaleDateString() : 
-                        "N/A"
-                      }
-                    </span>
-                  </div>
-                  {offer.jobSalary > 0 && (
-                    <div className="detail-item">
-                      <span className="detail-label">Salary:</span>
-                      <span className="detail-value">${offer.jobSalary}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Quizzes Section */}
-                {offer.hasQuiz && offer.quizzes && offer.quizzes.length > 0 && (
-                  <div className="quiz-section">
-                    <h4 className="quiz-title">
-                      Quizzes ({offer.quizzes.length})
-                    </h4>
-                    <div className="quiz-list">
-                      {offer.quizzes.map((quiz) => (
-                        <div key={quiz._id} className="quiz-item">
-                          <span className="quiz-name">{quiz.title}</span>
-                          <span className="quiz-questions">{quiz.nbrQuestions}Q</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Action Buttons */}
-                <div className="offer-actions">
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="pagination-container">
+                <div className="pagination">
                   <button 
-                    className="action-btn secondary"
-                    onClick={() => handleEditOffer(offer)}
+                    className={`pagination-btn ${currentPage === 1 ? 'disabled' : ''}`}
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 1}
                   >
-                    Edit
+                    ‹
                   </button>
+                  
+                  {getPageNumbers().map((pageNumber, index) => (
+                    <React.Fragment key={index}>
+                      {pageNumber === '...' ? (
+                        <span className="pagination-ellipsis">...</span>
+                      ) : (
+                        <button
+                          className={`pagination-page ${currentPage === pageNumber ? 'active' : ''}`}
+                          onClick={() => handlePageChange(pageNumber)}
+                        >
+                          {pageNumber}
+                        </button>
+                      )}
+                    </React.Fragment>
+                  ))}
+                  
                   <button 
-                    className="action-btn details"
-                    onClick={() => handleShowDetails(offer)}
+                    className={`pagination-btn ${currentPage === totalPages ? 'disabled' : ''}`}
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
                   >
-                    Details
-                  </button>
-                  <button
-                    className="action-btn primary"
-                    onClick={() => {
-                      setCurrentOfferId(offer._id);
-                      setShowAddQuiz(true);
-                    }}
-                  >
-                    Add Quiz
-                  </button>
-                  <button 
-                    className="action-btn danger"
-                    onClick={() => handleDeleteOffer(offer._id)}
-                  >
-                    Delete
+                    ›
                   </button>
                 </div>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </div>
 
@@ -317,7 +428,6 @@ const Application = () => {
         />
       )}
 
-      {/* Nouveau modal EditOffer */}
       {showEditOffer && editingOffer && (
         <EditOffer
           token={token}
@@ -339,7 +449,6 @@ const Application = () => {
         />
       )}
 
-      {/* Modal DetailsOffer */}
       {showDetailsModal && selectedOffer && (
         <DetailsOffer 
           offerId={selectedOffer._id} 
