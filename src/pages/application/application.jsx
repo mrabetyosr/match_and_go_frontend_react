@@ -89,19 +89,41 @@ const Application = () => {
     }
   };
 
-  const handleDeleteOffer = async (id) => {
-    if (window.confirm("Are you sure you want to delete this offer?")) {
-      try {
-        await axios.delete(`http://localhost:7001/api/offers/delete/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        toast.success("Offer deleted successfully");
-        fetchOffers();
-      } catch {
-        toast.error("Failed to delete offer");
-      }
-    }
-  };
+ const handleDeleteOffer = async (id) => {
+  // Afficher un toast de confirmation personnalisé
+  toast.info(
+    <div>
+      <p>Do you really want to delete this offer?</p>
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+        <button
+          onClick={async () => {
+            try {
+              await axios.delete(`http://localhost:7001/api/offers/delete/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+              });
+              toast.dismiss(); // fermer le toast de confirmation
+              toast.success("Offer deleted successfully");
+              fetchOffers();
+            } catch {
+              toast.error("Failed to delete offer");
+            }
+          }}
+          style={{ background: "red", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px" }}
+        >
+          Yes
+        </button>
+        <button
+          onClick={() => toast.dismiss()} // fermer le toast sans supprimer
+          style={{ background: "gray", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px" }}
+        >
+          No
+        </button>
+      </div>
+    </div>,
+    { autoClose: false }
+  );
+};
+
 
   const handleShowDetails = (offer) => {
     setSelectedOffer(offer);
