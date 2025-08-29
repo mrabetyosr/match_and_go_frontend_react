@@ -1,0 +1,304 @@
+/* Overlay pour le modal */
+.offer-details-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Container principal du popup */
+.offer-details-container {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  max-width: 700px;
+  max-height: 85vh;
+  width: 90%;
+  overflow: hidden;
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Header du popup */
+.offer-details-header {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  padding: 24px 28px;
+  color: white;
+  position: relative;
+}
+
+.offer-details-header h1 {
+  margin: 0 0 12px 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.job-type-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+/* Bouton de fermeture */
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  font-size: 20px;
+  transition: all 0.3s ease;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+/* Contenu scrollable */
+.offer-details-content {
+  max-height: calc(85vh - 120px);
+  overflow-y: auto;
+  padding: 0;
+}
+
+/* Section des informations principales */
+.offer-main-info {
+  padding: 24px 28px;
+  background: #fefefe;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.info-card {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 12px;
+  border-left: 4px solid #22c55e;
+  transition: all 0.3s ease;
+}
+
+.info-card:hover {
+  background: #f0f9f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.1);
+}
+
+.info-card strong {
+  color: #1f2937;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-card span {
+  color: #4b5563;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+/* Sections détaillées */
+.offer-section {
+  padding: 20px 28px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.offer-section:last-child {
+  border-bottom: none;
+}
+
+.section-title {
+  color: #22c55e;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title::before {
+  content: "";
+  width: 4px;
+  height: 20px;
+  background: #22c55e;
+  border-radius: 2px;
+}
+
+.section-content {
+  color: #4b5563;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* Tags et listes */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.tag {
+  background: linear-gradient(135deg, #f5f3f0 0%, #e8e5e0 100%);
+  color: #6b5b47;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid #e0ddd6;
+  transition: all 0.3s ease;
+}
+
+.tag:hover {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* États de chargement et erreur */
+.loading-container, .error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f4f6;
+  border-top: 3px solid #22c55e;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+.error-container h2 {
+  color: #dc2626;
+  margin-bottom: 16px;
+}
+
+.back-button {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .offer-details-container {
+    width: 95%;
+    max-height: 95vh;
+    margin: 10px;
+  }
+  
+  .offer-details-header {
+    padding: 20px 20px;
+  }
+  
+  .offer-details-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .offer-section {
+    padding: 16px 20px;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .info-card {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .offer-details-container {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  
+  .offer-details-header {
+    padding: 16px;
+  }
+  
+  .offer-details-header h1 {
+    font-size: 1.3rem;
+  }
+  
+  .close-button {
+    width: 35px;
+    height: 35px;
+    top: 15px;
+    right: 15px;
+  }
+}

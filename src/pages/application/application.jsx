@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import AddOffer from "../../components/AddOffer/AddOffer.jsx";
 import AddQuiz from "../../components/AddQuiz/AddQuiz.jsx";
+import DetailsOffer from "../../components/DetailsOffer/DetailsOffer.jsx";
 import "./application.css";
 
 const Application = () => {
@@ -11,6 +12,8 @@ const Application = () => {
   const [showAddOffer, setShowAddOffer] = useState(false);
   const [showAddQuiz, setShowAddQuiz] = useState(false);
   const [currentOfferId, setCurrentOfferId] = useState(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [selectedOffer, setSelectedOffer] = useState(null);
   const [stats, setStats] = useState({
     totalOffers: 0,
     activeOffers: 0,
@@ -90,6 +93,17 @@ const Application = () => {
         toast.error("Failed to delete offer");
       }
     }
+  };
+
+  const handleShowDetails = (offer) => {
+    setSelectedOffer(offer);
+    setShowDetailsModal(true);
+  };
+
+  // Fonction pour fermer le modal des détails
+  const handleCloseDetailsModal = () => {
+    setShowDetailsModal(false);
+    setSelectedOffer(null);
   };
 
   const getJobTypeColor = (type) => {
@@ -236,6 +250,12 @@ const Application = () => {
                   >
                     Edit
                   </button>
+                  <button 
+                    className="action-btn details"
+                    onClick={() => handleShowDetails(offer)}
+                  >
+                    Details
+                  </button>
                   <button
                     className="action-btn primary"
                     onClick={() => {
@@ -276,6 +296,14 @@ const Application = () => {
             setShowAddQuiz(false);
             setCurrentOfferId(null);
           }}
+        />
+      )}
+
+      {/* Modal DetailsOffer - Version simplifiée SANS double overlay */}
+      {showDetailsModal && selectedOffer && (
+        <DetailsOffer 
+          offerId={selectedOffer._id} 
+          onClose={handleCloseDetailsModal}
         />
       )}
     </div>
