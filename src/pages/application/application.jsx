@@ -341,7 +341,7 @@ const Application = () => {
                     {offer.jobSalary > 0 && (
                       <div className="detail-item">
                         <span className="detail-label">Salary:</span>
-                        <span className="detail-value">${offer.jobSalary}</span>
+                        <span className="detail-value">dt{offer.jobSalary}</span>
                       </div>
                     )}
                   </div>
@@ -373,12 +373,7 @@ const Application = () => {
 
                   {/* Action Buttons */}
                   <div className="offer-actions">
-                    <button 
-                      className="action-btn secondary"
-                      onClick={() => handleEditOffer(offer)}
-                    >
-                      Edit
-                    </button>
+                    
                     <button 
                       className="action-btn details"
                       onClick={() => handleShowDetails(offer)}

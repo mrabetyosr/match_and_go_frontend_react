@@ -16,6 +16,7 @@ const QuizManager = ({ quiz, offerId, token, onQuizUpdated, onClose }) => {
     title: quiz.title,
     nbrQuestions: quiz.nbrQuestions,
     durationSeconds: quiz.durationSeconds,
+    totalScore: quiz.totalScore,
     createdAt: quiz.createdAt,
   })
 
@@ -46,6 +47,7 @@ const QuizManager = ({ quiz, offerId, token, onQuizUpdated, onClose }) => {
       title: quiz.title,
       nbrQuestions: quiz.nbrQuestions,
       durationSeconds: quiz.durationSeconds,
+      totalScore: quiz.totalScore,
       createdAt: quiz.createdAt,
     })
     setEditQuizData({
@@ -63,10 +65,12 @@ const QuizManager = ({ quiz, offerId, token, onQuizUpdated, onClose }) => {
       })
       const fetchedQuestions = res.data || []
       setQuestions(fetchedQuestions)
+      const totalScore = fetchedQuestions.reduce((sum, q) => sum + (q.score ?? 0), 0)
 
       setLocalQuizData((prev) => ({
         ...prev,
         nbrQuestions: fetchedQuestions.length,
+        totalScore,
       }))
     } catch (error) {
       toast.error("Failed to fetch questions")
@@ -255,6 +259,11 @@ const QuizManager = ({ quiz, offerId, token, onQuizUpdated, onClose }) => {
                   <span className="info-label">Duration:</span>
                   <span className="info-value">{Math.floor(localQuizData.durationSeconds / 60)} minutes</span>
                 </div>
+                <div className="info-item">
+  <span className="info-label">Total Score:</span>
+  <span className="info-value">{localQuizData.totalScore}</span>
+</div>
+
                 <div className="info-item">
                   <span className="info-label">Created:</span>
                   <span className="info-value">{new Date(localQuizData.createdAt).toLocaleDateString()}</span>
