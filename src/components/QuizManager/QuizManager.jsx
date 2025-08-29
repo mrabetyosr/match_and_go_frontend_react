@@ -1,4 +1,3 @@
-"use client"
 
 import { useState, useEffect } from "react"
 import axios from "axios"
@@ -194,6 +193,7 @@ const QuizManager = ({ quiz, offerId, token, onQuizUpdated, onClose }) => {
             ? editingQuestion.choices.filter((choice) => choice.trim() !== "")
             : [],
         correctAnswer: editingQuestion.correctAnswer,
+        score: editingQuestion.score,
       }
 
       await axios.put(`http://localhost:7001/api/questions/update/${editingQuestion._id}`, questionData, {
@@ -364,186 +364,212 @@ const QuizManager = ({ quiz, offerId, token, onQuizUpdated, onClose }) => {
         </div>
 
         {/* Add Question Modal */}
-        {showAddQuestion && (
-          <div className="modal-overlay">
-            <div className="question-modal">
-              <div className="modal-header">
-                <h3>Add New Question</h3>
-                <button onClick={() => setShowAddQuestion(false)}>×</button>
+{showAddQuestion && (
+  <div className="modal-overlay">
+    <div className="question-modal">
+      <div className="modal-header">
+        <h3>Add New Question</h3>
+        <button onClick={() => setShowAddQuestion(false)}>×</button>
+      </div>
+
+      <form onSubmit={handleAddQuestion} className="question-form">
+        <div className="form-group">
+          <label>Question Text:</label>
+          <textarea
+            value={newQuestion.questionText}
+            onChange={(e) => setNewQuestion({ ...newQuestion, questionText: e.target.value })}
+            required
+            rows="3"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Question Type:</label>
+          <select
+            value={newQuestion.questionType}
+            onChange={(e) => setNewQuestion({ ...newQuestion, questionType: e.target.value })}
+          >
+            <option value="multiple-choice">Multiple Choice</option>
+            <option value="text">Text Answer</option>
+          </select>
+        </div>
+
+        {newQuestion.questionType === "multiple-choice" && (
+          <div className="form-group">
+            <label>Choices:</label>
+            {newQuestion.choices.map((choice, index) => (
+              <div key={index} className="choice-input">
+                <input
+                  type="text"
+                  placeholder={`Choice ${String.fromCharCode(65 + index)}`}
+                  value={choice}
+                  onChange={(e) => {
+                    const updatedChoices = [...newQuestion.choices]
+                    updatedChoices[index] = e.target.value
+                    setNewQuestion({ ...newQuestion, choices: updatedChoices })
+                  }}
+                />
               </div>
-
-              <form onSubmit={handleAddQuestion} className="question-form">
-                <div className="form-group">
-                  <label>Question Text:</label>
-                  <textarea
-                    value={newQuestion.questionText}
-                    onChange={(e) => setNewQuestion({ ...newQuestion, questionText: e.target.value })}
-                    required
-                    rows="3"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Question Type:</label>
-                  <select
-                    value={newQuestion.questionType}
-                    onChange={(e) => setNewQuestion({ ...newQuestion, questionType: e.target.value })}
-                  >
-                    <option value="multiple-choice">Multiple Choice</option>
-                    <option value="text">Text Answer</option>
-                  </select>
-                </div>
-
-                {newQuestion.questionType === "multiple-choice" && (
-                  <div className="form-group">
-                    <label>Choices:</label>
-                    {newQuestion.choices.map((choice, index) => (
-                      <div key={index} className="choice-input">
-                        <input
-                          type="text"
-                          placeholder={`Choice ${String.fromCharCode(65 + index)}`}
-                          value={choice}
-                          onChange={(e) => {
-                            const updatedChoices = [...newQuestion.choices]
-                            updatedChoices[index] = e.target.value
-                            setNewQuestion({ ...newQuestion, choices: updatedChoices })
-                          }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                <div className="form-group">
-                  <label>Correct Answer:</label>
-                  {newQuestion.questionType === "multiple-choice" ? (
-                    <select
-                      value={newQuestion.correctAnswer}
-                      onChange={(e) => setNewQuestion({ ...newQuestion, correctAnswer: e.target.value })}
-                      required
-                    >
-                      <option value="">Select correct answer</option>
-                      {newQuestion.choices
-                        .filter((choice) => choice.trim())
-                        .map((choice, index) => (
-                          <option key={index} value={choice}>
-                            {choice}
-                          </option>
-                        ))}
-                    </select>
-                  ) : (
-                    <textarea
-                      value={newQuestion.correctAnswer}
-                      onChange={(e) => setNewQuestion({ ...newQuestion, correctAnswer: e.target.value })}
-                      required
-                      rows="2"
-                    />
-                  )}
-                </div>
-
-                <div className="form-actions">
-                  <button type="submit" className="save-btn">
-                    Add Question
-                  </button>
-                  <button type="button" onClick={() => setShowAddQuestion(false)} className="cancel-btn">
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
+            ))}
           </div>
         )}
+
+        <div className="form-group">
+          <label>Correct Answer:</label>
+          {newQuestion.questionType === "multiple-choice" ? (
+            <select
+              value={newQuestion.correctAnswer}
+              onChange={(e) => setNewQuestion({ ...newQuestion, correctAnswer: e.target.value })}
+              required
+            >
+              <option value="">Select correct answer</option>
+              {newQuestion.choices
+                .filter((choice) => choice.trim())
+                .map((choice, index) => (
+                  <option key={index} value={choice}>
+                    {choice}
+                  </option>
+                ))}
+            </select>
+          ) : (
+            <textarea
+              value={newQuestion.correctAnswer}
+              onChange={(e) => setNewQuestion({ ...newQuestion, correctAnswer: e.target.value })}
+              required
+              rows="2"
+            />
+          )}
+        </div>
+
+        {/* ⚡ Ajout du champ Score */}
+        <div className="form-group">
+          <label>Score:</label>
+          <input
+            type="number"
+            min="0"
+            value={newQuestion.score || 1} // valeur par défaut 1
+            onChange={(e) => setNewQuestion({ ...newQuestion, score: Number(e.target.value) })}
+            required
+          />
+        </div>
+
+        <div className="form-actions">
+          <button type="submit" className="save-btn">
+            Add Question
+          </button>
+          <button type="button" onClick={() => setShowAddQuestion(false)} className="cancel-btn">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
 
         {/* Edit Question Modal */}
-        {showEditQuestion && editingQuestion && (
-          <div className="modal-overlay">
-            <div className="question-modal">
-              <div className="modal-header">
-                <h3>Edit Question</h3>
-                <button onClick={() => setShowEditQuestion(false)}>×</button>
+{showEditQuestion && editingQuestion && (
+  <div className="modal-overlay">
+    <div className="question-modal">
+      <div className="modal-header">
+        <h3>Edit Question</h3>
+        <button onClick={() => setShowEditQuestion(false)}>×</button>
+      </div>
+
+      <form onSubmit={handleUpdateQuestion} className="question-form">
+        <div className="form-group">
+          <label>Question Text:</label>
+          <textarea
+            value={editingQuestion.questionText}
+            onChange={(e) => setEditingQuestion({ ...editingQuestion, questionText: e.target.value })}
+            required
+            rows="3"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Question Type:</label>
+          <select
+            value={editingQuestion.questionType}
+            onChange={(e) => setEditingQuestion({ ...editingQuestion, questionType: e.target.value })}
+          >
+            <option value="multiple-choice">Multiple Choice</option>
+            <option value="text">Text Answer</option>
+          </select>
+        </div>
+
+        {editingQuestion.questionType === "multiple-choice" && (
+          <div className="form-group">
+            <label>Choices:</label>
+            {editingQuestion.choices.map((choice, index) => (
+              <div key={index} className="choice-input">
+                <input
+                  type="text"
+                  placeholder={`Choice ${String.fromCharCode(65 + index)}`}
+                  value={choice}
+                  onChange={(e) => {
+                    const updatedChoices = [...editingQuestion.choices]
+                    updatedChoices[index] = e.target.value
+                    setEditingQuestion({ ...editingQuestion, choices: updatedChoices })
+                  }}
+                />
               </div>
-
-              <form onSubmit={handleUpdateQuestion} className="question-form">
-                <div className="form-group">
-                  <label>Question Text:</label>
-                  <textarea
-                    value={editingQuestion.questionText}
-                    onChange={(e) => setEditingQuestion({ ...editingQuestion, questionText: e.target.value })}
-                    required
-                    rows="3"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Question Type:</label>
-                  <select
-                    value={editingQuestion.questionType}
-                    onChange={(e) => setEditingQuestion({ ...editingQuestion, questionType: e.target.value })}
-                  >
-                    <option value="multiple-choice">Multiple Choice</option>
-                    <option value="text">Text Answer</option>
-                  </select>
-                </div>
-
-                {editingQuestion.questionType === "multiple-choice" && (
-                  <div className="form-group">
-                    <label>Choices:</label>
-                    {editingQuestion.choices.map((choice, index) => (
-                      <div key={index} className="choice-input">
-                        <input
-                          type="text"
-                          placeholder={`Choice ${String.fromCharCode(65 + index)}`}
-                          value={choice}
-                          onChange={(e) => {
-                            const updatedChoices = [...editingQuestion.choices]
-                            updatedChoices[index] = e.target.value
-                            setEditingQuestion({ ...editingQuestion, choices: updatedChoices })
-                          }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                <div className="form-group">
-                  <label>Correct Answer:</label>
-                  {editingQuestion.questionType === "multiple-choice" ? (
-                    <select
-                      value={editingQuestion.correctAnswer}
-                      onChange={(e) => setEditingQuestion({ ...editingQuestion, correctAnswer: e.target.value })}
-                      required
-                    >
-                      <option value="">Select correct answer</option>
-                      {editingQuestion.choices
-                        .filter((choice) => choice.trim())
-                        .map((choice, index) => (
-                          <option key={index} value={choice}>
-                            {choice}
-                          </option>
-                        ))}
-                    </select>
-                  ) : (
-                    <textarea
-                      value={editingQuestion.correctAnswer}
-                      onChange={(e) => setEditingQuestion({ ...editingQuestion, correctAnswer: e.target.value })}
-                      required
-                      rows="2"
-                    />
-                  )}
-                </div>
-
-                <div className="form-actions">
-                  <button type="submit" className="save-btn">
-                    Update Question
-                  </button>
-                  <button type="button" onClick={() => setShowEditQuestion(false)} className="cancel-btn">
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
+            ))}
           </div>
         )}
+
+        <div className="form-group">
+          <label>Correct Answer:</label>
+          {editingQuestion.questionType === "multiple-choice" ? (
+            <select
+              value={editingQuestion.correctAnswer}
+              onChange={(e) => setEditingQuestion({ ...editingQuestion, correctAnswer: e.target.value })}
+              required
+            >
+              <option value="">Select correct answer</option>
+              {editingQuestion.choices
+                .filter((choice) => choice.trim())
+                .map((choice, index) => (
+                  <option key={index} value={choice}>
+                    {choice}
+                  </option>
+                ))}
+            </select>
+          ) : (
+            <textarea
+              value={editingQuestion.correctAnswer}
+              onChange={(e) => setEditingQuestion({ ...editingQuestion, correctAnswer: e.target.value })}
+              required
+              rows="2"
+            />
+          )}
+        </div>
+
+        {/* ⚡ Ajout du champ Score */}
+        <div className="form-group">
+          <label>Score:</label>
+          <input
+            type="number"
+            min="0"
+            value={editingQuestion.score || 1}
+            onChange={(e) => setEditingQuestion({ ...editingQuestion, score: Number(e.target.value) })}
+            required
+          />
+        </div>
+
+        <div className="form-actions">
+          <button type="submit" className="save-btn">
+            Update Question
+          </button>
+          <button type="button" onClick={() => setShowEditQuestion(false)} className="cancel-btn">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
       </div>
     </div>
   )
