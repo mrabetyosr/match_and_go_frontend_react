@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import AddOffer from "../../components/AddOffer/AddOffer.jsx";
 import AddQuiz from "../../components/AddQuiz/AddQuiz.jsx";
 import EditOffer from "../../components/EditOffer/EditOffer.jsx";
+import QuizManager from "../../components/QuizManager/QuizManager.jsx";
 import { useNavigate } from "react-router-dom";
 import DetailsOffer from "../../components/DetailsOffer/DetailsOffer.jsx";
 import "./application.css";
@@ -18,6 +19,11 @@ const Application = () => {
   const [currentOfferId, setCurrentOfferId] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState(null);
+  
+  // Quiz Manager states
+  const [showQuizManager, setShowQuizManager] = useState(false);
+  const [selectedQuiz, setSelectedQuiz] = useState(null);
+  const [selectedQuizOfferId, setSelectedQuizOfferId] = useState(null);
   
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -137,6 +143,19 @@ const Application = () => {
     }
     
     return pageNumbers;
+  };
+
+  // Quiz Manager handlers
+  const handleShowQuizDetails = (quiz, offerId) => {
+    setSelectedQuiz(quiz);
+    setSelectedQuizOfferId(offerId);
+    setShowQuizManager(true);
+  };
+
+  const handleCloseQuizManager = () => {
+    setShowQuizManager(false);
+    setSelectedQuiz(null);
+    setSelectedQuizOfferId(null);
   };
 
   const handleEditOffer = (offer) => {
@@ -335,9 +354,17 @@ const Application = () => {
                       </h4>
                       <div className="quiz-list">
                         {offer.quizzes.map((quiz) => (
-                          <div key={quiz._id} className="quiz-item">
-                            <span className="quiz-name">{quiz.title}</span>
-                            <span className="quiz-questions">{quiz.nbrQuestions}Q</span>
+                          <div 
+                            key={quiz._id} 
+                            className="quiz-item clickable"
+                            onClick={() => handleShowQuizDetails(quiz, offer._id)}
+                            title="Click to manage quiz"
+                          >
+                            <div className="quiz-info">
+                              <span className="quiz-name">{quiz.title}</span>
+                              <span className="quiz-questions">{quiz.nbrQuestions}Q</span>
+                            </div>
+                            <span className="quiz-manage-icon">⚙️</span>
                           </div>
                         ))}
                       </div>
@@ -453,6 +480,17 @@ const Application = () => {
         <DetailsOffer 
           offerId={selectedOffer._id} 
           onClose={handleCloseDetailsModal}
+        />
+      )}
+
+      {/* Quiz Manager Modal */}
+      {showQuizManager && selectedQuiz && (
+        <QuizManager
+          quiz={selectedQuiz}
+          offerId={selectedQuizOfferId}
+          token={token}
+          onQuizUpdated={fetchOffers}
+          onClose={handleCloseQuizManager}
         />
       )}
     </div>
