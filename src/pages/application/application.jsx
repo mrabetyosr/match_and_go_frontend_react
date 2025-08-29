@@ -4,12 +4,16 @@ import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import AddOffer from "../../components/AddOffer/AddOffer.jsx";
 import AddQuiz from "../../components/AddQuiz/AddQuiz.jsx";
+import EditOffer from "../../components/EditOffer/EditOffer.jsx";
+import { useNavigate } from "react-router-dom";
 import DetailsOffer from "../../components/DetailsOffer/DetailsOffer.jsx";
 import "./application.css";
 
 const Application = () => {
   const [offers, setOffers] = useState([]);
   const [showAddOffer, setShowAddOffer] = useState(false);
+  const [showEditOffer, setShowEditOffer] = useState(false); // Nouvel état
+  const [editingOffer, setEditingOffer] = useState(null); // Offre en cours d'édition
   const [showAddQuiz, setShowAddQuiz] = useState(false);
   const [currentOfferId, setCurrentOfferId] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -65,19 +69,23 @@ const Application = () => {
     }
   };
 
+  // Nouvelle fonction pour gérer l'édition
+  const handleEditOffer = (offer) => {
+    setEditingOffer(offer);
+    setShowEditOffer(true);
+  };
+
+  // Fonction pour fermer le modal d'édition
+  const handleCloseEditOffer = () => {
+    setShowEditOffer(false);
+    setEditingOffer(null);
+  };
+
+  // Ancienne fonction mise à jour (gardée pour compatibilité avec le menu)
   const handleUpdateOffer = async (id) => {
-    const updatedTitle = prompt("Enter new job title:");
-    if (!updatedTitle) return;
-    try {
-      await axios.put(
-        `http://localhost:7001/api/offers/update/${id}`,
-        { jobTitle: updatedTitle },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      toast.success("Offer updated");
-      fetchOffers();
-    } catch {
-      toast.error("Failed to update offer");
+    const offer = offers.find(o => o._id === id);
+    if (offer) {
+      handleEditOffer(offer);
     }
   };
 
@@ -246,7 +254,7 @@ const Application = () => {
                 <div className="offer-actions">
                   <button 
                     className="action-btn secondary"
-                    onClick={() => handleUpdateOffer(offer._id)}
+                    onClick={() => handleEditOffer(offer)}
                   >
                     Edit
                   </button>
@@ -287,6 +295,16 @@ const Application = () => {
         />
       )}
 
+      {/* Nouveau modal EditOffer */}
+      {showEditOffer && editingOffer && (
+        <EditOffer
+          token={token}
+          offer={editingOffer}
+          onOfferUpdated={fetchOffers}
+          onClose={handleCloseEditOffer}
+        />
+      )}
+
       {showAddQuiz && currentOfferId && (
         <AddQuiz
           token={token}
@@ -299,7 +317,7 @@ const Application = () => {
         />
       )}
 
-      {/* Modal DetailsOffer - Version simplifiée SANS double overlay */}
+      {/* Modal DetailsOffer */}
       {showDetailsModal && selectedOffer && (
         <DetailsOffer 
           offerId={selectedOffer._id} 

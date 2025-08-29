@@ -100,7 +100,8 @@ const DetailsOffer = ({ offerId, onClose }) => {
             <div className="info-grid">
               <div className="info-card">
                 <strong>Company</strong>
-                <span>{offer.companyId?.companyName || "N/A"}</span>
+                <span>{offer.companyId?.username || offer.companyId?.email || "N/A"}</span>
+
               </div>
               <div className="info-card">
                 <strong>Slots</strong>
