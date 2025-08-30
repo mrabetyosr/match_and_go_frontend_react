@@ -8,6 +8,7 @@ import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-ico
 import { useNavigate } from "react-router-dom"
 
 const timeSincePost = (jobDate) => {
+  if (!jobDate) return "N/A"
   const now = new Date()
   const posted = new Date(jobDate)
   const diffInMs = now - posted
@@ -29,7 +30,6 @@ const HeaderFindJob = () => {
   const [jobTypeFilter, setJobTypeFilter] = useState([])
   const [showJobTypes, setShowJobTypes] = useState(false)
   const [results, setResults] = useState([])
-  const [sortOption] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const jobsPerPage = 3
   const [savedJobs, setSavedJobs] = useState([])
@@ -37,32 +37,44 @@ const HeaderFindJob = () => {
 
   // Rotating words animation
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % rotatingWords.length)
-    }, 2000)
+    const interval = setInterval(() => setIndex((prev) => (prev + 1) % rotatingWords.length), 2000)
     return () => clearInterval(interval)
   }, [])
 
-  // 🔹 Fetch jobs from backend
+  // Fetch jobs from backend
   useEffect(() => {
     const fetchJobs = async () => {
       try {
         const res = await fetch("http://localhost:7001/api/offers/allOffers")
         const data = await res.json()
 
-        const enriched = data.map((job) => ({
-          ...job,
-          company: {
-            name: job.companyId.username,
-            logo: `http://localhost:7001/images/${job.companyId.image_User}`,
-            cover: `http://localhost:7001/images/${job.companyId.cover_User}`,
-            location: job.companyId.companyInfo?.location || "",
-            category: job.companyId.companyInfo?.category || "",
-            size: job.companyId.companyInfo?.size || "",
-            website: job.companyId.companyInfo?.website || "",
-            socialLinks: job.companyId.companyInfo?.socialLinks || {},
-          },
-        }))
+        const enriched = data.map((job) => {
+          const companyId = job.companyId
+          return {
+            ...job,
+            company: companyId
+              ? {
+                  name: companyId.username,
+                  logo: `http://localhost:7001/images/${companyId.image_User}`,
+                  cover: `http://localhost:7001/images/${companyId.cover_User}`,
+                  location: companyId.companyInfo?.location || "",
+                  category: companyId.companyInfo?.category || "",
+                  size: companyId.companyInfo?.size || "",
+                  website: companyId.companyInfo?.website || "",
+                  socialLinks: companyId.companyInfo?.socialLinks || {},
+                }
+              : {
+                  name: "Unknown Company",
+                  logo: "http://localhost:7001/images/default.png",
+                  cover: "http://localhost:7001/images/defaultCover.png",
+                  location: "",
+                  category: "",
+                  size: "",
+                  website: "",
+                  socialLinks: {},
+                },
+          }
+        })
 
         setResults(enriched)
       } catch (err) {
@@ -73,7 +85,7 @@ const HeaderFindJob = () => {
     fetchJobs()
   }, [])
 
-  // Filter and sort results
+  // Filter and sort
   const filteredResults = results
     .filter((job) => {
       const keywordMatch =
@@ -84,25 +96,11 @@ const HeaderFindJob = () => {
       const jobTypeMatch = jobTypeFilter.length === 0 || jobTypeFilter.includes(job.jobType)
       return keywordMatch && locationMatch && jobTypeMatch
     })
-    .sort((a, b) => {
-      switch (sortOption) {
-        case "salary":
-          return b.jobSalary - a.jobSalary
-        case "date":
-          return new Date(b.jobDate) - new Date(a.jobDate)
-        case "salary-date":
-          return b.jobSalary !== a.jobSalary ? b.jobSalary - a.jobSalary : new Date(b.jobDate) - new Date(a.jobDate)
-        default:
-          return 0
-      }
-    })
-
   const totalPages = Math.ceil(filteredResults.length / jobsPerPage)
   const currentJobs = filteredResults.slice((currentPage - 1) * jobsPerPage, currentPage * jobsPerPage)
 
-  const toggleJobType = (type) => {
+  const toggleJobType = (type) =>
     setJobTypeFilter((prev) => (prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]))
-  }
 
   const getJobTypeClass = (jobType) => {
     switch (jobType) {
@@ -163,12 +161,7 @@ const HeaderFindJob = () => {
             <div className="job-type-checkboxes">
               {["Internship", "FullTime", "PartTime"].map((type) => (
                 <label key={type}>
-                  <input
-                    type="checkbox"
-                    value={type}
-                    checked={jobTypeFilter.includes(type)}
-                    onChange={() => toggleJobType(type)}
-                  />
+                  <input type="checkbox" value={type} checked={jobTypeFilter.includes(type)} onChange={() => toggleJobType(type)} />
                   {type}
                 </label>
               ))}
@@ -213,14 +206,10 @@ const HeaderFindJob = () => {
                         {getJobTypeIcon(job.jobType)} {job.jobType}
                       </span>
                       {job.remote && <span className="remote-badge">🏠 Remote</span>}
-                      <span className="slots-badge">
-                        👥 {job.jobSlots} slot{job.jobSlots !== 1 ? "s" : ""}
-                      </span>
+                      <span className="slots-badge">👥 {job.jobSlots} slot{job.jobSlots !== 1 ? "s" : ""}</span>
                       <span className="posted-time">📅 {timeSincePost(job.jobDate)}</span>
                     </div>
-                    <div className="job-quick-reqs">
-                      🎓 {job.education || "N/A"} | 🧠 {job.experience || "N/A"}
-                    </div>
+                    <div className="job-quick-reqs">🎓 {job.education || "N/A"} | 🧠 {job.experience || "N/A"}</div>
                   </div>
 
                   <div className="job-footer">
@@ -256,27 +245,15 @@ const HeaderFindJob = () => {
             </div>
 
             <div className="pagination">
-              <button
-                className="prev"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              >
+              <button className="prev" onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
                 Prev
               </button>
               {[...Array(totalPages)].map((_, idx) => (
-                <button
-                  key={idx + 1}
-                  onClick={() => setCurrentPage(idx + 1)}
-                  className={currentPage === idx + 1 ? "active" : ""}
-                >
+                <button key={idx + 1} onClick={() => setCurrentPage(idx + 1)} className={currentPage === idx + 1 ? "active" : ""}>
                   {idx + 1}
                 </button>
               ))}
-              <button
-                className="next"
-                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-              >
+              <button className="next" onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
                 Next
               </button>
             </div>
