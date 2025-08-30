@@ -87,7 +87,7 @@
   color: #10b981;
 }
 
-.stat-icon.active-offers {
+.stat-icon.published-quizzes {
   background: #fef3c7;
   color: #d97706;
 }
@@ -367,6 +367,10 @@
   margin-bottom: 10px;
 }
 
+.quiz-info.clickable:hover .quiz-name {
+  color: #10b981;
+}
+
 .quiz-details {
   display: flex;
   align-items: center;
@@ -378,6 +382,7 @@
   font-weight: 600;
   color: #1e293b;
   font-size: 14px;
+  transition: color 0.2s ease;
 }
 
 .quiz-questions {
@@ -413,6 +418,15 @@
   border-color: #fde68a;
 }
 
+/* Quiz Actions Container */
+.quiz-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+/* Publish Quiz Button */
 .publish-quiz-btn {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
@@ -427,6 +441,8 @@
   gap: 6px;
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+  min-width: 90px;
+  justify-content: center;
 }
 
 .publish-quiz-btn:hover:not(:disabled) {
@@ -438,6 +454,61 @@
 .publish-quiz-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.publish-quiz-btn.loading {
+  pointer-events: none;
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Delete Quiz Button */
+.delete-quiz-btn {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+  min-width: 85px;
+  justify-content: center;
+}
+
+.delete-quiz-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+}
+
+.delete-quiz-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.delete-quiz-btn.loading {
+  pointer-events: none;
+}
+
+.delete-icon {
+  font-size: 12px;
+}
+
+.publish-icon {
+  font-size: 12px;
 }
 
 /* Action Buttons */
@@ -512,6 +583,25 @@
   background: #fee2e2;
   border-color: #fca5a5;
   transform: translateY(-1px);
+}
+
+/* Menu Button */
+.menu-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: #64748b;
+  transition: all 0.2s ease;
+}
+
+.menu-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #475569;
 }
 
 /* Pagination */
@@ -612,11 +702,44 @@
 .stat-icon.total-offers::before {
   content: "📊";
 }
-.stat-icon.active-offers::before {
-  content: "⚡";
+.stat-icon.published-quizzes::before {
+  content: "🚀";
 }
 .stat-icon.total-quizzes::before {
   content: "📝";
+}
+
+/* Custom Toast Styles */
+.Toastify__toast-container {
+  z-index: 10000;
+}
+
+.Toastify__toast--info {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.Toastify__toast--success {
+  background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 100%);
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+}
+
+.Toastify__toast--error {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+}
+
+.Toastify__toast--warning {
+  background: linear-gradient(135deg, #fefbeb 0%, #fef3c7 100%);
+  color: #d97706;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
 }
 
 /* Responsive */
@@ -647,5 +770,53 @@
   .action-btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .quiz-actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .publish-quiz-btn,
+  .delete-quiz-btn {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .quiz-details {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .quiz-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .application-dashboard {
+    padding: 15px;
+  }
+
+  .dashboard-header {
+    padding: 20px;
+  }
+
+  .offers-section {
+    padding: 20px;
+  }
+
+  .offer-card {
+    padding: 16px;
+  }
+
+  .quiz-section {
+    padding: 14px;
+  }
+
+  .quiz-item {
+    padding: 12px;
   }
 }

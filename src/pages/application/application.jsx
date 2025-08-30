@@ -37,6 +37,9 @@ const [offers, setOffers] = useState([])
 
   // Loading states for publish actions
   const [publishingQuizzes, setPublishingQuizzes] = useState(new Set())
+  
+  // Loading states for delete actions
+  const [deletingQuizzes, setDeletingQuizzes] = useState(new Set())
 
   const token = localStorage.getItem("token")
 
@@ -143,6 +146,106 @@ const [offers, setOffers] = useState([])
         return newSet
       })
     }
+  }
+
+  // Fonction pour supprimer un quiz
+  const handleDeleteQuiz = async (quizId, quizTitle) => {
+    if (deletingQuizzes.has(quizId)) return // Éviter les double clics
+
+    toast.info(
+      <div>
+        <p>Are you sure you want to delete the quiz "{quizTitle}"?</p>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "15px" }}>
+          <button
+            onClick={async () => {
+              setDeletingQuizzes((prev) => new Set(prev).add(quizId))
+              
+              try {
+                const response = await axios.delete(
+                  `http://localhost:7001/api/offers/deletequiz/${quizId}`,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                      "Content-Type": "application/json",
+                    },
+                  }
+                )
+
+                if (response.status === 200) {
+                  toast.dismiss()
+                  toast.success("Quiz deleted successfully!")
+                  fetchOffers() // Rafraîchir la liste des offres
+                }
+              } catch (error) {
+                console.error("Error deleting quiz:", error)
+                toast.dismiss()
+
+                if (error.response) {
+                  const { status, data } = error.response
+
+                  switch (status) {
+                    case 404:
+                      toast.error("Quiz not found")
+                      break
+                    case 403:
+                      toast.error("You are not authorized to delete this quiz")
+                      break
+                    case 400:
+                      toast.warning(data.message || "Unable to delete quiz")
+                      break
+                    case 500:
+                      toast.error("Server error. Please try again later")
+                      break
+                    default:
+                      toast.error("Failed to delete quiz")
+                  }
+                } else {
+                  toast.error("Network error. Please check your connection")
+                }
+              } finally {
+                setDeletingQuizzes((prev) => {
+                  const newSet = new Set(prev)
+                  newSet.delete(quizId)
+                  return newSet
+                })
+              }
+            }}
+            style={{ 
+              background: "#dc2626", 
+              color: "white", 
+              border: "none", 
+              padding: "8px 16px", 
+              borderRadius: "6px",
+              fontSize: "13px",
+              fontWeight: "600",
+              cursor: "pointer"
+            }}
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss()}
+            style={{ 
+              background: "#6b7280", 
+              color: "white", 
+              border: "none", 
+              padding: "8px 16px", 
+              borderRadius: "6px",
+              fontSize: "13px",
+              fontWeight: "600",
+              cursor: "pointer"
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>,
+      { 
+        autoClose: false,
+        closeOnClick: false,
+        closeButton: false
+      },
+    )
   }
 
   // Pagination calculations
@@ -415,30 +518,55 @@ const [offers, setOffers] = useState([])
                               </div>
                             </div>
 
-                            {/* Publish Button - Only show if quiz is not published */}
-                            {!quiz.isPublished && (
+                            <div className="quiz-actions">
+                              {/* Publish Button - Only show if quiz is not published */}
+                              {!quiz.isPublished && (
+                                <button
+                                  className={`publish-quiz-btn ${publishingQuizzes.has(quiz._id) ? "loading" : ""}`}
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    handlePublishQuiz(quiz._id)
+                                  }}
+                                  disabled={publishingQuizzes.has(quiz._id)}
+                                  title="Publish this quiz"
+                                >
+                                  {publishingQuizzes.has(quiz._id) ? (
+                                    <>
+                                      <span className="loading-spinner">⏳</span>
+                                      Publishing...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <span className="publish-icon">🚀</span>
+                                      Publish
+                                    </>
+                                  )}
+                                </button>
+                              )}
+
+                              {/* Delete Button */}
                               <button
-                                className={`publish-quiz-btn ${publishingQuizzes.has(quiz._id) ? "loading" : ""}`}
+                                className={`delete-quiz-btn ${deletingQuizzes.has(quiz._id) ? "loading" : ""}`}
                                 onClick={(e) => {
                                   e.stopPropagation()
-                                  handlePublishQuiz(quiz._id)
+                                  handleDeleteQuiz(quiz._id, quiz.title)
                                 }}
-                                disabled={publishingQuizzes.has(quiz._id)}
-                                title="Publish this quiz"
+                                disabled={deletingQuizzes.has(quiz._id)}
+                                title="Delete this quiz"
                               >
-                                {publishingQuizzes.has(quiz._id) ? (
+                                {deletingQuizzes.has(quiz._id) ? (
                                   <>
                                     <span className="loading-spinner">⏳</span>
-                                    Publishing...
+                                    Deleting...
                                   </>
                                 ) : (
                                   <>
-                                    <span className="publish-icon">🚀</span>
-                                    Publish
+                                    <span className="delete-icon">🗑️</span>
+                                    Delete
                                   </>
                                 )}
                               </button>
-                            )}
+                            </div>
                           </div>
                         ))}
                       </div>

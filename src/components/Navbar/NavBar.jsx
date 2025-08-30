@@ -41,7 +41,6 @@ const handleLogout = () => {
         <ul className='navbar-menu'>
           <Link to="/"><li onClick={() => setMenu("home")} className={menu === "home" ? "active" : ""}>Home</li></Link>
           <Link to="/find-job"><li onClick={() => setMenu("find-a-job")} className={menu === "find-a-job" ? "active" : ""}>Find a job</li></Link>
-          <Link to="/find-company"><li onClick={() => setMenu("find-a-company")} className={menu === "find-a-company" ? "active" : ""}>Find a company</li></Link>
           <Link to="/forum"><li onClick={() => setMenu("forum")} className={menu === "forum" ? "active" : ""}>Forum</li></Link>
         </ul>
         <div className="navbar-right">
