@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { jwtDecode } from 'jwt-decode'
+import  { jwtDecode } from 'jwt-decode'
 import AddOffer from '../../components/AddOffer/AddOffer.jsx'
 import EditOffer from '../../components/EditOffer/EditOffer.jsx'
 import AddQuiz from '../../components/AddQuiz/AddQuiz.jsx'
