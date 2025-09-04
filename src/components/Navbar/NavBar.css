@@ -35,13 +35,29 @@ body {
 }
 
 .logo {
-  height: 250px;           /* Adjust as needed (e.g., 50px–60px) */
-  width: auto;            /* Maintain aspect ratio */
+  height: 27px;          /* taille par défaut */
+  width: auto;           /* garder le ratio */
   cursor: pointer;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
   object-fit: contain;
-  display: block;         /* Helps with alignment */
+  display: block;
+  transition: height 0.3s ease; /* animation fluide lors du redimensionnement */
 }
+
+/* Tablette */
+@media (max-width: 768px) {
+  .logo {
+    height: 22px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .logo {
+    height: 18px;
+  }
+}
+
 
 
 .navbar-menu {
@@ -219,4 +235,42 @@ body {
   text-decoration: none;
   color: inherit;
   display: block;
+}
+.user-dropdown {
+  position: relative;
+}
+
+.dropdown-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-top: 5px;
+  min-width: 120px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 1000;
+}
+
+.dropdown-menu li {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f0f0f0;
 }

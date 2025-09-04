@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.11.0",
     "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.542.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-feather": "^2.0.10",
