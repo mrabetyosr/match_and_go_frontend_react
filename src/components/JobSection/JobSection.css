@@ -32,12 +32,12 @@
 /* Nouveau style du cadre plus petit et positionné en haut à droite */
 .job-text-overlay {
   position: absolute;
-  top: 60px;
-  right: 80px;
+  top: 40px;
+  right: 10px;
   backdrop-filter: blur(8px);
   padding: 14px 18px;
   border-radius: 12px;
-  max-width: 400px;
+  max-width: 600px;
   z-index: 2;
 }
 
@@ -63,7 +63,7 @@
 }
 
 /* Bouton modernisé */
-.find-job-button {
+.find-job-buttons {
   background-color: #464646;
   color: #fff;
   padding: 10px 20px;
@@ -74,9 +74,11 @@
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
+  
 }
 
-.find-job-button:hover {
+.find-job-buttons:hover {
   background-color: #000000;
   color: #ffffff;
 }
