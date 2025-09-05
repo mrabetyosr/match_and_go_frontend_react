@@ -14,7 +14,7 @@ const JobSection = () => {
     <p>Explore authentic teams, values, and daily life. Go beyond job titles to find real fit.</p>
     <p>Every company has a story. Discover their culture before applying.</p>
     <p><strong>MATCH&GO</strong> helps you connect with companies that match your goals and values — faster, smarter, and more personally.</p>
-    <button className="find-job-button">Find Job</button>
+    <button className="find-job-buttons">Find Job</button>
   </div>
 </div>
 

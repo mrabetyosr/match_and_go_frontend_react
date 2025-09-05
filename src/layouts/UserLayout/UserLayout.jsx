@@ -10,11 +10,13 @@ import ScrollToTopButton from '../../components/ScrollToTopButton/ScrollToTopBut
 import Home from '../../pages/Home/Home.jsx';
 import FindJob from '../../pages/FindJob/FindJob.jsx';
 import JobDetails from '../../components/JobDetails/JobDetails.jsx';
-import Application from '../../pages/application/Application.jsx';
+import ApplicationCompany from '../../components/ApplicationCompany/ApplicationCompany.jsx';
+import ApplicationUser from '../../components/ApplicationUser/ApplicationUser.jsx';
 
 import './UserLayout.css';
 import  Settings  from '../../pages/settings/settings.jsx';
 import UpdateSettings from '../../components/updatesettings/updatesettings.jsx';
+import FullApplication from '../../pages/FullApplication/FullApplication.jsx';
 
 const UserLayout = () => {
   const [showSignIn, setShowSignIn] = useState(false);
@@ -43,9 +45,13 @@ const UserLayout = () => {
         <Route path="/" element={<Home />} />
         <Route path="/find-job" element={<FindJob />} />
         <Route path="/find-job/details/:id" element={<JobDetails />} />
-        <Route path="/applications" element={<Application />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/update-profile" element={<UpdateSettings />} />
+        <Route path="/applications" element={<FullApplication />}>
+        {/* Enfants */}
+        <Route path="company" element={<ApplicationCompany />} />
+        <Route path="user" element={<ApplicationUser />} />
+      </Route>
 
 
       </Routes>
