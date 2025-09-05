@@ -1,0 +1,143 @@
+/* updatesettings.css */
+
+/* Variables globales */
+:root {
+  --primary-color: #2ecc71;
+  --primary-hover: #27ae60;
+  --primary-gradient: linear-gradient(135deg, #2ecc71, #27ae60);
+  --light-bg: #f9f9f9;
+  --text-color: #333;
+  --input-bg: #fff;
+  --input-border: #ddd;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --border-radius: 12px;
+  --transition-speed: 0.3s;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Conteneur principal */
+.update-profile-card {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: var(--light-bg);
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 20px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+  font-family: var(--font-family);
+  transition: transform var(--transition-speed);
+}
+
+.update-profile-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Section cover et avatar */
+.cover-section, .avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  transition: box-shadow var(--transition-speed);
+}
+
+.cover-section:hover, .avatar-section:hover {
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.cover-section img, .avatar-section img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  border: 2px solid var(--input-border);
+  transition: transform var(--transition-speed);
+}
+
+.cover-section img:hover, .avatar-section img:hover {
+  transform: scale(1.05);
+}
+
+.cover-section .file-label, .avatar-section .file-label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: var(--text-color);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.cover-section input[type="file"], .avatar-section input[type="file"] {
+  display: none;
+}
+
+.file-name {
+  margin-top: 5px;
+  font-size: 13px;
+  color: #555;
+  font-style: italic;
+}
+
+/* Boutons de mise à jour */
+.cover-section button, .avatar-section button, .form-section button {
+  margin-top: 12px;
+  padding: 12px 25px;
+  background: var(--primary-gradient);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all var(--transition-speed);
+}
+
+.cover-section button:hover, .avatar-section button:hover, .form-section button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+/* Formulaire */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-section input {
+  padding: 14px;
+  border: 1px solid var(--input-border);
+  border-radius: var(--border-radius);
+  font-size: 15px;
+  outline: none;
+  transition: all var(--transition-speed);
+  background-color: var(--input-bg);
+}
+
+.form-section input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .update-profile-card {
+    padding: 25px 20px;
+  }
+
+  .cover-section, .avatar-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cover-section img, .avatar-section img {
+    width: 100%;
+    height: auto;
+  }
+}

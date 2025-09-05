@@ -1,0 +1,100 @@
+/* Container */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 240px;
+  background-color: white; /* Fond blanc */
+  color: #16a34a; /* Texte vert */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+/* Logo */
+.sidebar-logo {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.sidebar-logo h1 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #16a34a;
+}
+
+/* Menu */
+.sidebar-menu {
+  flex: 1;
+  padding: 20px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  color: #16a34a;
+  transition: all 0.3s ease;
+}
+
+.sidebar-link:hover {
+  background-color: #16a34a;
+  color: white;
+}
+
+/* Footer */
+.sidebar-footer {
+  padding: 15px;
+  text-align: center;
+  font-size: 13px;
+  border-top: 1px solid #e5e5e5;
+  color: #666;
+}
+
+/* Bouton Hamburger */
+.sidebar-toggle {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 1100;
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar-toggle {
+    display: block;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
