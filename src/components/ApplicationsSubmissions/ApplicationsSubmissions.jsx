@@ -201,7 +201,7 @@ const ApplicationsSubmissions = ({ offerId, offerTitle, onClose }) => {
                 <div className="documents-links">
                   {application.cv && (
                     <a 
-                      href={`http://localhost:7001/${application.cv}`} 
+                      href={`http://localhost:7001/images/${application.cv}`}  
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="doc-link cv-link"
@@ -213,13 +213,13 @@ const ApplicationsSubmissions = ({ offerId, offerTitle, onClose }) => {
                   
                   {application.motivationLetter && (
                     <a 
-                      href={`http://localhost:7001/${application.motivationLetter}`} 
+                      href={`http://localhost:7001/images/${application.motivationLetter}`} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="doc-link cover-link"
                     >
                       <FileText className="doc-icon" />
-                      Cover Letter
+                      Download Letter
                     </a>
                   )}
                   
