@@ -9,6 +9,7 @@ import AddQuiz from '../../components/AddQuiz/AddQuiz.jsx'
 import QuizManager from '../../components/QuizManager/QuizManager.jsx'
 import DetailsOffer from '../../components/DetailsOffer/DetailsOffer.jsx'
 import './ApplicationCompany.css'
+import ApplicationsSubmissions from '../ApplicationsSubmissions/ApplicationsSubmissions.jsx'
 
 
 const ApplicationCompany = () => {
@@ -25,6 +26,23 @@ const [offers, setOffers] = useState([])
   const [showQuizManager, setShowQuizManager] = useState(false)
   const [selectedQuiz, setSelectedQuiz] = useState(null)
   const [selectedQuizOfferId, setSelectedQuizOfferId] = useState(null)
+
+  // Applications states 
+const [showApplications, setShowApplications] = useState(false)
+const [selectedOfferId, setSelectedOfferId] = useState(null)
+const [selectedOfferTitle, setSelectedOfferTitle] = useState('')
+// Applications handlers - AJOUTER CES FONCTIONS
+const handleViewApplications = (offer) => {
+  setSelectedOfferId(offer._id)
+  setSelectedOfferTitle(offer.jobTitle)
+  setShowApplications(true)
+}
+
+const handleCloseApplications = () => {
+  setShowApplications(false)
+  setSelectedOfferId(null)
+  setSelectedOfferTitle('')
+}
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1)
@@ -447,23 +465,29 @@ const [offers, setOffers] = useState([])
                   )}
 
                   {/* Action Buttons */}
-                  <div className="offer-actions">
-                    <button className="action-btn details" onClick={() => handleShowDetails(offer)}>
-                      Details
-                    </button>
-                    <button
-                      className="action-btn primary"
-                      onClick={() => {
-                        setCurrentOfferId(offer._id)
-                        setShowAddQuiz(true)
-                      }}
-                    >
-                      Add Quiz
-                    </button>
-                    <button className="action-btn danger" onClick={() => handleDeleteOffer(offer._id)}>
-                      Delete
-                    </button>
-                  </div>
+<div className="offer-actions">
+  <button className="action-btn details" onClick={() => handleShowDetails(offer)}>
+    Details
+  </button>
+  <button 
+    className="view-applications-btn" 
+    onClick={() => handleViewApplications(offer)}
+  >
+    View Applications
+  </button>
+  <button
+    className="action-btn primary"
+    onClick={() => {
+      setCurrentOfferId(offer._id)
+      setShowAddQuiz(true)
+    }}
+  >
+    Add Quiz
+  </button>
+  <button className="action-btn danger" onClick={() => handleDeleteOffer(offer._id)}>
+    Delete
+  </button>
+</div>
                 </div>
               ))}
             </div>
@@ -542,6 +566,15 @@ const [offers, setOffers] = useState([])
           onClose={handleCloseQuizManager}
         />
       )}
+
+      {/* Applications Modal - AJOUTER CETTE SECTION */}
+{showApplications && selectedOfferId && (
+  <ApplicationsSubmissions
+    offerId={selectedOfferId}
+    offerTitle={selectedOfferTitle}
+    onClose={handleCloseApplications}
+  />
+)}
     </div>
   )
 }
