@@ -14,7 +14,7 @@ const ApplicationUser = () => {
   const [activeTab, setActiveTab] = useState("applications");
 
   return (
-    <div>
+    <div className="application-user">
       {/* Tab Buttons */}
       <div className="button-container">
         {Object.keys(tabs).map((tab) => (
