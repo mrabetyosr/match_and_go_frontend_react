@@ -1,0 +1,60 @@
+/* ApplicationUser.css */
+
+/* Parent container for scoping */
+.application-user {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f7faf7; /* light background for the page */
+  font-family: Arial, sans-serif;
+}
+
+/* Sidebar buttons container */
+.application-user .button-container {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  background-color: #ffffff; /* sidebar white */
+  padding: 20px 0;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Individual buttons */
+.application-user .button-container button {
+  padding: 15px 20px;
+  margin: 5px 10px;
+  background-color: transparent;
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  color: #2fa84f; /* green text */
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.application-user .button-container button:hover {
+  background-color: #e6f4ea; /* light green on hover */
+}
+
+.application-user .button-container button.active {
+  background-color: #2fa84f; /* green background for active */
+  color: #ffffff; /* white text when active */
+}
+
+/* Content area */
+.application-user .tab-content {
+  flex: 1;
+  padding: 30px;
+  background-color: #f7faf7;
+  overflow-y: auto;
+}
+
+/* Scrollbar style (optional) */
+.application-user .tab-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.application-user .tab-content::-webkit-scrollbar-thumb {
+  background-color: #2fa84f;
+  border-radius: 4px;
+}
