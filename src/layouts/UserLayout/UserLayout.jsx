@@ -12,6 +12,7 @@ import FindJob from '../../pages/FindJob/FindJob.jsx';
 import JobDetails from '../../components/JobDetails/JobDetails.jsx';
 import ApplicationCompany from '../../components/ApplicationCompany/ApplicationCompany.jsx';
 import ApplicationUser from '../../components/ApplicationUser/ApplicationUser.jsx';
+import Forum from '../../pages/Forum/Forum.jsx';
 
 import './UserLayout.css';
 import  Settings  from '../../pages/settings/settings.jsx';
@@ -47,6 +48,7 @@ const UserLayout = () => {
         <Route path="/find-job/details/:id" element={<JobDetails />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/update-profile" element={<UpdateSettings />} />
+        <Route path='/Forum' element={<Forum/>} /> 
         <Route path="/applications" element={<FullApplication />}>
         {/* Enfants */}
         <Route path="company" element={<ApplicationCompany />} />
