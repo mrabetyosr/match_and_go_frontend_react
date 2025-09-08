@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { User, MapPin, Phone, Mail, Calendar, FileText, Github, Linkedin, Clock, CheckCircle, XCircle, ArrowLeft } from 'lucide-react';
+import { User, MapPin, Phone, Mail, Calendar, FileText, Github, Linkedin, Clock, CheckCircle, XCircle, ArrowLeft, UserCheck } from 'lucide-react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './ApplicationsSubmissions.css'; // Assuming you have a CSS file for styling
+import './ApplicationsSubmissions.css';
+import ScheduleInterviewModal from '../ScheduleInterviewModal/ScheduleInterviewModal';
+
 
 const ApplicationsSubmissions = ({ offerId, offerTitle, onClose }) => {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [updatingStatus, setUpdatingStatus] = useState(new Set());
+  const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [selectedApplication, setSelectedApplication] = useState(null);
 
   const token = localStorage.getItem('token');
 
@@ -42,6 +46,14 @@ const ApplicationsSubmissions = ({ offerId, offerTitle, onClose }) => {
   const updateApplicationStatus = async (applicationId, newStatus) => {
     if (updatingStatus.has(applicationId)) return;
 
+    // Si le nouveau statut est "interview_scheduled", ouvrir le modal
+    if (newStatus === 'interview_scheduled') {
+      const application = applications.find(app => app._id === applicationId);
+      setSelectedApplication(application);
+      setScheduleModalOpen(true);
+      return;
+    }
+
     setUpdatingStatus(prev => new Set(prev).add(applicationId));
 
     try {
@@ -58,12 +70,13 @@ const ApplicationsSubmissions = ({ offerId, offerTitle, onClose }) => {
         setApplications(prev => prev.map(app => 
           app._id === applicationId ? { ...app, status: newStatus } : app
         ));
-        toast.success(`Application ${newStatus} successfully!`);
+        toast.success(`Application ${newStatus.replace('_', ' ')} successfully!`);
       } else {
-        throw new Error('Failed to update status');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update status');
       }
     } catch (err) {
-      toast.error('Failed to update application status');
+      toast.error(err.message || 'Failed to update application status');
       console.error('Error updating status:', err);
     } finally {
       setUpdatingStatus(prev => {
@@ -74,10 +87,18 @@ const ApplicationsSubmissions = ({ offerId, offerTitle, onClose }) => {
     }
   };
 
+  const handleInterviewScheduled = (applicationId) => {
+    // Mettre à jour le statut de l'application à "interview_scheduled"
+    setApplications(prev => prev.map(app => 
+      app._id === applicationId ? { ...app, status: 'interview_scheduled' } : app
+    ));
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'accepted': return 'status-accepted';
       case 'rejected': return 'status-rejected';
+      case 'interview_scheduled': return 'status-interview';
       default: return 'status-pending';
     }
   };
@@ -86,7 +107,36 @@ const ApplicationsSubmissions = ({ offerId, offerTitle, onClose }) => {
     switch (status) {
       case 'accepted': return <CheckCircle className="status-icon" />;
       case 'rejected': return <XCircle className="status-icon" />;
+      case 'interview_scheduled': return <UserCheck className="status-icon" />;
       default: return <Clock className="status-icon" />;
+    }
+  };
+
+  const getStatusText = (status) => {
+    switch (status) {
+      case 'interview_scheduled': return 'Interview Scheduled';
+      default: return status.charAt(0).toUpperCase() + status.slice(1);
+    }
+  };
+
+  // Fonction pour déterminer les actions possibles selon le statut actuel
+  const getAvailableActions = (currentStatus) => {
+    switch (currentStatus) {
+      case 'pending':
+        return [
+          { action: 'interview_scheduled', label: 'Schedule Interview', icon: UserCheck, className: 'interview-btn' },
+          { action: 'rejected', label: 'Reject', icon: XCircle, className: 'reject-btn' }
+        ];
+      case 'interview_scheduled':
+        return [
+          { action: 'accepted', label: 'Accept', icon: CheckCircle, className: 'accept-btn' },
+          { action: 'rejected', label: 'Reject', icon: XCircle, className: 'reject-btn' }
+        ];
+      case 'accepted':
+      case 'rejected':
+        return []; 
+      default:
+        return [];
     }
   };
 
@@ -165,7 +215,7 @@ const ApplicationsSubmissions = ({ offerId, offerTitle, onClose }) => {
                   <div className="application-meta">
                     <div className={`status-badge ${getStatusColor(application.status)}`}>
                       {getStatusIcon(application.status)}
-                      <span>{application.status.charAt(0).toUpperCase() + application.status.slice(1)}</span>
+                      <span>{getStatusText(application.status)}</span>
                     </div>
                     <div className="application-date">
                       {new Date(application.createdAt).toLocaleDateString()}
@@ -248,31 +298,73 @@ const ApplicationsSubmissions = ({ offerId, offerTitle, onClose }) => {
                   )}
                 </div>
 
-                {/* Action Buttons */}
+                {/* Action Buttons - Logique dynamique selon le statut */}
+                {(() => {
+                  const availableActions = getAvailableActions(application.status);
+                  
+                  if (availableActions.length === 0) {
+                    return (
+                      <div className="status-final">
+                        <span className="final-status-text">
+                          {application.status === 'accepted' && '✅ Application accepted - Final decision'}
+                          {application.status === 'rejected' && '❌ Application rejected - Final decision'}
+                        </span>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div className="action-buttons">
+                      {availableActions.map(({ action, label, icon: Icon, className }) => (
+                        <button
+                          key={action}
+                          onClick={() => updateApplicationStatus(application._id, action)}
+                          className={`action-btn ${className} ${updatingStatus.has(application._id) ? 'loading' : ''}`}
+                          disabled={updatingStatus.has(application._id)}
+                        >
+                          <Icon className="btn-icon" />
+                          {updatingStatus.has(application._id) ? `${label.split(' ')[0]}ing...` : label}
+                        </button>
+                      ))}
+                    </div>
+                  );
+                })()}
+
+                {/* Information sur les transitions possibles */}
                 {application.status === 'pending' && (
-                  <div className="action-buttons">
-                    <button
-                      onClick={() => updateApplicationStatus(application._id, 'accepted')}
-                      className={`action-btn accept-btn ${updatingStatus.has(application._id) ? 'loading' : ''}`}
-                      disabled={updatingStatus.has(application._id)}
-                    >
-                      <CheckCircle className="btn-icon" />
-                      {updatingStatus.has(application._id) ? 'Accepting...' : 'Accept'}
-                    </button>
-                    <button
-                      onClick={() => updateApplicationStatus(application._id, 'rejected')}
-                      className={`action-btn reject-btn ${updatingStatus.has(application._id) ? 'loading' : ''}`}
-                      disabled={updatingStatus.has(application._id)}
-                    >
-                      <XCircle className="btn-icon" />
-                      {updatingStatus.has(application._id) ? 'Rejecting...' : 'Reject'}
-                    </button>
+                  <div className="transition-info">
+                    <small className="text-muted">
+                      💡 You can schedule an interview or reject this application
+                    </small>
+                  </div>
+                )}
+                
+                {application.status === 'interview_scheduled' && (
+                  <div className="transition-info">
+                    <small className="text-muted">
+                      💡 After the interview, you can accept or reject this candidate
+                    </small>
                   </div>
                 )}
               </div>
             ))
           )}
         </div>
+
+        {/* Schedule Interview Modal */}
+        {scheduleModalOpen && selectedApplication && (
+          <ScheduleInterviewModal
+            isOpen={scheduleModalOpen}
+            onClose={() => {
+              setScheduleModalOpen(false);
+              setSelectedApplication(null);
+            }}
+            applicationId={selectedApplication._id}
+            candidateName={selectedApplication.candidateId?.username || 'Unknown Candidate'}
+            jobTitle={offerTitle}
+            onInterviewScheduled={handleInterviewScheduled}
+          />
+        )}
       </div>
     </div>
   );
