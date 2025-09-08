@@ -1,10 +1,12 @@
+// FullApplication.jsx
 import React, { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 import { toast } from "react-toastify";
 
 const FullApplication = () => {
-const navigate = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -18,11 +20,11 @@ const navigate = useNavigate();
     try {
       const decoded = jwtDecode(token);
 
-      if (decoded.role === "company") {
+      if (decoded.role === "company" && !location.pathname.startsWith("/applications/company")) {
         navigate("/applications/company");
-      } else if (decoded.role === "candidate") {
+      } else if (decoded.role === "candidate" && !location.pathname.startsWith("/applications/user")) {
         navigate("/applications/user");
-      } else {
+      } else if (!["company", "candidate"].includes(decoded.role)) {
         toast.error("Unauthorized access");
         navigate("/");
       }
@@ -31,14 +33,9 @@ const navigate = useNavigate();
       localStorage.removeItem("token");
       navigate("/login");
     }
-  }, [navigate]);
+  }, [navigate, location]);
 
-  return (
-    <div>
-      <Outlet />
-    </div>
-  );
+  return <Outlet />;
 };
 
 export default FullApplication;
-
