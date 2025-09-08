@@ -1,251 +1,109 @@
-/* ViewCandidateApplication.css
-   Palette : blanc (fond principal) + vert (accent).
-   Modern, épuré, responsive, cartes compactes (sans animation).
-*/
-
-/* variables de thème */
-:root{
-  --bg: #f7faf7;
-  --card-bg: #ffffff;
-  --accent: #2fa84f;
-  --accent-dark: #248a3f;
-  --muted: #667085;
-  --glass: rgba(255,255,255,0.65);
-  --radius: 12px;
-  --shadow: 0 6px 20px rgba(16,24,40,0.08);
-  --shadow-soft: 0 3px 10px rgba(16,24,40,0.06);
-  --max-width: 1200px;
-  --gap: 18px;
-  --card-min-width: 220px;
-}
-
-/* Reset & base */
-* {
-  box-sizing: border-box;
-}
-html,body,#root {
-  height: 100%;
-  margin: 0;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background: var(--bg);
-  color: #0f172a;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-h2, h3, h4, p { margin: 0; }
-
-/* container principal */
-.applications-container{
+/* Container principal */
+.applications-container {
   width: 100%;
-  max-width: var(--max-width);
-  margin: 28px auto;
-  padding: 22px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));
-  border-radius: calc(var(--radius) + 4px);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(6px);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Segoe UI", sans-serif;
 }
 
-/* titre */
-.applications-container > h2{
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #07122a;
+/* Grid pour les statuts */
+.status-grid {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-.applications-container > h2::before{
-  content: "";
-  width: 10px;
-  height: 10px;
-  background: var(--accent);
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(47,168,79,0.18);
+  flex-direction: column;
+  gap: 2rem;
 }
 
-/* grille de status */
-.status-grid{
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--gap);
-}
-
-/* responsive */
-@media (max-width: 1100px){
-  .status-grid{ grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 720px){
-  .status-grid{ grid-template-columns: 1fr; }
-}
-
-/* groupe de status */
-.status-group{
-  background: linear-gradient(180deg, var(--glass), rgba(255,255,255,0.7));
-  border-radius: var(--radius);
-  padding: 14px;
-  min-height: 140px;
-  box-shadow: var(--shadow-soft);
+/* Chaque statut */
+.status-group {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  border: 1px solid rgba(34,197,94,0.06);
-}
-.status-group:hover{
-  transform: translateY(-3px);
-  box-shadow: var(--shadow);
 }
 
-/* titre du status */
-.status-title{
+/* Titre du statut */
+.status-title {
   text-transform: capitalize;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #0b2b16;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.status-title::after{
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(10,60,20,0.06), rgba(10,60,20,0.02));
-  margin-left: 6px;
-}
-
-/* grille de cartes */
-.cards-grid{
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--card-min-width), 1fr));
-  gap: 12px;
-  align-items: start;
-}
-
-/* carte d'application */
-.application-card{
-  background: var(--card-bg);
-  border-radius: 10px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-height: 120px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(15,23,42,0.04);
-  cursor: default;
-}
-.application-card:hover{
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 14px 30px rgba(16,24,40,0.12);
-  background-color: #f9fff9;
-}
-
-/* card header */
-.application-card h4{
-  font-size: 0.98rem;
-  font-weight: 700;
-  color: #07122a;
-  line-height: 1.15;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.application-card:hover h4{
-  color: var(--accent-dark);
-}
-
-/* texte */
-.application-card p{
-  font-size: 0.85rem;
-  color: var(--muted);
-  line-height: 1.2;
-}
-.application-card p strong{
-  color: #0b1720;
+  font-size: 1.5rem;
+  color: #2e7d32;
   font-weight: 600;
-  margin-right: 6px;
-  font-size: 0.86rem;
 }
 
-/* company image */
-.company-image{
-  width: 48px;
-  height: 48px;
+/* Conteneur cartes - horizontal */
+.cards-grid {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto; /* scroll horizontal si trop de cartes */
+  padding-bottom: 8px;
+}
+
+.cards-grid::-webkit-scrollbar {
+  height: 8px;
+}
+
+.cards-grid::-webkit-scrollbar-thumb {
+  background: #4caf50;
+  border-radius: 4px;
+}
+
+.cards-grid::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+/* Carte d'application */
+.application-card {
+  min-width: 250px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  flex-shrink: 0; /* éviter que la carte se réduise */
+}
+
+.application-card h4 {
+  margin: 0 0 8px 0;
+  font-size: 1.2rem;
+  color: #2e7d32;
+}
+
+.application-card p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.company-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
   object-fit: cover;
-  border-radius: 8px;
-  align-self: flex-end;
-  border: 1px solid rgba(15,23,42,0.04);
-  box-shadow: 0 6px 18px rgba(12,17,22,0.04);
-}
-.application-card:hover .company-image{
-  transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(15,23,42,0.12);
+  margin-top: 8px;
 }
 
-/* badge status */
-.application-card .status-badge{
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 0.78rem;
-  color: #fff;
-  background: var(--accent);
-  text-transform: capitalize;
-  align-self: flex-start;
-  margin-top: 4px;
-}
-.application-card:hover .status-badge{
-  background-color: var(--accent-dark);
-}
-
-/* loader */
-.spinner-container{
+/* Loader */
+.spinner-container {
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 46px 0;
+  margin: 40px 0;
 }
-.spinner{
-  width: 44px;
-  height: 44px;
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f0f0f0;
+  border-top: 4px solid #4caf50;
   border-radius: 50%;
-  border: 5px solid rgba(47,168,79,0.14);
-  border-top-color: var(--accent);
+  animation: spin 1s linear infinite;
 }
 
-/* message d'erreur */
-.error-message{
-  background: #fff5f5;
-  color: #9b1c1c;
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid rgba(155,28,28,0.08);
-  box-shadow: 0 6px 18px rgba(140,20,20,0.03);
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Message d'erreur */
+.error-message {
+  color: red;
   font-weight: 600;
-}
-
-/* helpers */
-.status-group p{ margin: 0; font-size: 0.92rem; color: var(--muted); }
-.applications-container > p{
-  padding: 28px;
   text-align: center;
-  color: var(--muted);
-  font-weight: 600;
-}
-
-/* focus */
-.application-card:focus-within,
-.application-card:focus{
-  outline: 3px solid rgba(47,168,79,0.12);
-  outline-offset: 4px;
-}
-
-/* responsive cartes */
-@media (max-width: 420px){
-  :root{ --card-min-width: 180px; }
-  .application-card{ padding: 10px; }
-  .company-image{ width: 40px; height: 40px; }
+  margin: 20px 0;
 }
