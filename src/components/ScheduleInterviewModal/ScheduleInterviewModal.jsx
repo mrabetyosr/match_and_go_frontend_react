@@ -176,7 +176,7 @@ const ScheduleInterviewModal = ({
           <div className="form-group">
             <label className="form-label">
               <MessageSquare className="label-icon" />
-              Message to Candidate (Optional)
+              Message to Candidate
             </label>
             <textarea
               name="message"

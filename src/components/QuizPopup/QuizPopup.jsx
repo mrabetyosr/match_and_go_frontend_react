@@ -2,14 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import './QuizPopup.css';
 
-const QuizPopup = ({ isOpen, onClose, offerId }) => {
+const QuizPopup = ({ isOpen, onClose, offerId, onStartQuiz }) => {
   const [hasQuiz, setHasQuiz] = useState(false);
-  const [showQuizChoice, setShowQuizChoice] = useState(false);
-  const [currentQuiz, setCurrentQuiz] = useState(null);
-  const [questions, setQuestions] = useState([]);
-  const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (isOpen && offerId) {
@@ -20,16 +15,20 @@ const QuizPopup = ({ isOpen, onClose, offerId }) => {
   const checkOfferQuizzes = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:7001/api/quiz/offer/${offerId}/check`, {
+      const response = await fetch(`http://localhost:7001/api/offers/${offerId}/quiz-availability`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      const data = await response.json();
-      if (response.ok && data.hasQuiz) {
-        setHasQuiz(true);
-        setShowQuizChoice(true);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.hasQuiz) {
+          setHasQuiz(true);
+        } else {
+          // Pas de quiz disponible
+          onClose();
+        }
       } else {
-        // No quiz available, just close
+        console.error('Error checking quizzes, status:', response.status);
         onClose();
       }
     } catch (error) {
@@ -38,11 +37,11 @@ const QuizPopup = ({ isOpen, onClose, offerId }) => {
     }
   };
 
-  const startRandomQuiz = async () => {
+  const handleStartQuiz = async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:7001/api/quiz/offer/${offerId}/random`, {
+      const response = await fetch(`http://localhost:7001/api/offers/${offerId}/random-quiz`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -51,12 +50,11 @@ const QuizPopup = ({ isOpen, onClose, offerId }) => {
         toast.error(error.message || "Failed to load quiz");
         return;
       }
-
+      
       const data = await response.json();
-      setCurrentQuiz(data.quiz);
-      setQuestions(data.questions);
-      setShowQuizChoice(false);
-      setAnswers({});
+      // Fermer le popup et ouvrir le drawer avec les données du quiz
+      onClose();
+      onStartQuiz(data.quiz, data.questions);
     } catch (error) {
       console.error('Error loading quiz:', error);
       toast.error("Failed to load quiz");
@@ -65,154 +63,54 @@ const QuizPopup = ({ isOpen, onClose, offerId }) => {
     }
   };
 
-  const handleAnswerChange = (questionId, answer) => {
-    setAnswers(prev => ({
-      ...prev,
-      [questionId]: answer
-    }));
-  };
-
-  const submitQuiz = async () => {
-    if (Object.keys(answers).length !== questions.length) {
-      toast.warning("Please answer all questions");
-      return;
-    }
-
-    setSubmitting(true);
-    try {
-      const token = localStorage.getItem("token");
-      const formattedAnswers = Object.entries(answers).map(([questionId, selectedAnswer]) => ({
-        questionId,
-        selectedAnswer
-      }));
-
-      const response = await fetch(`http://localhost:7001/api/quiz-answers/${currentQuiz._id}/submit`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ answers: formattedAnswers })
-      });
-
-      const result = await response.json();
-      if (response.ok) {
-        toast.success("Quiz submitted successfully! Your score: " + result.quizAnswer.totalScore);
-        handleClose();
-      } else {
-        toast.error(result.message || "Failed to submit quiz");
-      }
-    } catch (error) {
-      console.error('Error submitting quiz:', error);
-      toast.error("Failed to submit quiz");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleClose = () => {
-    setHasQuiz(false);
-    setShowQuizChoice(false);
-    setCurrentQuiz(null);
-    setQuestions([]);
-    setAnswers({});
-    onClose();
-  };
-
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
-      handleClose();
+      onClose();
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !hasQuiz) return null;
 
   return (
-    <div className="quiz-popup-overlay" onClick={handleBackdropClick}>
-      <div className="quiz-popup-container">
-        <div className="quiz-popup-header">
-          <h2>
-            {showQuizChoice ? "Quiz Available!" : 
-             currentQuiz ? `Quiz: ${currentQuiz.title}` : "Loading..."}
-          </h2>
-          <button className="close-btn" onClick={handleClose}>×</button>
+    <div className="qap-modal-backdrop" onClick={handleBackdropClick}>
+      <div className="qap-modal-wrapper">
+        <div className="qap-header-section">
+          <h2>🎯 Quiz Available!</h2>
+          <button className="qap-close-button" onClick={onClose}>×</button>
         </div>
 
-        <div className="quiz-popup-content">
-          {showQuizChoice && (
-            <div className="quiz-choice-section">
-              <div className="quiz-info">
-                <p>🎯 This offer has quizzes available!</p>
-                <p>Taking a quiz can give you a quick response from the company and help you stand out from other candidates.</p>
-              </div>
-              <div className="quiz-actions">
-                <button 
-                  className="btn-quiz-random" 
-                  onClick={startRandomQuiz}
-                  disabled={loading}
-                >
-                  {loading ? "Loading..." : "Take Random Quiz"}
-                </button>
-                <button className="btn-skip" onClick={handleClose}>
-                  Skip Quiz
-                </button>
-              </div>
+        <div className="qap-main-content">
+          <div className="qap-info-section">
+            <div className="qap-icon">
+              <span className="qap-quiz-icon">📝</span>
             </div>
-          )}
-
-          {currentQuiz && questions.length > 0 && (
-            <div className="quiz-section">
-              <div className="quiz-description">
-                {currentQuiz.description && (
-                  <p className="quiz-desc">{currentQuiz.description}</p>
-                )}
-                <p className="quiz-meta">
-                  {questions.length} questions • 
-                  Total Points: {questions.reduce((sum, q) => sum + q.score, 0)}
-                </p>
-              </div>
-
-              <div className="questions-container">
-                {questions.map((question, index) => (
-                  <div key={question._id} className="question-card">
-                    <div className="question-header">
-                      <h4>Question {index + 1}</h4>
-                      <span className="question-score">{question.score} pts</span>
-                    </div>
-                    <p className="question-text">{question.text}</p>
-                    
-                    <div className="answers-grid">
-                      {question.options.map((option, optionIndex) => (
-                        <label key={optionIndex} className="answer-option">
-                          <input
-                            type="radio"
-                            name={`question-${question._id}`}
-                            value={option}
-                            checked={answers[question._id] === option}
-                            onChange={(e) => handleAnswerChange(question._id, e.target.value)}
-                          />
-                          <span className="answer-text">{option}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="quiz-submit-section">
-                <div className="progress-info">
-                  Answered: {Object.keys(answers).length} / {questions.length}
-                </div>
-                <button 
-                  className="btn-submit-quiz"
-                  onClick={submitQuiz}
-                  disabled={submitting || Object.keys(answers).length !== questions.length}
-                >
-                  {submitting ? "Submitting..." : "Submit Quiz"}
-                </button>
-              </div>
+            <div className="qap-text-content">
+              <p className="qap-main-text">
+                This offer has quizzes available!
+              </p>
+              <p className="qap-sub-text">
+                Taking a quiz can give you a quick response from the company and help you stand out from other candidates.
+              </p>
             </div>
-          )}
+          </div>
+
+          <div className="qap-action-buttons">
+            
+            <button 
+              className="qap-btn-primary" 
+              onClick={handleStartQuiz}
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="qap-loading">
+                  <span className="qap-spinner"></span>
+                  Loading...
+                </span>
+              ) : (
+                "Take Random Quiz"
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>

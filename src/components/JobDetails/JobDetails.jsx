@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './JobDetails.css';
 import { useParams } from 'react-router-dom';
 import ApplyJob from '../ApplyJob/ApplyJob.jsx';
+import QuizDrawer from '../QuizDrawer/QuizDrawer.jsx';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-
+import QuizPopup from '../QuizPopup/QuizPopup.jsx';
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -14,6 +15,19 @@ const JobDetails = () => {
   const [error, setError] = useState('');
   const [showApplicationForm, setShowApplicationForm] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
+  const [showQuizPopup, setShowQuizPopup] = useState(false);
+  const [showQuizDrawer, setShowQuizDrawer] = useState(false);
+  
+  // États pour gérer les données du quiz
+  const [currentQuiz, setCurrentQuiz] = useState(null);
+  const [currentQuestions, setCurrentQuestions] = useState([]);
+
+  // Fonction pour gérer le démarrage du quiz
+  const handleStartQuiz = (quiz, questions) => {
+    setCurrentQuiz(quiz);
+    setCurrentQuestions(questions);
+    setShowQuizDrawer(true);
+  };
 
   useEffect(() => {
     const fetchJobDetails = async () => {
@@ -37,7 +51,7 @@ const JobDetails = () => {
 
     if (!token) {
       toast.warning("⚠️ You need to sign in first!");
-      setShowSignIn(true); // ouvre le modal SignIn
+      setShowSignIn(true);
       return;
     }
 
@@ -46,6 +60,21 @@ const JobDetails = () => {
 
   const handleCloseApplication = () => setShowApplicationForm(false);
   const handleCloseSignIn = () => setShowSignIn(false);
+
+  // Fonction pour gérer la soumission réussie de la candidature
+  const handleApplicationSubmitted = () => {
+    setShowApplicationForm(false); // Fermer le modal de candidature
+    setShowQuizPopup(true); // Ouvrir le quiz popup
+  };
+
+  const handleCloseQuizPopup = () => setShowQuizPopup(false);
+  
+  const handleCloseQuizDrawer = () => {
+    setShowQuizDrawer(false);
+    // Reset des données du quiz
+    setCurrentQuiz(null);
+    setCurrentQuestions([]);
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error || !job || !company) return <p>{error || 'Job not found.'}</p>;
@@ -156,9 +185,24 @@ const JobDetails = () => {
         onClose={handleCloseApplication}
         job={job}
         company={company}
+        onApplicationSubmitted={handleApplicationSubmitted}
       />
 
-      
+      {/* Quiz Availability Popup Modal (petit popup au centre) */}
+      <QuizPopup
+        isOpen={showQuizPopup}
+        onClose={handleCloseQuizPopup}
+        offerId={job?._id}
+        onStartQuiz={handleStartQuiz}
+      />
+
+      {/* Quiz Drawer (drawer à droite pour répondre au quiz) */}
+      <QuizDrawer
+        isOpen={showQuizDrawer}
+        onClose={handleCloseQuizDrawer}
+        quiz={currentQuiz}
+        questions={currentQuestions}
+      />
     </div>
   );
 };

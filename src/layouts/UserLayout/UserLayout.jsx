@@ -21,6 +21,7 @@ import './UserLayout.css';
 import Settings from '../../pages/settings/settings.jsx';
 import UpdateSettings from '../../components/updatesettings/updatesettings.jsx';
 import FullApplication from '../../pages/FullApplication/FullApplication.jsx';
+import ApplicationsSubmissions from '../../components/ApplicationsSubmissions/ApplicationsSubmissions.jsx';
 
 const UserLayout = () => {
   const [showSignIn, setShowSignIn] = useState(false);
@@ -70,7 +71,11 @@ const UserLayout = () => {
           </Route>
 
         </Route>
+        {/* NOUVELLE ROUTE POUR LES CANDIDATURES D'UNE OFFRE */}
+        <Route path="offer/:offerId/applications" element={<ApplicationsSubmissions />} />
+      
       </Routes>
+      
 
 
       {/* Footer */}
