@@ -78,17 +78,18 @@ const ViewCandidateApplication = () => {
   if (error) return <ErrorMessage message={error} />;
   if (!applications.length) return <p>No applications found.</p>;
 
-  const grouped = {
-    pending: applications.filter((app) => app.status === "pending"),
-    accepted: applications.filter((app) => app.status === "accepted"),
-    rejected: applications.filter((app) => app.status === "rejected"),
-  };
+  // ✅ Grouper les applications par statut, en incluant le nouveau "interview_scheduled"
+  const statuses = ["pending", "interview scheduled", "accepted", "rejected"];
+  const grouped = {};
+  statuses.forEach((status) => {
+    grouped[status] = applications.filter((app) => app.status === status);
+  });
 
   return (
     <div className="applications-container">
       <h2>My Applications</h2>
       <div className="status-grid">
-        {["pending", "accepted", "rejected"].map((status) => (
+        {statuses.map((status) => (
           <StatusGroup
             key={status}
             status={status}
