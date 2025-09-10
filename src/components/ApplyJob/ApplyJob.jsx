@@ -3,7 +3,7 @@ import './ApplyJob.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const ApplyJob = ({ isOpen, onClose, job, company }) => {
+const ApplyJob = ({ isOpen, onClose, job, company, onApplicationSubmitted }) => {
   const initialFormData = {
     firstName: '',
     lastName: '',
@@ -102,11 +102,58 @@ const ApplyJob = ({ isOpen, onClose, job, company }) => {
         toast.error(result.message || "Error submitting application");
       } else {
         toast.success("Application submitted successfully!");
-        handleClose(); // reset + fermer
+        
+        // Vérifier s'il y a un quiz pour cette offre
+        await checkAndHandleQuiz();
       }
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong");
+    }
+  };
+
+  // Nouvelle fonction pour vérifier et gérer les quiz
+  const checkAndHandleQuiz = async () => {
+    console.log("🔍 Checking quiz availability for job:", job._id);
+    
+    try {
+      const token = localStorage.getItem("token");
+      console.log("🔑 Token exists:", !!token);
+      
+      // Utiliser la nouvelle route quiz-availability
+      const response = await fetch(`http://localhost:7001/api/offers/${job._id}/quiz-availability`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      console.log("📡 Response status:", response.status);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log("📋 Quiz availability data:", data);
+        
+        if (data.hasQuiz) {
+          console.log("✅ Quiz available! Opening quiz popup...");
+          // Il y a un quiz disponible, fermer ce modal et ouvrir le quiz
+          if (onApplicationSubmitted) {
+            console.log("🎯 Calling onApplicationSubmitted callback");
+            onApplicationSubmitted();
+          } else {
+            console.log("❌ onApplicationSubmitted callback is missing!");
+          }
+        } else {
+          console.log("❌ No quiz available for this offer");
+          // Pas de quiz, juste fermer le modal normalement
+          handleClose();
+        }
+      } else {
+        console.log("❌ Error occurred, status:", response.status);
+        // Erreur, fermer le modal normalement
+        handleClose();
+      }
+    } catch (error) {
+      console.error('❌ Error checking quiz availability:', error);
+      // En cas d'erreur, fermer le modal normalement
+      handleClose();
     }
   };
 

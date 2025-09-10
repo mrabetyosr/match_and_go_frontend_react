@@ -1,0 +1,385 @@
+/* Quiz Availability Popup - Professional Design */
+
+/* Modal Backdrop */
+.qap-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(45, 55, 65, 0.7);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: qap-fadeInBackdrop 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Modal Container */
+.qap-modal-wrapper {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 
+    0 24px 48px rgba(45, 55, 65, 0.15),
+    0 8px 16px rgba(45, 55, 65, 0.1);
+  max-width: 520px;
+  width: 90%;
+  max-height: 90vh;
+  overflow: hidden;
+  position: relative;
+  animation: qap-slideUpModal 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+}
+
+/* Header Section */
+.qap-header-section {
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+  position: relative;
+  padding: 28px 32px;
+  color: white;
+  overflow: hidden;
+}
+
+.qap-header-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" fill="none"><path d="M0 20L50 0L100 20Z" fill="rgba(255,255,255,0.05)"/></svg>') repeat-x;
+  background-size: 100px 20px;
+}
+
+.qap-header-section h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.qap-close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 300;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2;
+}
+
+.qap-close-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+}
+
+/* Main Content */
+.qap-main-content {
+  padding: 40px 32px 32px;
+  background: #fefefe;
+}
+
+/* Info Section */
+.qap-info-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 36px;
+}
+
+.qap-icon {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border: 2px solid #d1d5db;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.qap-icon::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+  animation: qap-rotateGradient 3s linear infinite;
+}
+
+.qap-quiz-icon {
+  font-size: 24px;
+  z-index: 1;
+  filter: sepia(1) hue-rotate(120deg) saturate(1.5);
+}
+
+.qap-text-content {
+  flex: 1;
+  padding-top: 4px;
+}
+
+.qap-main-text {
+  margin: 0 0 12px 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+
+.qap-sub-text {
+  margin: 0;
+  font-size: 1rem;
+  color: #6b7280;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* Action Buttons */
+.qap-action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.qap-btn-secondary,
+.qap-btn-primary {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.01em;
+}
+
+.qap-btn-secondary {
+  background: #f8fafc;
+  color: #475569;
+  border: 2px solid #e2e8f0;
+}
+
+.qap-btn-secondary:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(71, 85, 105, 0.15);
+}
+
+.qap-btn-primary {
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+  color: white;
+  border: 2px solid transparent;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+.qap-btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.qap-btn-primary:hover::before {
+  left: 100%;
+}
+
+.qap-btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
+  background: linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%);
+}
+
+.qap-btn-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Loading State */
+.qap-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.qap-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.3);
+  border-top: 2.5px solid white;
+  border-radius: 50%;
+  animation: qap-spinLoader 0.8s linear infinite;
+}
+
+/* Animations */
+@keyframes qap-fadeInBackdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes qap-slideUpModal {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes qap-spinLoader {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes qap-rotateGradient {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .qap-modal-wrapper {
+    width: 95%;
+    margin: 20px;
+    border-radius: 16px;
+  }
+  
+  .qap-header-section {
+    padding: 24px 20px;
+  }
+  
+  .qap-header-section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .qap-main-content {
+    padding: 32px 20px 24px;
+  }
+  
+  .qap-info-section {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+  
+  .qap-icon {
+    align-self: center;
+    width: 56px;
+    height: 56px;
+  }
+  
+  .qap-action-buttons {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .qap-btn-secondary,
+  .qap-btn-primary {
+    width: 100%;
+    padding: 16px 24px;
+  }
+  
+  .qap-main-text {
+    font-size: 1.2rem;
+  }
+  
+  .qap-sub-text {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .qap-modal-wrapper {
+    width: 98%;
+    margin: 12px;
+  }
+  
+  .qap-header-section {
+    padding: 20px 16px;
+  }
+  
+  .qap-main-content {
+    padding: 28px 16px 20px;
+  }
+  
+  .qap-close-button {
+    width: 32px;
+    height: 32px;
+    top: 16px;
+    right: 16px;
+    font-size: 18px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .qap-modal-wrapper {
+    border: 2px solid #000;
+  }
+  
+  .qap-btn-primary {
+    background: #059669;
+    border: 2px solid #047857;
+  }
+  
+  .qap-btn-secondary {
+    border: 2px solid #475569;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .qap-modal-backdrop,
+  .qap-modal-wrapper,
+  .qap-btn-primary,
+  .qap-btn-secondary,
+  .qap-close-button {
+    animation: none;
+    transition: none;
+  }
+  
+  .qap-spinner {
+    animation: none;
+    border: 2.5px solid rgba(255, 255, 255, 0.6);
+  }
+}

@@ -9,11 +9,14 @@ import AddQuiz from '../../components/AddQuiz/AddQuiz.jsx'
 import QuizManager from '../../components/QuizManager/QuizManager.jsx'
 import DetailsOffer from '../../components/DetailsOffer/DetailsOffer.jsx'
 import './ApplicationCompany.css'
+import { useNavigate } from 'react-router-dom'
+
 import ApplicationsSubmissions from '../ApplicationsSubmissions/ApplicationsSubmissions.jsx'
 
 
 const ApplicationCompany = () => {
-const [offers, setOffers] = useState([])
+  const navigate = useNavigate();
+  const [offers, setOffers] = useState([])
   const [showAddOffer, setShowAddOffer] = useState(false)
   const [showEditOffer, setShowEditOffer] = useState(false)
   const [editingOffer, setEditingOffer] = useState(null)
@@ -32,11 +35,10 @@ const [showApplications, setShowApplications] = useState(false)
 const [selectedOfferId, setSelectedOfferId] = useState(null)
 const [selectedOfferTitle, setSelectedOfferTitle] = useState('')
 // Applications handlers - AJOUTER CES FONCTIONS
-const handleViewApplications = (offer) => {
-  setSelectedOfferId(offer._id)
-  setSelectedOfferTitle(offer.jobTitle)
-  setShowApplications(true)
-}
+  const handleViewApplications = (offer) => {
+    // Navigation vers la nouvelle page avec l'ID de l'offre
+    navigate(`/offer/${offer._id}/applications`);
+  };
 
 const handleCloseApplications = () => {
   setShowApplications(false)
@@ -469,12 +471,13 @@ const handleCloseApplications = () => {
   <button className="action-btn details" onClick={() => handleShowDetails(offer)}>
     Details
   </button>
-  <button 
-    className="view-applications-btn" 
-    onClick={() => handleViewApplications(offer)}
-  >
-    View Applications
-  </button>
+   {/* Bouton View Applications */}
+      <button 
+        onClick={() => handleViewApplications(offer)}
+        className="view-applications-btn"
+      >
+        View Applications
+      </button>
   <button
     className="action-btn primary"
     onClick={() => {
@@ -567,14 +570,7 @@ const handleCloseApplications = () => {
         />
       )}
 
-      {/* Applications Modal - AJOUTER CETTE SECTION */}
-{showApplications && selectedOfferId && (
-  <ApplicationsSubmissions
-    offerId={selectedOfferId}
-    offerTitle={selectedOfferTitle}
-    onClose={handleCloseApplications}
-  />
-)}
+      
     </div>
   )
 }
