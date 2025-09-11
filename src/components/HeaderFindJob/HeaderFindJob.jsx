@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBookmark as solidBookmark } from "@fortawesome/free-solid-svg-icons"
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons"
 import { useNavigate } from "react-router-dom"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 const timeSincePost = (jobDate) => {
   if (!jobDate) return "N/A"
@@ -47,7 +49,6 @@ const HeaderFindJob = () => {
       try {
         const res = await fetch("http://localhost:7001/api/offers/allOffers")
         const data = await res.json()
-
         const enriched = data.map((job) => {
           const companyId = job.companyId
           return {
@@ -75,17 +76,34 @@ const HeaderFindJob = () => {
                 },
           }
         })
-
         setResults(enriched)
       } catch (err) {
         console.error(err)
       }
     }
-
     fetchJobs()
   }, [])
 
-  // Filter and sort
+  // Fetch saved jobs
+  useEffect(() => {
+    const fetchSavedJobs = async () => {
+      try {
+        const token = localStorage.getItem("token")
+        if (!token) return
+        const res = await fetch("http://localhost:7001/api/users/saved-jobs", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        if (!res.ok) throw new Error("Failed to fetch saved jobs")
+        const data = await res.json()
+        setSavedJobs(data.savedJobs)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    fetchSavedJobs()
+  }, [])
+
+  // Filter results
   const filteredResults = results
     .filter((job) => {
       const keywordMatch =
@@ -104,55 +122,62 @@ const HeaderFindJob = () => {
 
   const getJobTypeClass = (jobType) => {
     switch (jobType) {
-      case "FullTime":
-        return "job-type-full-time"
-      case "PartTime":
-        return "job-type-part-time"
-      case "Internship":
-        return "job-type-internship"
-      default:
-        return ""
+      case "FullTime": return "job-type-full-time"
+      case "PartTime": return "job-type-part-time"
+      case "Internship": return "job-type-internship"
+      default: return ""
     }
   }
 
   const getJobTypeIcon = (jobType) => {
     switch (jobType) {
-      case "FullTime":
-        return "💼"
-      case "PartTime":
-        return "⏰"
-      case "Internship":
-        return "🎓"
-      default:
-        return "📋"
+      case "FullTime": return "💼"
+      case "PartTime": return "⏰"
+      case "Internship": return "🎓"
+      default: return "📋"
     }
   }
 
-  const toggleSaveJob = (jobId) => {
-    setSavedJobs((prev) => (prev.includes(jobId) ? prev.filter((id) => id !== jobId) : [...prev, jobId]))
+  // Toggle save job with toast
+  const toggleSaveJob = async (jobId) => {
+    try {
+      const token = localStorage.getItem("token")
+      if (!token) return toast.error("You must be logged in to save jobs.")
+
+      const res = await fetch(`http://localhost:7001/api/users/save-job/${jobId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (!res.ok) throw new Error("Failed to toggle job")
+      const data = await res.json()
+      setSavedJobs(data.savedJobs)
+
+      // Show toast
+      if (data.savedJobs.includes(jobId)) {
+        toast.success("Job saved!")
+      } else {
+        toast.info("Job removed from saved list")
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error("Error saving job. Please try again.")
+    }
   }
 
   return (
     <div className="header-container">
+      <ToastContainer position="top-right" autoClose={2000} hideProgressBar closeOnClick />
       <h1 className="header-title">
         Find the job with the right <span className="highlighted-word">{rotatingWords[index]}</span>
       </h1>
 
       <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Search by job or company"
-          className="search-input"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="City / Location"
-          className="search-input"
-          value={locationFilter}
-          onChange={(e) => setLocationFilter(e.target.value)}
-        />
+        <input type="text" placeholder="Search by job or company" className="search-input" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+        <input type="text" placeholder="City / Location" className="search-input" value={locationFilter} onChange={(e) => setLocationFilter(e.target.value)} />
         <div className="job-type-dropdown">
           <div onClick={() => setShowJobTypes(!showJobTypes)} className="dropdown-label">
             Job type {jobTypeFilter.length > 0 && `(${jobTypeFilter.length})`}
