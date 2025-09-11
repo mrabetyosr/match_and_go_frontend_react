@@ -1,109 +1,302 @@
-/* Container principal */
-.applications-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: "Segoe UI", sans-serif;
+/* ================= Loader ================= */
+.vca-loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
 }
 
-/* Grid pour les statuts */
-.status-grid {
+.vca-loader-spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: vca-spin 1s linear infinite;
+}
+
+@keyframes vca-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ================= Error Message ================= */
+.vca-error-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: #ffe5e5;
+  border: 1px solid #ffcccc;
+  border-radius: 8px;
+  margin: 2rem;
+}
+
+.vca-error-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.vca-error-message {
+  color: #cc0000;
+  font-weight: 500;
+}
+
+/* ================= Dashboard Container ================= */
+.vca-dashboard-container {
+  padding: 2rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ================= Empty Dashboard ================= */
+.vca-empty-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 4rem;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+}
+
+.vca-empty-dashboard-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+/* ================= Stats Section ================= */
+.vca-stats-section {
+  margin-bottom: 2rem;
+}
+
+.vca-stats-grid {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.vca-stats-card {
+  flex: 1 1 150px;
+  padding: 1rem;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: default;
+}
+
+.vca-stats-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.vca-stats-total { background-color: #2f80ed; }
+.vca-stats-pending { background-color: #f2994a; }
+.vca-stats-interviews { background-color: #56ccf2; }
+.vca-stats-accepted { background-color: #27ae60; }
+.vca-stats-rejected { background-color: #eb5757; }
+
+.vca-stats-title {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.vca-stats-count {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.vca-stats-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.vca-stats-icon {
+  font-size: 2rem;
+}
+
+/* ================= Main Grid ================= */
+.vca-main-grid {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
   gap: 2rem;
 }
 
-/* Chaque statut */
-.status-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+@media (max-width: 1024px) {
+  .vca-main-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-/* Titre du statut */
-.status-title {
-  text-transform: capitalize;
-  font-size: 1.5rem;
-  color: #2e7d32;
+/* ================= Application Cards ================= */
+.vca-application-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.vca-application-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.vca-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.vca-job-title {
+  font-size: 1.1rem;
   font-weight: 600;
 }
 
-/* Conteneur cartes - horizontal */
-.cards-grid {
+.vca-status-badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
   display: flex;
-  gap: 16px;
-  overflow-x: auto; /* scroll horizontal si trop de cartes */
-  padding-bottom: 8px;
+  align-items: center;
+  font-weight: 500;
+  font-size: 0.85rem;
 }
 
-.cards-grid::-webkit-scrollbar {
-  height: 8px;
+.vca-status-icon {
+  margin-right: 0.3rem;
 }
 
-.cards-grid::-webkit-scrollbar-thumb {
-  background: #4caf50;
-  border-radius: 4px;
+/* Status colors */
+.vca-status-pending { background-color: #f2994a; color: #fff; }
+.vca-status-interview { background-color: #56ccf2; color: #fff; }
+.vca-status-accepted { background-color: #27ae60; color: #fff; }
+.vca-status-rejected { background-color: #eb5757; color: #fff; }
+
+/* Card body */
+.vca-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.cards-grid::-webkit-scrollbar-track {
-  background: #f0f0f0;
+.vca-company-info {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 }
 
-/* Carte d'application */
-.application-card {
-  min-width: 250px;
-  background: #fff;
-  padding: 16px;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  flex-shrink: 0; /* éviter que la carte se réduise */
-}
-
-.application-card h4 {
-  margin: 0 0 8px 0;
-  font-size: 1.2rem;
-  color: #2e7d32;
-}
-
-.application-card p {
-  margin: 4px 0;
-  font-size: 0.95rem;
-  color: #333;
-}
-
-.company-image {
+.vca-company-image {
   width: 50px;
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
-  margin-top: 8px;
 }
 
-/* Loader */
-.spinner-container {
+.vca-company-placeholder {
+  width: 50px;
+  height: 50px;
+  background-color: #eee;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
-  margin: 40px 0;
+  align-items: center;
+  font-size: 1.5rem;
 }
 
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #f0f0f0;
-  border-top: 4px solid #4caf50;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+.vca-company-details {
+  display: flex;
+  flex-direction: column;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Message d'erreur */
-.error-message {
-  color: red;
+.vca-company-name {
   font-weight: 600;
-  text-align: center;
-  margin: 20px 0;
+}
+
+.vca-application-date {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Contact info */
+.vca-contact-info {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.vca-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+}
+
+/* ================= Status Group ================= */
+.vca-status-section {
+  margin-bottom: 2rem;
+}
+
+.vca-status-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.vca-status-icon-large {
+  font-size: 1.5rem;
+}
+
+.vca-status-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Empty state */
+.vca-empty-state {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #999;
+}
+
+/* Grid of cards */
+.vca-cards-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================= Sidebar ================= */
+.vca-sidebar {
+  position: sticky;
+  top: 2rem;
+}
+
+.vca-sidebar-content {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.vca-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.vca-sidebar-icon {
+  font-size: 1.5rem;
+}
+
+.vca-calendar-container {
+  /* Ajustez selon votre composant calendrier */
+  min-height: 300px;
 }

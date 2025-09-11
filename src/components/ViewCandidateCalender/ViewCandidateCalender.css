@@ -1,0 +1,105 @@
+.vcc-container {
+  padding: 20px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 600px;
+  margin: auto;
+}
+
+.vcc-title {
+  text-align: center;
+  color: #28a745;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.vcc-date-group {
+  margin-bottom: 20px;
+}
+
+.vcc-date-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.vcc-date-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #28a745;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.vcc-date-header h3 {
+  font-size: 18px;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.vcc-interview-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vcc-interview-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9fff9;
+  border-left: 4px solid #28a745;
+  padding: 14px 18px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.vcc-interview-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+.vcc-info p {
+  margin: 3px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.vcc-job-title {
+  font-weight: 600;
+  color: #1b4332;
+}
+
+.vcc-company-name {
+  color: #2d6a4f;
+}
+
+.vcc-time {
+  font-weight: 500;
+  color: #555;
+}
+
+.vcc-join-link {
+  text-decoration: none;
+  font-weight: 600;
+  color: #fff;
+  background: #28a745;
+  padding: 8px 16px;
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+.vcc-join-link:hover {
+  background-color: #218838;
+}
+
+.vcc-no-interviews, .vcc-loading {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  margin-top: 40px;
+}
