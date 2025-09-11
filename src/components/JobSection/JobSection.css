@@ -50,7 +50,11 @@
   margin-bottom: 10px;
   letter-spacing: -0.5px;
   line-height: 1.4;
+
+  text-align: center;   /* ✅ centre le texte */
+  margin-left: 0;       /* supprime le décalage gauche */
 }
+
 
 /* Texte de description */
 .job-text-overlay p {
@@ -74,9 +78,11 @@
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  
-  
+
+  display: block;        /* bouton devient un bloc */
+  margin: 20px auto 0;   /* centre horizontalement */
 }
+
 
 .find-job-buttons:hover {
   background-color: #000000;
