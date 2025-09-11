@@ -16,29 +16,31 @@ const ScheduleInterviewModal = ({
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem('token');
 
+  // Minimum selectable datetime (30 mins from now)
+  const getMinDateTime = () => {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + 30);
+    return now.toISOString().slice(0,16);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!date) {
-      toast.error('Date is required');
-      return;
-    }
-    if (new Date(date) <= new Date()) {
-      toast.error('Please select a future date and time');
-      return;
-    }
+    if (!date) return toast.error('Please select a date & time.');
+    if (new Date(date) <= new Date()) return toast.error('Please select a future date.');
 
     setLoading(true);
     try {
-      // Only send date; backend generates message and meet link
-      const payload = { date };
-      const res = await fetch(`http://localhost:7001/api/interviews/${applicationId}`, {
+      const res = await fetch(`http://localhost:7001/api/interviews/schedule/${applicationId}`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        headers: { 
+          'Authorization': `Bearer ${token}`, 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({ date })
       });
 
       if (res.ok) {
-        toast.success('Interview scheduled successfully! Email sent to candidate.');
+        toast.success('Interview scheduled successfully! Email & notification sent.');
         if (onInterviewScheduled) onInterviewScheduled(applicationId);
         setDate('');
         onClose();
@@ -53,17 +55,11 @@ const ScheduleInterviewModal = ({
     }
   };
 
-  const getMinDateTime = () => {
-    const now = new Date();
-    now.setMinutes(now.getMinutes() + 30);
-    return now.toISOString().slice(0,16);
-  };
-
   if (!isOpen) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content schedule-interview-modal" onClick={e => e.stopPropagation()}>
+      <div className="modal-content schedule-interview-modal" onClick={e => e.stopPropagation()} role="dialog" aria-modal="true">
         <div className="modal-header">
           <div className="modal-title-section">
             <Calendar className="modal-title-icon" />
@@ -74,7 +70,9 @@ const ScheduleInterviewModal = ({
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="modal-close-btn" disabled={loading}><X className="close-icon" /></button>
+          <button onClick={onClose} className="modal-close-btn" disabled={loading} aria-label="Close">
+            <X className="close-icon" />
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="interview-form">
@@ -82,7 +80,6 @@ const ScheduleInterviewModal = ({
             <label className="form-label"><Clock className="label-icon" /> Date & Time</label>
             <input 
               type="datetime-local" 
-              name="date" 
               value={date} 
               onChange={e => setDate(e.target.value)} 
               min={getMinDateTime()} 
@@ -93,8 +90,11 @@ const ScheduleInterviewModal = ({
 
           {date && (
             <div className="interview-preview">
-              <h4>Interview Preview</h4>
-              <div className="preview-item"><strong>Date:</strong> {new Date(date).toLocaleString()}</div>
+              <h4>Preview</h4>
+              <div className="preview-item"><strong>Candidate:</strong> {candidateName}</div>
+              <div className="preview-item"><strong>Job Title:</strong> {jobTitle}</div>
+              <div className="preview-item"><strong>Scheduled At:</strong> {new Date(date).toLocaleString()}</div>
+              <div className="preview-item"><strong>Company:</strong> {companyName}</div>
             </div>
           )}
 
