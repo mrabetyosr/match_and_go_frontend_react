@@ -1,11 +1,17 @@
+"use client"
+
 import React, { useState, useEffect } from 'react';
 import './JobDetails.css';
 import { useParams } from 'react-router-dom';
 import ApplyJob from '../ApplyJob/ApplyJob.jsx';
 import QuizDrawer from '../QuizDrawer/QuizDrawer.jsx';
-import axios from 'axios';
-import { toast } from 'react-toastify';
 import QuizPopup from '../QuizPopup/QuizPopup.jsx';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookmark as solidBookmark } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as regularBookmark } from '@fortawesome/free-regular-svg-icons';
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -17,18 +23,20 @@ const JobDetails = () => {
   const [showSignIn, setShowSignIn] = useState(false);
   const [showQuizPopup, setShowQuizPopup] = useState(false);
   const [showQuizDrawer, setShowQuizDrawer] = useState(false);
-  
-  // États pour gérer les données du quiz
+  const [savedJobs, setSavedJobs] = useState([]);
+
+  // Quiz states
   const [currentQuiz, setCurrentQuiz] = useState(null);
   const [currentQuestions, setCurrentQuestions] = useState([]);
 
-  // Fonction pour gérer le démarrage du quiz
+  // Start quiz
   const handleStartQuiz = (quiz, questions) => {
     setCurrentQuiz(quiz);
     setCurrentQuestions(questions);
     setShowQuizDrawer(true);
   };
 
+  // Fetch job details & saved jobs
   useEffect(() => {
     const fetchJobDetails = async () => {
       try {
@@ -37,63 +45,94 @@ const JobDetails = () => {
         setJob(offer);
         setCompany(offer.companyId);
         setLoading(false);
+
+        // Fetch saved jobs
+        const token = localStorage.getItem('token');
+        if (token) {
+          const savedRes = await axios.get('http://localhost:7001/api/users/saved-jobs', {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setSavedJobs(savedRes.data.savedJobs || []);
+        }
       } catch (err) {
         setError('Failed to fetch job details.');
         setLoading(false);
+        toast.error("⚠️ Failed to fetch job details.");
       }
     };
 
     fetchJobDetails();
   }, [id]);
 
+  // Apply now
   const handleApplyNow = () => {
-    const token = localStorage.getItem("token");
-
+    const token = localStorage.getItem('token');
     if (!token) {
       toast.warning("⚠️ You need to sign in first!");
       setShowSignIn(true);
       return;
     }
-
     setShowApplicationForm(true);
   };
 
   const handleCloseApplication = () => setShowApplicationForm(false);
   const handleCloseSignIn = () => setShowSignIn(false);
 
-  // Fonction pour gérer la soumission réussie de la candidature
+  // Application submitted
   const handleApplicationSubmitted = () => {
-    setShowApplicationForm(false); // Fermer le modal de candidature
-    setShowQuizPopup(true); // Ouvrir le quiz popup
+    setShowApplicationForm(false);
+    toast.success("Application submitted successfully! 🎉");
+    setShowQuizPopup(true);
   };
 
   const handleCloseQuizPopup = () => setShowQuizPopup(false);
-  
   const handleCloseQuizDrawer = () => {
     setShowQuizDrawer(false);
-    // Reset des données du quiz
     setCurrentQuiz(null);
     setCurrentQuestions([]);
+  };
+
+  // Save / Unsave job with toast
+  const toggleSaveJob = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.warning("⚠️ You need to sign in to save jobs.");
+      setShowSignIn(true);
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        `http://localhost:7001/api/users/save-job/${job._id}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setSavedJobs(res.data.savedJobs);
+      const isSaved = res.data.savedJobs.includes(job._id);
+      toast[isSaved ? 'success' : 'info'](isSaved ? "Job saved successfully ✅" : "Job removed from saved list ❌");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to save job. Try again.");
+    }
   };
 
   if (loading) return <p>Loading...</p>;
   if (error || !job || !company) return <p>{error || 'Job not found.'}</p>;
 
+  const isSaved = savedJobs.includes(job._id);
+
   return (
     <div className="job-details-container">
-      <img 
-        src={`http://localhost:7001/images/${company.cover_User}`} 
-        alt={`${company.username} cover`} 
-      />
+      {/* Toast Container */}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar closeOnClick />
 
-      <div>
+      <img src={`http://localhost:7001/images/${company.cover_User}`} alt={`${company.username} cover`} />
+
+      <div className="job-details-inner">
         {/* Sidebar */}
         <div className="sidebar">
           <div className="company-header">
-            <img 
-              src={`http://localhost:7001/images/${company.image_User}`} 
-              alt={`${company.username} logo`} 
-            />
+            <img src={`http://localhost:7001/images/${company.image_User}`} alt={`${company.username} logo`} />
             <h2>{company.username}</h2>
             <div className="company-info">
               <p>{company.companyInfo?.location || 'N/A'}</p>
@@ -133,7 +172,9 @@ const JobDetails = () => {
 
           <div className="action-buttons">
             <button onClick={handleApplyNow}>Apply Now</button>
-            <button>Save Job</button>
+            <button onClick={toggleSaveJob}>
+              <FontAwesomeIcon icon={isSaved ? solidBookmark : regularBookmark} /> {isSaved ? "Unsave Job" : "Save Job"}
+            </button>
           </div>
         </div>
 
@@ -154,32 +195,26 @@ const JobDetails = () => {
                   <span key={index} className="skill-tag">{skill}</span>
                 ))}
               </div>
-            ) : (
-              <p className="no-data">No skills listed.</p>
-            )}
+            ) : <p className="no-data">No skills listed.</p>}
           </section>
 
           <section>
             <h3>Key Responsibilities</h3>
             {job.responsibilities?.length ? (
               <ul>{job.responsibilities.map((item, idx) => <li key={idx}>{item}</li>)}</ul>
-            ) : (
-              <p className="no-data">No responsibilities listed.</p>
-            )}
+            ) : <p className="no-data">No responsibilities listed.</p>}
           </section>
 
           <section>
             <h3>Requirements</h3>
             {job.requirements?.length ? (
               <ul>{job.requirements.map((req, idx) => <li key={idx}>{req}</li>)}</ul>
-            ) : (
-              <p className="no-data">No requirements listed.</p>
-            )}
+            ) : <p className="no-data">No requirements listed.</p>}
           </section>
         </div>
       </div>
 
-      {/* Application Form Modal */}
+      {/* Modals */}
       <ApplyJob 
         isOpen={showApplicationForm}
         onClose={handleCloseApplication}
@@ -187,16 +222,12 @@ const JobDetails = () => {
         company={company}
         onApplicationSubmitted={handleApplicationSubmitted}
       />
-
-      {/* Quiz Availability Popup Modal (petit popup au centre) */}
       <QuizPopup
         isOpen={showQuizPopup}
         onClose={handleCloseQuizPopup}
         offerId={job?._id}
         onStartQuiz={handleStartQuiz}
       />
-
-      {/* Quiz Drawer (drawer à droite pour répondre au quiz) */}
       <QuizDrawer
         isOpen={showQuizDrawer}
         onClose={handleCloseQuizDrawer}
