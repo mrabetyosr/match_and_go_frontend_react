@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './CompanySignUpForm.css';
-import { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const CompanySignUpForm = ({ onClose }) => {
+const CompanySignUpForm = ({ onClose, captchaToken, setCaptchaToken, captchaRef }) => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -31,6 +30,12 @@ const CompanySignUpForm = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!captchaToken) {
+      toast.error("Please verify the reCAPTCHA first!");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -40,6 +45,7 @@ const CompanySignUpForm = ({ onClose }) => {
         body: JSON.stringify({
           ...formData,
           role: "company",
+          captchaToken,
           companyInfo: {
             category: formData.category,
             founded: formData.founded,
@@ -58,7 +64,23 @@ const CompanySignUpForm = ({ onClose }) => {
       }
 
       toast.success(data.message || "✅ Registration successful!");
-      onClose(true);
+
+      // Reset form
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+        category: "",
+        founded: "",
+        size: "",
+        location: "",
+      });
+
+      if (captchaRef?.current) captchaRef.current.reset();
+      setCaptchaToken("");
+
+      // Pass control back to SignIn and switch to login
+      onClose({ success: true, role: "company" });
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong");
@@ -133,5 +155,4 @@ const CompanySignUpForm = ({ onClose }) => {
   );
 };
 
-
-export default CompanySignUpForm ;
+export default CompanySignUpForm;
