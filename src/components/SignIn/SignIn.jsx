@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import './SignIn.css';
 import { assets } from '../../assets/assets';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CompanySignUpForm from '../CompanySignUpForm/CompanySignUpForm';
+import ReCAPTCHA from "react-google-recaptcha";
 
 const SignIn = ({ onClose }) => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -12,32 +13,44 @@ const SignIn = ({ onClose }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-
   const [verificationCode, setVerificationCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [emailForReset, setEmailForReset] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
+
+  const recaptchaRef = useRef();
+
+  // --- Helper: reset captcha ---
+  const resetCaptcha = () => {
+    if (recaptchaRef.current) recaptchaRef.current.reset();
+    setCaptchaToken("");
+  };
 
   // --- Normal SignIn / SignUp submit ---
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!captchaToken) {
+      toast.error("Please verify the reCAPTCHA first!");
+      return;
+    }
     setLoading(true);
-    const url = isSignUp
-      ? "http://localhost:7001/api/auth/register"
-      : "http://localhost:7001/api/auth/login";
-
-    const body = isSignUp
-      ? { username, email, password, role: isCompany ? "company" : "candidate" }
-      : { email, password };
-
     try {
+      const url = isSignUp
+        ? "http://localhost:7001/api/auth/register"
+        : "http://localhost:7001/api/auth/login";
+
+      const body = isSignUp
+        ? { username, email, password, role: isCompany ? "company" : "candidate", captchaToken }
+        : { email, password, captchaToken };
+
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      const data = await res.json();
 
+      const data = await res.json();
       if (!res.ok) {
         toast.error(data.message || (isSignUp ? "Registration failed" : "Login failed"));
         setLoading(false);
@@ -57,6 +70,7 @@ const SignIn = ({ onClose }) => {
       setUsername("");
       setEmail("");
       setPassword("");
+      resetCaptcha();
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong");
@@ -65,15 +79,19 @@ const SignIn = ({ onClose }) => {
     }
   };
 
-  // --- Forgot Password Email Submit ---
+  // --- Forgot Password ---
   const handleForgotPassword = async (e) => {
     e.preventDefault();
+    if (!captchaToken) {
+      toast.error("Please verify the reCAPTCHA first!");
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch("http://localhost:7001/api/auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, captchaToken }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -84,6 +102,7 @@ const SignIn = ({ onClose }) => {
       toast.success("📧 Check your email for the verification code!");
       setEmailForReset(email);
       setStep("verify");
+      resetCaptcha();
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong");
@@ -92,15 +111,19 @@ const SignIn = ({ onClose }) => {
     }
   };
 
-  // --- Verify Code Submit ---
+  // --- Verify Code ---
   const handleVerifyCode = async (e) => {
     e.preventDefault();
+    if (!captchaToken) {
+      toast.error("Please verify the reCAPTCHA first!");
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch("http://localhost:7001/api/auth/verify-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: emailForReset, code: verificationCode }),
+        body: JSON.stringify({ email: emailForReset, code: verificationCode, captchaToken }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -110,6 +133,7 @@ const SignIn = ({ onClose }) => {
       }
       toast.success("✅ Code verified! Now set your new password");
       setStep("reset");
+      resetCaptcha();
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong");
@@ -118,15 +142,19 @@ const SignIn = ({ onClose }) => {
     }
   };
 
-  // --- Reset Password Submit ---
+  // --- Reset Password ---
   const handleResetPassword = async (e) => {
     e.preventDefault();
+    if (!captchaToken) {
+      toast.error("Please verify the reCAPTCHA first!");
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch("http://localhost:7001/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: emailForReset, code: verificationCode, newPassword }),
+        body: JSON.stringify({ email: emailForReset, code: verificationCode, newPassword, captchaToken }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -139,6 +167,7 @@ const SignIn = ({ onClose }) => {
       setEmail("");
       setVerificationCode("");
       setNewPassword("");
+      resetCaptcha();
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong");
@@ -147,7 +176,7 @@ const SignIn = ({ onClose }) => {
     }
   };
 
-  // --- Company registration mode ---
+  // --- Company Registration Mode ---
   if (isCompany) {
     return (
       <div className="signin-container">
@@ -159,20 +188,42 @@ const SignIn = ({ onClose }) => {
           <div className="signin-right">
             <img src={assets.namelogo} alt="Logo" className="signin-logo" />
             <h2 className="signin-title">Company Registration</h2>
-            <CompanySignUpForm onClose={onClose} />
+
+            {/* Company SignUp Form */}
+            <CompanySignUpForm
+              onClose={({ success, role }) => {
+                if (success) {
+                  setIsCompany(false);  // Close the company form
+                  setIsSignUp(false);   // Switch to login form
+                  toast.success("You can now log in!");
+                }
+              }}
+              captchaRef={recaptchaRef}
+              setCaptchaToken={setCaptchaToken}
+              captchaToken={captchaToken}
+            />
+
             <p className="signup-text">
               Not a recruiter?{" "}
               <span onClick={() => setIsCompany(false)} className="signup-link btn-link">
                 Back to Candidate
               </span>
             </p>
+
+            {/* Google reCAPTCHA */}
+            <ReCAPTCHA
+              sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+              size="normal"
+              onChange={(token) => setCaptchaToken(token)}
+              ref={recaptchaRef}
+            />
           </div>
         </div>
       </div>
     );
   }
 
-  // --- Main form container ---
+  // --- Main Candidate Form ---
   return (
     <div className="signin-container">
       <div className="signin-card">
@@ -185,7 +236,15 @@ const SignIn = ({ onClose }) => {
         <div className="signin-right">
           <img src={assets.namelogo} alt="Logo" className="signin-logo" />
 
-          {/* Login / SignUp Form */}
+          {/* Google reCAPTCHA */}
+          <ReCAPTCHA
+            sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+            size="normal"
+            onChange={(token) => setCaptchaToken(token)}
+            ref={recaptchaRef}
+          />
+
+          {/* Candidate Login / SignUp */}
           {step === "login" && (
             <>
               <h2 className="signin-title">{isSignUp ? "Create Account" : "Welcome Back"}</h2>
@@ -250,7 +309,7 @@ const SignIn = ({ onClose }) => {
             </>
           )}
 
-          {/* Forgot password email */}
+          {/* Forgot Password */}
           {step === "forgot" && (
             <>
               <h2 className="signin-title">Forgot Password</h2>
@@ -311,7 +370,6 @@ const SignIn = ({ onClose }) => {
               </form>
             </>
           )}
-
         </div>
       </div>
     </div>
