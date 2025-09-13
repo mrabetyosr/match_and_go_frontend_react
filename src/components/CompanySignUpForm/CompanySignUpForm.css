@@ -1,41 +1,63 @@
-.company-text {
-  font-size: 14px;
-  margin-bottom: 10px;
-  color: #555;
-}
-
-.company-text .signup-link {
-  color: #e3342f;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.company-text .signup-link:hover {
-  color: #b71c1c;
-}
-/* Style du select (liste déroulante) */
-.signin-form select {
+/* Formulaire de base */
+.csf-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   width: 100%;
-  padding: 10px 12px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  background-color: #fff;
-  color: #333;
-  appearance: none; /* supprime le style natif sur certains navigateurs */
-  cursor: pointer;
-  transition: border 0.3s, box-shadow 0.3s;
 }
 
-.signin-form select:focus {
-  border-color: #2ecc71;
-  box-shadow: 0 0 5px rgba(12, 79, 3, 0.5);
+/* Inputs et select */
+.csf-input {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
   outline: none;
 }
 
-.signin-form select option {
-  padding: 8px;
-  font-size: 14px;
+.csf-input:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+/* Boutons container */
+.csf-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Bouton primaire vert */
+.csf-btn-primary {
+  flex: 1;
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.csf-btn-primary:hover {
+  background-color: #218838;
+}
+
+/* Bouton outline */
+.csf-btn-outline {
+  flex: 1;
+  padding: 10px 20px;
+  background-color: white;
+  color: #28a745;
+  border: 2px solid #28a745;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.csf-btn-outline:hover {
+  background-color: #28a745;
+  color: white;
 }
