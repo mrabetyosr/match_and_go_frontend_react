@@ -1,252 +1,124 @@
-/* ================= Loader ================= */
-.vca-loader-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 60vh;
-}
-
-.vca-loader-spinner {
-  border: 6px solid #f3f3f3;
-  border-top: 6px solid #3498db;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: vca-spin 1s linear infinite;
-}
-
-@keyframes vca-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* ================= Error Message ================= */
-.vca-error-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-  background-color: #ffe5e5;
-  border: 1px solid #ffcccc;
-  border-radius: 8px;
-  margin: 2rem;
-}
-
-.vca-error-icon {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-.vca-error-message {
-  color: #cc0000;
-  font-weight: 500;
-}
-
-/* ================= Dashboard Container ================= */
+/* Container principal du dashboard */
 .vca-dashboard-container {
-  padding: 2rem;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  background: transparent;
+  min-height: calc(100vh - 120px);
 }
 
-/* ================= Empty Dashboard ================= */
-.vca-empty-dashboard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 4rem;
-  border: 2px dashed #ccc;
-  border-radius: 8px;
-}
-
-.vca-empty-dashboard-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-/* ================= Stats Section ================= */
+/* Section des statistiques */
 .vca-stats-section {
-  margin-bottom: 2rem;
+  margin-bottom: 32px;
 }
 
 .vca-stats-grid {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
 }
 
+/* Cartes de statistiques */
 .vca-stats-card {
-  flex: 1 1 150px;
-  padding: 1rem;
+  background: white;
   border-radius: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #fff;
-  transition: transform 0.2s, box-shadow 0.2s;
-  cursor: default;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.vca-stats-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #22c55e, #059669);
 }
 
 .vca-stats-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.vca-stats-total { background-color: #2f80ed; }
-.vca-stats-pending { background-color: #f2994a; }
-.vca-stats-interviews { background-color: #56ccf2; }
-.vca-stats-accepted { background-color: #27ae60; }
-.vca-stats-rejected { background-color: #eb5757; }
-
-.vca-stats-title {
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.vca-stats-count {
-  font-weight: 700;
-  font-size: 1.5rem;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
 .vca-stats-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+}
+
+.vca-stats-text {
+  flex: 1;
+}
+
+.vca-stats-title {
+  margin: 0 0 8px 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.vca-stats-count {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1;
 }
 
 .vca-stats-icon {
-  font-size: 2rem;
-}
-
-/* ================= Main Grid ================= */
-.vca-main-grid {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  gap: 2rem;
-}
-
-@media (max-width: 1024px) {
-  .vca-main-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ================= Application Cards ================= */
-.vca-application-card {
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.vca-application-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.vca-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.vca-job-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.vca-status-badge {
-  padding: 0.3rem 0.6rem;
+  width: 48px;
+  height: 48px;
+  background: #f3f4f6;
   border-radius: 12px;
   display: flex;
   align-items: center;
-  font-weight: 500;
-  font-size: 0.85rem;
-}
-
-.vca-status-icon {
-  margin-right: 0.3rem;
-}
-
-/* Status colors */
-.vca-status-pending { background-color: #f2994a; color: #fff; }
-.vca-status-interview { background-color: #56ccf2; color: #fff; }
-.vca-status-accepted { background-color: #27ae60; color: #fff; }
-.vca-status-rejected { background-color: #eb5757; color: #fff; }
-
-/* Card body */
-.vca-card-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.vca-company-info {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-}
-
-.vca-company-image {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.vca-company-placeholder {
-  width: 50px;
-  height: 50px;
-  background-color: #eee;
-  border-radius: 50%;
-  display: flex;
   justify-content: center;
-  align-items: center;
+  margin-left: 16px;
+}
+
+.vca-icon {
   font-size: 1.5rem;
 }
 
-.vca-company-details {
-  display: flex;
-  flex-direction: column;
+/* Couleurs spécifiques aux stats */
+.vca-stats-total::before { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+.vca-stats-pending::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.vca-stats-interviews::before { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+.vca-stats-accepted::before { background: linear-gradient(90deg, #10b981, #059669); }
+.vca-stats-rejected::before { background: linear-gradient(90deg, #ef4444, #dc2626); }
+
+/* Grille principale du contenu */
+.vca-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 32px;
+  align-items: start;
 }
 
-.vca-company-name {
-  font-weight: 600;
+.vca-main-content {
+  min-width: 0; /* Permet au contenu de se rétrécir */
 }
 
-.vca-application-date {
-  font-size: 0.8rem;
-  color: #666;
-}
-
-/* Contact info */
-.vca-contact-info {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.vca-contact-item {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.85rem;
-}
-
-/* ================= Status Group ================= */
+/* Section de statut */
 .vca-status-section {
-  margin-bottom: 2rem;
+  margin-bottom: 40px;
 }
 
 .vca-status-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f3f4f6;
 }
 
 .vca-status-icon-large {
@@ -254,49 +126,402 @@
 }
 
 .vca-status-title {
-  font-size: 1.2rem;
+  margin: 0;
+  font-size: 1.25rem;
   font-weight: 600;
+  color: #1f2937;
+  letter-spacing: -0.025em;
 }
 
-/* Empty state */
-.vca-empty-state {
+/* Grille des cartes d'applications */
+.vca-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+/* Carte d'application individuelle */
+.vca-application-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.vca-application-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #e5e7eb;
+  transition: background 0.3s ease;
+}
+
+.vca-application-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Couleurs de bordure par statut */
+.vca-status-pending::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.vca-status-interview::before { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+.vca-status-accepted::before { background: linear-gradient(90deg, #10b981, #059669); }
+.vca-status-rejected::before { background: linear-gradient(90deg, #ef4444, #dc2626); }
+
+/* Header de la carte */
+.vca-card-header {
+  padding: 20px 20px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.vca-job-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.4;
+  flex: 1;
+}
+
+/* Badge de statut */
+.vca-status-badge {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.95rem;
-  color: #999;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
 }
 
-/* Grid of cards */
-.vca-cards-grid {
+.vca-status-badge.vca-status-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.vca-status-badge.vca-status-interview {
+  background: #ede9fe;
+  color: #6b21a8;
+}
+
+.vca-status-badge.vca-status-accepted {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.vca-status-badge.vca-status-rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.vca-status-icon {
+  font-size: 0.875rem;
+}
+
+.vca-status-text {
+  font-weight: 500;
+}
+
+/* Corps de la carte */
+.vca-card-body {
+  padding: 0 20px 20px;
+}
+
+/* Informations de l'entreprise */
+.vca-company-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.vca-company-image {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.vca-company-placeholder {
+  width: 48px;
+  height: 48px;
+  background: #e5e7eb;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+.vca-building-icon {
+  font-size: 1.25rem;
+  color: #6b7280;
+}
+
+.vca-company-details {
+  flex: 1;
+}
+
+.vca-company-name {
+  margin: 0 0 4px 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.vca-application-date {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Informations de contact */
+.vca-contact-info {
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 
-/* ================= Sidebar ================= */
+.vca-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vca-contact-icon {
+  font-size: 0.875rem;
+  width: 20px;
+  text-align: center;
+}
+
+.vca-contact-text {
+  font-size: 0.8125rem;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+/* État vide */
+.vca-empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  background: white;
+  border-radius: 12px;
+  border: 2px dashed #e5e7eb;
+}
+
+.vca-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.vca-empty-message {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Dashboard vide */
+.vca-empty-dashboard {
+  text-align: center;
+  padding: 80px 24px;
+  background: white;
+  border-radius: 16px;
+  border: 2px dashed #e5e7eb;
+  margin: 40px auto;
+  max-width: 500px;
+}
+
+.vca-empty-dashboard-icon {
+  font-size: 4rem;
+  margin-bottom: 24px;
+  opacity: 0.5;
+}
+
+.vca-empty-dashboard h2 {
+  margin: 0 0 12px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.vca-empty-dashboard p {
+  margin: 0;
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+/* Sidebar */
 .vca-sidebar {
   position: sticky;
-  top: 2rem;
+  top: 120px; /* Hauteur du header + padding */
+  height: fit-content;
 }
 
 .vca-sidebar-content {
-  background-color: #f9f9f9;
-  padding: 1rem;
+  background: white;
   border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
 }
 
 .vca-sidebar-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 12px;
+  padding: 20px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .vca-sidebar-icon {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+}
+
+.vca-sidebar-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
 }
 
 .vca-calendar-container {
-  /* Ajustez selon votre composant calendrier */
-  min-height: 300px;
+  padding: 20px;
+}
+
+/* Loader */
+.vca-loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 20px;
+}
+
+.vca-loader-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f4f6;
+  border-left-color: #22c55e;
+  border-radius: 50%;
+  animation: vca-spin 1s linear infinite;
+}
+
+@keyframes vca-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Message d'erreur */
+.vca-error-container {
+  text-align: center;
+  padding: 48px 24px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  margin: 20px auto;
+  max-width: 500px;
+}
+
+.vca-error-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.vca-error-message {
+  margin: 0;
+  font-size: 1rem;
+  color: #991b1b;
+  font-weight: 500;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .vca-main-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .vca-sidebar {
+    position: static;
+  }
+  
+  .vca-stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .vca-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .vca-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .vca-stats-card {
+    padding: 18px;
+  }
+  
+  .vca-stats-count {
+    font-size: 1.75rem;
+  }
+  
+  .vca-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .vca-status-badge {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .vca-dashboard-container {
+    padding: 0;
+  }
+  
+  .vca-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .vca-cards-grid {
+    gap: 16px;
+  }
+  
+  .vca-application-card,
+  .vca-sidebar-content {
+    border-radius: 8px;
+  }
+  
+  .vca-company-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+  
+  .vca-contact-info {
+    text-align: center;
+  }
 }
