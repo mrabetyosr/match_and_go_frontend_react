@@ -1,105 +1,390 @@
+/* Container principal du calendrier */
 .vcc-container {
-  padding: 20px;
-  background: #fff;
-  border-radius: 15px;
-  box-shadow: 0 12px 25px rgba(0,0,0,0.08);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  max-width: 600px;
-  margin: auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
+/* Titre du calendrier */
 .vcc-title {
+  margin: 0 0 16px 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
   text-align: center;
-  color: #28a745;
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f3f4f6;
 }
 
+/* États de chargement et vide */
+.vcc-loading,
+.vcc-no-interviews {
+  text-align: center;
+  padding: 40px 20px;
+  margin: 0;
+  font-size: 0.9375rem;
+  color: #6b7280;
+  font-weight: 500;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 2px dashed #e5e7eb;
+}
+
+.vcc-loading {
+  position: relative;
+}
+
+.vcc-loading::before {
+  content: '⏳';
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 12px;
+  animation: vcc-spin 2s linear infinite;
+}
+
+@keyframes vcc-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.vcc-no-interviews::before {
+  content: '📅';
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+/* Groupe d'interviews par date */
 .vcc-date-group {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
+.vcc-date-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Header de date avec timeline */
 .vcc-date-header {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  gap: 12px;
+  margin-bottom: 16px;
+  position: relative;
 }
 
 .vcc-date-dot {
-  width: 10px;
-  height: 10px;
-  background-color: #28a745;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(135deg, #22c55e, #059669);
   border-radius: 50%;
-  margin-right: 10px;
+  position: relative;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+}
+
+.vcc-date-dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
 }
 
 .vcc-date-header h3 {
-  font-size: 18px;
-  color: #1a1a1a;
+  margin: 0;
+  font-size: 1rem;
   font-weight: 600;
+  color: #374151;
+  letter-spacing: -0.025em;
 }
 
+/* Container des cartes d'interview */
 .vcc-interview-cards {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-left: 24px;
+  position: relative;
 }
 
+.vcc-interview-cards::before {
+  content: '';
+  position: absolute;
+  left: -18px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, #22c55e 0%, #e5e7eb 100%);
+  border-radius: 1px;
+}
+
+/* Carte d'interview individuelle */
 .vcc-interview-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #f9fff9;
-  border-left: 4px solid #28a745;
-  padding: 14px 18px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  transition: transform 0.2s, box-shadow 0.2s;
+  gap: 16px;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .vcc-interview-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+  transform: translateX(4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-color: #22c55e;
 }
 
-.vcc-info p {
-  margin: 3px 0;
-  font-size: 14px;
-  color: #333;
+.vcc-interview-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #22c55e, #059669);
+  border-radius: 0 12px 12px 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.vcc-interview-card:hover::before {
+  opacity: 1;
+}
+
+/* Informations de l'interview */
+.vcc-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vcc-time,
+.vcc-job-title,
+.vcc-company-name {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.vcc-time {
+  font-weight: 600;
+  color: #059669;
 }
 
 .vcc-job-title {
   font-weight: 600;
-  color: #1b4332;
+  color: #1f2937;
 }
 
 .vcc-company-name {
-  color: #2d6a4f;
-}
-
-.vcc-time {
   font-weight: 500;
-  color: #555;
+  color: #6b7280;
 }
 
+/* Lien de participation */
 .vcc-join-link {
+  background: linear-gradient(135deg, #22c55e, #059669);
+  color: white;
   text-decoration: none;
-  font-weight: 600;
-  color: #fff;
-  background: #28a745;
   padding: 8px 16px;
-  border-radius: 10px;
-  transition: all 0.2s ease-in-out;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
+}
+
+.vcc-join-link::before {
+  content: '🎥';
+  font-size: 0.875rem;
 }
 
 .vcc-join-link:hover {
-  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+  background: linear-gradient(135deg, #059669, #047857);
 }
 
-.vcc-no-interviews, .vcc-loading {
-  text-align: center;
-  color: #888;
-  font-style: italic;
-  margin-top: 40px;
+.vcc-join-link:active {
+  transform: translateY(0);
+}
+
+/* Responsive design pour le calendrier */
+@media (max-width: 768px) {
+  .vcc-container {
+    gap: 16px;
+  }
+  
+  .vcc-title {
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+  
+  .vcc-date-group {
+    margin-bottom: 20px;
+  }
+  
+  .vcc-interview-cards {
+    margin-left: 20px;
+  }
+  
+  .vcc-interview-cards::before {
+    left: -14px;
+  }
+  
+  .vcc-interview-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+  }
+  
+  .vcc-info {
+    width: 100%;
+    gap: 4px;
+  }
+  
+  .vcc-join-link {
+    align-self: stretch;
+    justify-content: center;
+    padding: 10px 16px;
+  }
+  
+  .vcc-time,
+  .vcc-job-title,
+  .vcc-company-name {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .vcc-loading,
+  .vcc-no-interviews {
+    padding: 32px 16px;
+    font-size: 0.875rem;
+  }
+  
+  .vcc-date-header {
+    gap: 10px;
+  }
+  
+  .vcc-date-dot {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .vcc-date-dot::after {
+    width: 4px;
+    height: 4px;
+  }
+  
+  .vcc-date-header h3 {
+    font-size: 0.9375rem;
+  }
+  
+  .vcc-interview-cards {
+    margin-left: 16px;
+  }
+  
+  .vcc-interview-cards::before {
+    left: -11px;
+    width: 1px;
+  }
+  
+  .vcc-interview-card {
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .vcc-join-link {
+    font-size: 0.75rem;
+    padding: 8px 14px;
+    border-radius: 6px;
+  }
+}
+
+/* Animation pour les nouvelles interviews */
+.vcc-interview-card {
+  animation: vcc-slideIn 0.3s ease-out;
+}
+
+@keyframes vcc-slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Style pour les interviews urgentes (dans les prochaines 2 heures) */
+.vcc-interview-card.vcc-urgent {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.02) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
+.vcc-interview-card.vcc-urgent::before {
+  background: linear-gradient(180deg, #f59e0b, #d97706);
+}
+
+.vcc-interview-card.vcc-urgent .vcc-time {
+  color: #d97706;
+  animation: vcc-pulse 2s ease-in-out infinite;
+}
+
+@keyframes vcc-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Amélioration de l'accessibilité */
+.vcc-join-link:focus {
+  outline: 2px solid #22c55e;
+  outline-offset: 2px;
+}
+
+.vcc-interview-card:focus-within {
+  outline: 2px solid #22c55e;
+  outline-offset: 2px;
+  border-color: #22c55e;
+}
+
+/* Scrollbar personnalisée pour le container */
+.vcc-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.vcc-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.vcc-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+.vcc-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
