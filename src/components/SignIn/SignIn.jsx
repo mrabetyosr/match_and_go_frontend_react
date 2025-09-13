@@ -53,6 +53,7 @@ const SignIn = ({ onClose }) => {
       const data = await res.json();
       if (!res.ok) {
         toast.error(data.message || (isSignUp ? "Registration failed" : "Login failed"));
+        resetCaptcha(); // <-- reset ici
         setLoading(false);
         return;
       }
