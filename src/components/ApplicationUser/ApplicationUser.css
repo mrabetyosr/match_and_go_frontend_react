@@ -2,135 +2,270 @@
 .au-application-user {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  padding: 20px;
-  font-family: "Segoe UI", sans-serif;
   min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* Header avec logo + nom + boutons */
+/* Header professionnel */
 .au-header-user {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 900px;
-  gap: 1rem;
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(8px);
-  padding: 12px 24px;
-  border-radius: 50px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  padding: 16px 32px;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
-/* Logo + nom utilisateur */
+/* Section logo et profil utilisateur */
 .au-logo-user {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 .au-logo-user .au-logo {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   object-fit: cover;
-  border: 2px solid #4caf50;
+  border: 2px solid #22c55e;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.15);
 }
 
 .au-logo-user .au-username {
   font-weight: 600;
-  color: #2e7d32;
-  font-size: 1.2rem;
+  color: #1f2937;
+  font-size: 1.125rem;
+  letter-spacing: -0.025em;
 }
 
-/* Boutons verts smooth */
+/* Container des boutons de navigation */
 .au-button-container {
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  gap: 8px;
+  position: relative;
 }
 
 .au-button-container a {
   text-decoration: none;
 }
 
+/* Boutons de navigation style professionnel */
 .au-button-container button {
-  background: linear-gradient(135deg, #4caf50, #2e7d32);
-  color: white;
-  font-weight: 600;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 25px;
+  background: #f3f4f6;
+  color: #374151;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border: 1px solid #d1d5db;
+  padding: 10px 16px;
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
-  transition: all 0.3s ease;
+  gap: 8px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .au-button-container button:hover {
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 0 12px rgba(46, 125, 50, 0.6);
-}
-
-/* Contenu onglets */
-.au-tab-content {
-  width: 100%;
-  max-width: 900px;
-  background: white;
-  padding: 24px;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-/* Badge notification */
-.au-notif-count {
-  background: red;
+  background: #22c55e;
   color: white;
-  font-size: 0.8rem;
-  padding: 2px 6px;
-  border-radius: 50%;
-  margin-left: 4px;
+  border-color: #22c55e;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
 }
 
-/* Dropdown notifications */
+.au-button-container button:active {
+  transform: translateY(0);
+}
+
+/* Bouton notifications avec style spécifique */
+.au-button-container button:last-child {
+  position: relative;
+  background: #f9fafb;
+  border-color: #e5e7eb;
+}
+
+.au-button-container button:last-child:hover {
+  background: #059669;
+  border-color: #059669;
+}
+
+/* Badge de notification */
+.au-notif-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dropdown des notifications */
 .au-dropdown {
   position: absolute;
-  top: 60px; /* sous le bouton */
+  top: calc(100% + 8px);
   right: 0;
-  width: 300px;
+  width: 360px;
   max-height: 400px;
   overflow-y: auto;
   background: white;
-  border-radius: 15px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   z-index: 100;
+  animation: slideDown 0.2s ease;
 }
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header du dropdown */
+.au-dropdown::before {
+  content: "Notifications";
+  display: block;
+  padding: 16px 20px 12px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+  background: #f9fafb;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Items des notifications */
 .au-dropdown .au-notif-item {
-  border-bottom: 1px solid #e0e0e0;
-  padding: 8px 4px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.15s ease;
 }
 
 .au-dropdown .au-notif-item:last-child {
   border-bottom: none;
+  border-radius: 0 0 12px 12px;
+}
+
+.au-dropdown .au-notif-item:hover {
+  background: #f9fafb;
 }
 
 .au-dropdown .au-notif-item p {
-  margin: 0;
-  font-size: 0.95rem;
-  color: #333;
+  margin: 0 0 6px 0;
+  font-size: 0.875rem;
+  color: #374151;
+  line-height: 1.4;
 }
 
 .au-dropdown .au-notif-item small {
-  font-size: 0.8rem;
-  color: #999;
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
 }
 
+/* Message vide */
 .au-dropdown .au-empty {
+  padding: 32px 20px;
   text-align: center;
-  color: #999;
-  font-size: 0.9rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Contenu principal */
+.au-tab-content {
+  flex: 1;
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Scrollbar personnalisée pour le dropdown */
+.au-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.au-dropdown::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.au-dropdown::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.au-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .au-header-user {
+    padding: 12px 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .au-button-container {
+    gap: 6px;
+  }
+  
+  .au-button-container button {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .au-dropdown {
+    width: 300px;
+    right: -20px;
+  }
+  
+  .au-logo-user .au-username {
+    font-size: 1rem;
+  }
+  
+  .au-tab-content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .au-header-user {
+    padding: 12px 16px;
+  }
+  
+  .au-button-container button span {
+    display: none; /* Cache le texte sur mobile, garde juste les emojis */
+  }
+  
+  .au-dropdown {
+    width: calc(100vw - 32px);
+    right: -16px;
+  }
 }
