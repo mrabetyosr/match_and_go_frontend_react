@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 import NavBar from '../../components/Navbar/NavBar.jsx';
 import Footer from '../../components/Footer/Footer.jsx';
@@ -17,14 +18,30 @@ import ViewCandidateApplication from "../../components/ViewCandidateApplication/
 import ViewCandidatePosts from "../../components/ViewCandidatePosts/ViewCandidatePosts";
 import ViewCandidateNotification from "../../components/ViewCandidateNotification/ViewCandidateNotification";
 
-import './UserLayout.css';
 import Settings from '../../pages/settings/settings.jsx';
 import UpdateSettings from '../../components/updatesettings/updatesettings.jsx';
 import FullApplication from '../../pages/FullApplication/FullApplication.jsx';
 import ApplicationsSubmissions from '../../components/ApplicationsSubmissions/ApplicationsSubmissions.jsx';
 
+import RatingApp from "../../components/RatingApp/RatingApp.jsx"; // ✅ import ton rating
+import './UserLayout.css';
+
 const UserLayout = () => {
   const [showSignIn, setShowSignIn] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+
+  const token = localStorage.getItem("token");
+
+  // Charger user depuis ton backend
+  useEffect(() => {
+    if (token) {
+      axios.get("http://localhost:7001/api/users/getuserrate", {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(res => setUserInfo(res.data))
+      .catch(err => console.error(err));
+    }
+  }, [token]);
 
   return (
     <div className="user-layout">
@@ -56,33 +73,29 @@ const UserLayout = () => {
 
         {/* Route parent */}
         <Route path="applications" element={<FullApplication />}>
-          {/* Enfant 1 */}
           <Route path="company" element={<ApplicationCompany />} />
-
-          {/* Enfant 2 avec sous-enfants */}
           <Route path="user" element={<ApplicationUser />}>
-            {/* Route par défaut */}
             <Route index element={<ViewCandidateApplication />} />
-
-            {/* Autres onglets */}
             <Route path="applications" element={<ViewCandidateApplication />} />
             <Route path="posts" element={<ViewCandidatePosts />} />
             <Route path="notifications" element={<ViewCandidateNotification />} />
           </Route>
-
         </Route>
-        {/* NOUVELLE ROUTE POUR LES CANDIDATURES D'UNE OFFRE */}
-        <Route path="offer/:offerId/applications" element={<ApplicationsSubmissions />} />
-      
-      </Routes>
-      
 
+        {/* Candidatures pour une offre */}
+        <Route path="offer/:offerId/applications" element={<ApplicationsSubmissions />} />
+      </Routes>
 
       {/* Footer */}
       <Footer />
 
       {/* Scroll-to-top */}
       <ScrollToTopButton disabled={showSignIn} />
+
+      {/* ✅ Affichage RatingApp uniquement si l'utilisateur n'a pas encore noté */}
+      {userInfo && !userInfo.hasRatedApp && (
+        <RatingApp userInfo={userInfo} setUserInfo={setUserInfo} />
+      )}
     </div>
   );
 };
