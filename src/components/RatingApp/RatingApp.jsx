@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./RatingApp.css"; // ⚡️ nouveau nom pour le CSS
+import "./RatingApp.css";
 
 const RatingApp = ({ userInfo, setUserInfo }) => {
   const [rating, setRating] = useState(0);
@@ -8,7 +8,7 @@ const RatingApp = ({ userInfo, setUserInfo }) => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (userInfo && !userInfo.hasRatedApp) {
+    if (userInfo && !userInfo.hasRatedApp && userInfo.loginCount >= 5) {
       setShowModal(true);
     }
   }, [userInfo]);
@@ -34,11 +34,7 @@ const RatingApp = ({ userInfo, setUserInfo }) => {
   return (
     <div className="app-rating-overlay">
       <div className="app-rating-box">
-        {/* Bouton X */}
-        <button className="app-rating-close" onClick={() => setShowModal(false)}>
-          ✖
-        </button>
-
+        <button className="app-rating-close" onClick={() => setShowModal(false)}>✖</button>
         <h2 className="app-rating-title">Rate our App ⭐</h2>
         <div className="app-rating-stars">
           {[1, 2, 3, 4, 5].map((star) => (
