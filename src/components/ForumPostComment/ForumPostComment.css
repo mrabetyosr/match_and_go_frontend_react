@@ -1,0 +1,481 @@
+/* ===============================================
+   FORUM POST COMMENT - CSS PROFESSIONNEL
+   Intégré avec le design principal de la page forum
+=============================================== */
+
+.comment-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-light);
+  background: var(--light-beige);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  padding: 20px;
+}
+
+/* ===============================================
+   FORMULAIRE D'AJOUT DE COMMENTAIRE
+=============================================== */
+
+.comment-section form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  background: var(--white);
+  padding: 12px;
+  border-radius: var(--border-radius-small);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-light);
+}
+
+.comment-section form input[type="text"] {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  font-size: 14px;
+  color: var(--charcoal);
+  background: var(--light-gray);
+  transition: var(--transition);
+  outline: none;
+}
+
+.comment-section form input[type="text"]:focus {
+  border-color: var(--primary-green);
+  background: var(--white);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.1);
+}
+
+.comment-section form input[type="text"]::placeholder {
+  color: var(--dark-gray);
+  font-style: italic;
+}
+
+.comment-section form button[type="submit"] {
+  background: var(--primary-green);
+  color: var(--white);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.comment-section form button[type="submit"]:hover:not(:disabled) {
+  background: var(--accent-green);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(34, 197, 94, 0.2);
+}
+
+.comment-section form button[type="submit"]:disabled {
+  background: var(--dark-gray);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.comment-section form button[type="submit"]:active {
+  transform: translateY(0);
+}
+
+/* ===============================================
+   LISTE DES COMMENTAIRES
+=============================================== */
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comments-list > p {
+  text-align: center;
+  color: var(--dark-gray);
+  font-style: italic;
+  background: var(--white);
+  padding: 20px;
+  border-radius: var(--border-radius-small);
+  border: 1px solid var(--border-color);
+  margin: 0;
+}
+
+/* ===============================================
+   ITEM DE COMMENTAIRE
+=============================================== */
+
+.comment-item {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-small);
+  padding: 16px;
+  transition: var(--transition);
+  position: relative;
+  box-shadow: var(--shadow-light);
+}
+
+.comment-item:hover {
+  border-color: var(--light-green);
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-1px);
+}
+
+.comment-item strong {
+  color: var(--primary-green);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.comment-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--primary-green);
+  border-radius: 0 2px 2px 0;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.comment-item:hover::before {
+  opacity: 1;
+}
+
+/* ===============================================
+   CONTENU DU COMMENTAIRE
+=============================================== */
+
+.comment-item > span,
+.comment-item > text {
+  color: var(--charcoal);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-left: 8px;
+  word-wrap: break-word;
+}
+
+/* ===============================================
+   ACTIONS DES COMMENTAIRES
+=============================================== */
+
+.comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-light);
+}
+
+.comment-actions button {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--dark-gray);
+}
+
+.comment-actions button:hover {
+  background: var(--light-gray);
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+  transform: translateY(-1px);
+}
+
+.comment-actions button:active {
+  transform: translateY(0);
+}
+
+/* Styles spécifiques pour chaque action */
+.comment-actions button:nth-child(1) {
+  /* Edit button */
+  color: #0d6efd;
+  border-color: rgba(13, 110, 253, 0.3);
+}
+
+.comment-actions button:nth-child(1):hover {
+  background: rgba(13, 110, 253, 0.1);
+  border-color: #0d6efd;
+  color: #0d6efd;
+}
+
+.comment-actions button:nth-child(2) {
+  /* Delete button */
+  color: #dc3545;
+  border-color: rgba(220, 53, 69, 0.3);
+}
+
+.comment-actions button:nth-child(2):hover {
+  background: rgba(220, 53, 69, 0.1);
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.comment-actions button:nth-child(3) {
+  /* Reply button */
+  color: var(--primary-green);
+  border-color: var(--light-green);
+}
+
+.comment-actions button:nth-child(3):hover {
+  background: var(--light-green);
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+}
+
+/* ===============================================
+   FORMULAIRE D'ÉDITION INLINE
+=============================================== */
+
+.comment-item input[type="text"] {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--primary-green);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--charcoal);
+  background: var(--white);
+  margin-right: 8px;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.1);
+}
+
+.comment-item input[type="text"]:focus {
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+}
+
+/* Boutons d'édition */
+.comment-item > button {
+  background: var(--primary-green);
+  color: var(--white);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-right: 8px;
+}
+
+.comment-item > button:hover {
+  background: var(--accent-green);
+  transform: translateY(-1px);
+}
+
+.comment-item > button:last-child {
+  background: var(--dark-gray);
+  margin-right: 0;
+}
+
+.comment-item > button:last-child:hover {
+  background: #6c757d;
+}
+
+/* ===============================================
+   SECTION RÉPONSES
+=============================================== */
+
+.comment-item .forum-post-reply {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-light);
+  background: var(--light-beige);
+  border-radius: var(--border-radius-small);
+  padding: 16px;
+  margin-left: -16px;
+  margin-right: -16px;
+  margin-bottom: -16px;
+}
+
+/* ===============================================
+   ANIMATIONS
+=============================================== */
+
+.comment-item {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation pour les boutons */
+.comment-actions button {
+  position: relative;
+  overflow: hidden;
+}
+
+.comment-actions button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+.comment-actions button:active::after {
+  width: 100px;
+  height: 100px;
+}
+
+/* ===============================================
+   RESPONSIVE DESIGN
+=============================================== */
+
+@media (max-width: 768px) {
+  .comment-section {
+    padding: 16px;
+  }
+
+  .comment-section form {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .comment-section form input[type="text"] {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .comment-section form button[type="submit"] {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .comment-item {
+    padding: 12px;
+  }
+
+  .comment-actions {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .comment-actions button {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .comment-section form {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .comment-section form button[type="submit"] {
+    align-self: flex-end;
+    max-width: 120px;
+  }
+
+  .comment-actions {
+    justify-content: space-between;
+  }
+
+  .comment-actions button {
+    flex: 1;
+    text-align: center;
+  }
+
+  .comment-item input[type="text"] {
+    margin-bottom: 10px;
+  }
+
+  .comment-item > button {
+    margin-bottom: 5px;
+  }
+}
+
+/* ===============================================
+   ÉTATS FOCUS POUR L'ACCESSIBILITÉ
+=============================================== */
+
+.comment-actions button:focus-visible,
+.comment-section form button:focus-visible,
+.comment-item > button:focus-visible {
+  outline: 2px solid var(--primary-green);
+  outline-offset: 2px;
+}
+
+.comment-section form input[type="text"]:focus-visible,
+.comment-item input[type="text"]:focus-visible {
+  outline: 2px solid var(--primary-green);
+  outline-offset: 1px;
+}
+
+/* ===============================================
+   LOADING STATE
+=============================================== */
+
+.comment-section form button[type="submit"]:disabled {
+  position: relative;
+}
+
+.comment-section form button[type="submit"]:disabled::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  border: 2px solid transparent;
+  border-top-color: var(--white);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===============================================
+   HOVER EFFECTS AVANCÉS
+=============================================== */
+
+.comment-item:hover {
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 0 0 1px var(--light-green);
+}
+
+/* Effet de gradient sur hover */
+.comment-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-green), var(--accent-green));
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.comment-section:hover::before {
+  opacity: 1;
+}

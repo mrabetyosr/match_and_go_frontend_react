@@ -1,0 +1,451 @@
+/* ===============================================
+   FORUM POST COMPONENT - CSS PROFESSIONNEL
+   Intégré avec le design principal de la page forum
+=============================================== */
+
+/* Container principal des posts */
+.forum-container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ===============================================
+   CARTE DE POST
+=============================================== */
+
+.post-card {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  box-shadow: var(--shadow-light);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.post-card:hover {
+  box-shadow: var(--shadow-medium);
+  border-color: var(--light-green);
+  transform: translateY(-1px);
+}
+
+/* ===============================================
+   AUTEUR DU POST
+=============================================== */
+
+.post-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.author-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--light-green);
+  transition: var(--transition);
+}
+
+.author-logo:hover {
+  border-color: var(--primary-green);
+  transform: scale(1.02);
+}
+
+.post-author strong {
+  font-weight: 600;
+  color: var(--black);
+  font-size: 15px;
+  margin-right: 6px;
+}
+
+.post-author small {
+  color: var(--dark-gray);
+  font-size: 12px;
+  background: var(--beige);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+/* ===============================================
+   CONTENU DU POST
+=============================================== */
+
+.post-content {
+  color: var(--charcoal);
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+/* ===============================================
+   MÉDIA DU POST (Photo)
+=============================================== */
+
+.post-photo {
+  margin-bottom: 16px;
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+  box-shadow: var(--shadow-light);
+}
+
+.post-photo img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  display: block;
+  transition: var(--transition);
+}
+
+.post-photo img:hover {
+  transform: scale(1.02);
+}
+
+/* ===============================================
+   DOCUMENT PDF
+=============================================== */
+
+.post-document {
+  margin-bottom: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-small);
+  background: var(--light-beige);
+  transition: var(--transition);
+}
+
+.post-document:hover {
+  border-color: var(--primary-green);
+  box-shadow: var(--shadow-light);
+}
+
+.document-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  text-decoration: none;
+  color: var(--charcoal);
+  transition: var(--transition);
+}
+
+.document-link:hover {
+  color: var(--primary-green);
+  background: var(--light-green);
+}
+
+.pdf-thumbnail {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--white);
+  padding: 4px;
+}
+
+.document-link span {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.document-link:hover span {
+  text-decoration: underline;
+}
+
+/* ===============================================
+   ACTIONS DU POST (Réactions, Commentaires, Partage)
+=============================================== */
+
+.post-actions {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+.btn-reaction,
+.btn-comment,
+.btn-share {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--dark-gray);
+  flex: 1;
+  justify-content: center;
+  position: relative;
+}
+
+.btn-reaction:hover,
+.btn-comment:hover,
+.btn-share:hover {
+  background: var(--light-gray);
+  color: var(--charcoal);
+  transform: translateY(-1px);
+}
+
+/* États actifs des boutons */
+.btn-reaction:active,
+.btn-comment:active,
+.btn-share:active {
+  background: var(--light-green);
+  color: var(--primary-green);
+}
+
+/* Styles spécifiques pour chaque type de bouton */
+.btn-reaction:hover {
+  background: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+}
+
+.btn-comment:hover {
+  background: rgba(13, 110, 253, 0.1);
+  color: #0d6efd;
+}
+
+.btn-share:hover {
+  background: var(--light-green);
+  color: var(--primary-green);
+}
+
+/* Effet de pulsation pour les compteurs */
+.btn-reaction:active,
+.btn-comment:active,
+.btn-share:active {
+  animation: pulse 0.3s ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* ===============================================
+   ÉTATS DE CHARGEMENT ET VIDE
+=============================================== */
+
+.forum-container p {
+  text-align: center;
+  color: var(--dark-gray);
+  font-size: 16px;
+  padding: 40px 20px;
+  background: var(--white);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-light);
+}
+
+/* Animation de chargement */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.loading-spinner::after {
+  content: '';
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border-color);
+  border-top: 2px solid var(--primary-green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===============================================
+   SECTIONS DES RÉACTIONS ET COMMENTAIRES
+=============================================== */
+
+/* Container pour les réactions/commentaires qui s'affichent */
+.post-card > div:last-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+/* Transition douce pour l'apparition des sections */
+.post-card > div:nth-last-child(-n+2) {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================================
+   RESPONSIVE DESIGN
+=============================================== */
+
+@media (max-width: 768px) {
+  .forum-container {
+    padding: 0 12px;
+    gap: 16px;
+  }
+
+  .post-card {
+    padding: 16px;
+  }
+
+  .post-author {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .author-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .post-author strong {
+    font-size: 14px;
+  }
+
+  .post-content {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .post-actions {
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+
+  .btn-reaction,
+  .btn-comment,
+  .btn-share {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .document-link {
+    padding: 12px;
+  }
+
+  .pdf-thumbnail {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .post-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-reaction,
+  .btn-comment,
+  .btn-share {
+    width: 100%;
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .post-author {
+    flex-wrap: wrap;
+  }
+
+  .post-author small {
+    margin-left: auto;
+  }
+}
+
+/* ===============================================
+   INTÉGRATION AVEC LES COMPOSANTS ENFANTS
+=============================================== */
+
+/* Styles pour les composants ForumPostReaction et ForumPostComment */
+.post-card .forum-post-reaction,
+.post-card .forum-post-comment {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-light);
+}
+
+/* ===============================================
+   ACCESSIBILITÉ
+=============================================== */
+
+.btn-reaction:focus-visible,
+.btn-comment:focus-visible,
+.btn-share:focus-visible {
+  outline: 2px solid var(--primary-green);
+  outline-offset: 2px;
+}
+
+/* ===============================================
+   ANIMATIONS D'ENTRÉE
+=============================================== */
+
+.post-card {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.post-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.post-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.post-card:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+/* ===============================================
+   ÉTATS HOVER AVANCÉS
+=============================================== */
+
+.post-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-green), var(--accent-green));
+  transform: scaleX(0);
+  transition: transform 0.3s ease-out;
+}
+
+.post-card:hover::before {
+  transform: scaleX(1);
+}

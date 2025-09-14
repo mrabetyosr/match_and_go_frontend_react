@@ -1,0 +1,76 @@
+/* ===============================================
+   FORUM POST REACTION - CSS PROFESSIONNEL SIMPLE
+   Style épuré et moderne
+=============================================== */
+
+.reaction-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: var(--white);
+  border-top: 1px solid var(--border-light);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  margin-top: 16px;
+}
+
+/* ===============================================
+   EMOJI DE RÉACTION - STYLE SIMPLE
+=============================================== */
+
+.reaction-emoji {
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  background: var(--light-gray);
+  transition: all 0.2s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.reaction-emoji:hover {
+  background: var(--light-green);
+  transform: scale(1.1);
+}
+
+.reaction-emoji:active {
+  transform: scale(0.95);
+}
+
+/* ===============================================
+   RESPONSIVE DESIGN
+=============================================== */
+
+@media (max-width: 768px) {
+  .reaction-menu {
+    padding: 10px 16px;
+    gap: 8px;
+  }
+
+  .reaction-emoji {
+    font-size: 18px;
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reaction-menu {
+    justify-content: center;
+    padding: 8px 12px;
+    gap: 6px;
+  }
+
+  .reaction-emoji {
+    font-size: 16px;
+    width: 28px;
+    height: 28px;
+    padding: 4px;
+  }
+}
