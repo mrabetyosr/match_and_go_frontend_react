@@ -1,7 +1,6 @@
 import React from 'react';
-import './ForumSection.css'; // Assuming you have a CSS file for styling
+import './ForumSection.css';
 import { useRef } from 'react';
-
 import { assets, forumPosts } from '../../assets/assets';
 
 const ForumSection = () => {
@@ -16,37 +15,40 @@ const ForumSection = () => {
   };
 
   return (
-    <section className="forum-section">
-      <div className="forum-container">
-        <img src={assets.quote} alt="quote" className="quote-image" />
-            <header className="forum-header">
-        <img src={assets.matchgorforum} alt="Match&Go Forum Logo" className="forum-brand"
-        />
-        <h2 className="forum-section-title">Top Posts</h2>
-      </header>
-
+    <section className="top-posts-section">
+      <div className="top-posts-container">
+        <img src={assets.quote} alt="quote" className="top-posts-quote-image" />
+        
+        <header className="top-posts-header">
+          <img 
+            src={assets.matchgorforum} 
+            alt="Match&Go Forum Logo" 
+            className="top-posts-brand"
+          />
+          <h2 className="top-posts-title">Top Posts</h2>
+        </header>
 
         {/* Flèches */}
-        <button className="scroll-btn left" onClick={scrollLeft}>‹</button>
-        <button className="scroll-btn right" onClick={scrollRight}>›</button>
+        <button className="top-posts-scroll-btn left" onClick={scrollLeft}>‹</button>
+        <button className="top-posts-scroll-btn right" onClick={scrollRight}>›</button>
 
-        <div className="forum-posts-wrapper" ref={containerRef}>
-          <div className="forum-posts-container">
+        <div className="top-posts-wrapper" ref={containerRef}>
+          <div className="top-posts-grid">
             {forumPosts.map((post) => (
-              <article className="forum-post-card" key={post.id}>
-                <div className="forum-user-info">
+              <article className="top-post-card" key={post.id}>
+                <div className="top-post-user-info">
                   <img
                     src={post.userPhoto}
                     alt={`${post.firstName} ${post.lastName}`}
-                    className="forum-user-photo"
+                    className="top-post-user-photo"
                   />
                   <div>
-                    <h4 className="forum-user-name">{post.firstName} {post.lastName}</h4>
-                    <p className="forum-user-role">{post.role}</p>
+                    <h4 className="top-post-user-name">{post.firstName} {post.lastName}</h4>
+                    <p className="top-post-user-role">{post.role}</p>
                   </div>
                 </div>
-                <p className="forum-post-content">"{post.content}"</p>
-                <div className="forum-post-reactions">
+                <p className="top-post-content">"{post.content}"</p>
+                <div className="top-post-reactions">
                   <span>👍 {post.likes}</span>
                   <span>💬 {post.comments}</span>
                 </div>
