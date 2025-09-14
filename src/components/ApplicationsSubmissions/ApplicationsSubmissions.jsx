@@ -13,9 +13,9 @@ import ApplicationStats from '../ApplicationStats/ApplicationStats.jsx';
 
 // Sub-components
 const LoadingSpinner = () => (
-  <div className="loading-container">
-    <div className="loading-spinner"></div>
-    <div className="loading-text">
+  <div className="loading-container-one">
+    <div className="loading-spinner-one"></div>
+    <div className="loading-text-one">
       <h3>Loading Applications</h3>
       <p>Fetching candidate data...</p>
     </div>
@@ -23,30 +23,30 @@ const LoadingSpinner = () => (
 );
 
 const ErrorMessage = ({ error, onGoBack }) => (
-  <div className="error-container">
-    <div className="error-icon">⚠️</div>
+  <div className="error-container-one">
+    <div className="error-icon-one">⚠️</div>
     <h3>Something went wrong</h3>
     <p>Error: {error}</p>
-    <button onClick={onGoBack} className="btn-primary">Go Back</button>
+    <button onClick={onGoBack} className="btn-primary-one">Go Back</button>
   </div>
 );
 
 const PageHeader = ({ offerTitle, onGoBack, onExport }) => (
-  <div className="page-header">
-    <div className="header-left">
-      <button onClick={onGoBack} className="back-btn">
+  <div className="page-header-one">
+    <div className="header-left-one">
+      <button onClick={onGoBack} className="back-btn-one">
         <ArrowLeft size={20} />
         Back
       </button>
-      <div className="header-info">
-        <h1 className="page-title">
+      <div className="header-info-one">
+        <h1 className="page-title-one">
           <Target size={24} />
           {offerTitle}
         </h1>
-        <p className="page-subtitle">Manage applications and track hiring progress</p>
+        <p className="page-subtitle-one">Manage applications and track hiring progress</p>
       </div>
     </div>
-    <button onClick={onExport} className="export-btn">
+    <button onClick={onExport} className="export-btn-one">
       <Download size={18} />
       Export Data
     </button>
@@ -68,9 +68,9 @@ const SearchAndFilters = ({
   onClearFilters,
   hasActiveFilters
 }) => (
-  <div className="controls-section">
-    <div className="search-filter-row">
-      <div className="search-box">
+  <div className="controls-section-one">
+    <div className="search-filter-row-one">
+      <div className="search-box-one">
         <Search size={18} />
         <input
           type="text"
@@ -80,7 +80,7 @@ const SearchAndFilters = ({
         />
       </div>
 
-      <div className="filter-controls">
+      <div className="filter-controls-one">
         <select value={filterStatus} onChange={(e) => onStatusChange(e.target.value)}>
           <option value="all">All Status</option>
           <option value="pending">Pending ({stats.pending})</option>
@@ -96,15 +96,15 @@ const SearchAndFilters = ({
           <option value="month">This Month</option>
         </select>
 
-        <div className="view-toggle">
+        <div className="view-toggle-one">
           <button 
-            className={viewMode === 'cards' ? 'active' : ''}
+            className={viewMode === 'cards' ? 'active-one' : ''}
             onClick={() => onViewModeChange('cards')}
           >
-            <div className="grid-icon"></div>
+            <div className="grid-icon-one"></div>
           </button>
           <button 
-            className={viewMode === 'list' ? 'active' : ''}
+            className={viewMode === 'list' ? 'active-one' : ''}
             onClick={() => onViewModeChange('list')}
           >
             <BarChart3 size={16} />
@@ -113,10 +113,10 @@ const SearchAndFilters = ({
       </div>
     </div>
 
-    <div className="results-info">
+    <div className="results-info-one">
       <span>{resultCount} of {totalCount} applications</span>
       {hasActiveFilters && (
-        <button onClick={onClearFilters} className="clear-filters">
+        <button onClick={onClearFilters} className="clear-filters-one">
           Clear filters
         </button>
       )}
@@ -127,10 +127,10 @@ const SearchAndFilters = ({
 const ApplicationCard = ({ application, onStatusUpdate, updatingStatus, getTimeAgo }) => {
   const getStatusConfig = (status) => {
     const configs = {
-      accepted: { color: 'accepted', icon: CheckCircle, text: 'Accepted' },
-      rejected: { color: 'rejected', icon: XCircle, text: 'Rejected' },
-      interview_scheduled: { color: 'interview', icon: UserCheck, text: 'Interview Scheduled' },
-      pending: { color: 'pending', icon: Clock, text: 'Pending' }
+      accepted: { color: 'accepted-one', icon: CheckCircle, text: 'Accepted' },
+      rejected: { color: 'rejected-one', icon: XCircle, text: 'Rejected' },
+      interview_scheduled: { color: 'interview-one', icon: UserCheck, text: 'Interview Scheduled' },
+      pending: { color: 'pending-one', icon: Clock, text: 'Pending' }
     };
     return configs[status] || configs.pending;
   };
@@ -138,12 +138,12 @@ const ApplicationCard = ({ application, onStatusUpdate, updatingStatus, getTimeA
   const getAvailableActions = (status) => {
     const actions = {
       pending: [
-        { action: 'interview_scheduled', label: 'Schedule Interview', icon: UserCheck, className: 'interview-btn' },
-        { action: 'rejected', label: 'Reject', icon: XCircle, className: 'reject-btn' }
+        { action: 'interview_scheduled', label: 'Schedule Interview', icon: UserCheck, className: 'interview-btn-one' },
+        { action: 'rejected', label: 'Reject', icon: XCircle, className: 'reject-btn-one' }
       ],
       interview_scheduled: [
-        { action: 'accepted', label: 'Accept', icon: CheckCircle, className: 'accept-btn' },
-        { action: 'rejected', label: 'Reject', icon: XCircle, className: 'reject-btn' }
+        { action: 'accepted', label: 'Accept', icon: CheckCircle, className: 'accept-btn-one' },
+        { action: 'rejected', label: 'Reject', icon: XCircle, className: 'reject-btn-one' }
       ]
     };
     return actions[status] || [];
@@ -155,68 +155,68 @@ const ApplicationCard = ({ application, onStatusUpdate, updatingStatus, getTimeA
   const isUpdating = updatingStatus.has(application._id);
 
   return (
-    <div className="application-card">
-      <div className="card-header">
-        <div className="candidate-info">
-          <div className="candidate-avatar">
+    <div className="application-card-one">
+      <div className="card-header-one">
+        <div className="candidate-info-one">
+          <div className="candidate-avatar-one">
             <User size={20} />
           </div>
-          <div className="candidate-details">
+          <div className="candidate-details-one">
             <h3>{application.candidateId?.username || 'Unknown Candidate'}</h3>
-            <div className="candidate-email">
+            <div className="candidate-email-one">
               <Mail size={14} />
               <span>{application.email}</span>
             </div>
-            <div className="application-time">
+            <div className="application-time-one">
               Applied {getTimeAgo(application.createdAt)}
             </div>
           </div>
         </div>
         
-        <div className={`status-badge ${statusConfig.color}`}>
+        <div className={`status-badge-one ${statusConfig.color}`}>
           <StatusIcon size={16} />
           <span>{statusConfig.text}</span>
         </div>
       </div>
 
-      <div className="card-body">
-        <div className="contact-grid">
+      <div className="card-body-one">
+        <div className="contact-grid-one">
           {application.phoneNumber && (
-            <div className="contact-item">
+            <div className="contact-item-one">
               <Phone size={14} />
               <span>{application.phoneNumber}</span>
             </div>
           )}
           {application.location && (
-            <div className="contact-item">
+            <div className="contact-item-one">
               <MapPin size={14} />
               <span>{application.location}</span>
             </div>
           )}
         </div>
 
-        <div className="documents-section">
-          <div className="documents-grid">
+        <div className="documents-section-one">
+          <div className="documents-grid-one">
             {application.cv && (
-              <a href={`http://localhost:7001/images/${application.cv}`} target="_blank" rel="noopener noreferrer" className="doc-link">
+              <a href={`http://localhost:7001/images/${application.cv}`} target="_blank" rel="noopener noreferrer" className="doc-link-one">
                 <FileText size={16} />
                 <span>CV</span>
               </a>
             )}
             {application.motivationLetter && (
-              <a href={`http://localhost:7001/images/${application.motivationLetter}`} target="_blank" rel="noopener noreferrer" className="doc-link">
+              <a href={`http://localhost:7001/images/${application.motivationLetter}`} target="_blank" rel="noopener noreferrer" className="doc-link-one">
                 <FileText size={16} />
                 <span>Cover Letter</span>
               </a>
             )}
             {application.linkedin && (
-              <a href={application.linkedin} target="_blank" rel="noopener noreferrer" className="social-link">
+              <a href={application.linkedin} target="_blank" rel="noopener noreferrer" className="social-link-one">
                 <Linkedin size={16} />
                 <span>LinkedIn</span>
               </a>
             )}
             {application.github && (
-              <a href={application.github} target="_blank" rel="noopener noreferrer" className="social-link">
+              <a href={application.github} target="_blank" rel="noopener noreferrer" className="social-link-one">
                 <Github size={16} />
                 <span>GitHub</span>
               </a>
@@ -226,13 +226,13 @@ const ApplicationCard = ({ application, onStatusUpdate, updatingStatus, getTimeA
       </div>
 
       {availableActions.length > 0 && (
-        <div className="card-footer">
-          <div className="action-buttons">
+        <div className="card-footer-one">
+          <div className="action-buttons-one">
             {availableActions.map(({ action, label, icon: Icon, className }) => (
               <button
                 key={action}
                 onClick={() => onStatusUpdate(application._id, action)}
-                className={`action-btn ${className} ${isUpdating ? 'loading' : ''}`}
+                className={`action-btn-one ${className} ${isUpdating ? 'loading-one' : ''}`}
                 disabled={isUpdating}
               >
                 <Icon size={16} />
@@ -244,8 +244,8 @@ const ApplicationCard = ({ application, onStatusUpdate, updatingStatus, getTimeA
       )}
 
       {availableActions.length === 0 && (
-        <div className="card-footer">
-          <div className={`final-status ${application.status}`}>
+        <div className="card-footer-one">
+          <div className={`final-status-one ${application.status}-one`}>
             <StatusIcon size={16} />
             <span>
               {application.status === 'accepted' ? 'Candidate Accepted ✨' : 'Application Rejected'}
@@ -258,8 +258,8 @@ const ApplicationCard = ({ application, onStatusUpdate, updatingStatus, getTimeA
 };
 
 const EmptyState = ({ hasApplications, hasFilters }) => (
-  <div className="empty-state">
-    <div className="empty-icon">
+  <div className="empty-state-one">
+    <div className="empty-icon-one">
       {hasApplications ? <Search size={48} /> : <Users size={48} />}
     </div>
     <h3>
@@ -463,7 +463,7 @@ const ApplicationsSubmissions = () => {
 
   if (loading) {
     return (
-      <div className="applications-page">
+      <div className="applications-page-one">
         <LoadingSpinner />
       </div>
     );
@@ -471,15 +471,15 @@ const ApplicationsSubmissions = () => {
 
   if (error) {
     return (
-      <div className="applications-page">
+      <div className="applications-page-one">
         <ErrorMessage error={error} onGoBack={() => navigate(-1)} />
       </div>
     );
   }
 
   return (
-    <div className="applications-page">
-      <div className="applications-container">
+    <div className="applications-page-one">
+      <div className="applications-container-one">
         <PageHeader 
           offerTitle={offerTitle}
           onGoBack={() => navigate(-1)}
@@ -508,7 +508,7 @@ const ApplicationsSubmissions = () => {
           hasActiveFilters={hasActiveFilters}
         />
 
-        <div className={`applications-list ${viewMode}-view`}>
+        <div className={`applications-list-one ${viewMode}-view-one`}>
           {filteredApplications.length === 0 ? (
             <EmptyState 
               hasApplications={applications.length > 0}
