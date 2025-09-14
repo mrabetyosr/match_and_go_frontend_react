@@ -1,11 +1,11 @@
 /* --- Section principale --- */
-.forum-section {
+.top-posts-section {
   padding: 4rem 1rem;
   background-color: #f9fafb;
   position: relative;
 }
 
-.forum-container {
+.top-posts-container {
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
@@ -13,7 +13,7 @@
 }
 
 /* --- Image quote modifiée --- */
-.quote-image {
+.top-posts-quote-image {
   position: absolute;
   top: -48px;
   right: -70px;
@@ -24,12 +24,12 @@
 }
 
 /* --- En-tête forum --- */
-.forum-header {
+.top-posts-header {
   text-align: center;
   margin-bottom: 2rem;
 }
 
-.forum-brand {
+.top-posts-brand {
   width: 300px; /* Ajuste en fonction de la taille souhaitée */
   height: auto;
   display: block;
@@ -37,9 +37,7 @@
   object-fit: contain; /* pour que l'image garde ses proportions */
 }
 
-
-
-.forum-section-title {
+.top-posts-title {
   font-size: 2.5rem;
   font-weight: bold;
   color: #222;
@@ -49,7 +47,7 @@
 }
 
 /* Ligne décorative sous le titre */
-.forum-section-title::after {
+.top-posts-title::after {
   content: '';
   display: block;
   width: 60px;
@@ -60,7 +58,7 @@
 }
 
 /* --- Flèches de défilement --- */
-.scroll-btn {
+.top-posts-scroll-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -78,22 +76,22 @@
   transition: all 0.3s ease;
 }
 
-.scroll-btn:hover {
+.top-posts-scroll-btn:hover {
   background-color: #000000;
   color: #ffffff;
   transform: translateY(-50%) scale(1.1);
 }
 
-.scroll-btn.left {
+.top-posts-scroll-btn.left {
   left: -60px;
 }
 
-.scroll-btn.right {
+.top-posts-scroll-btn.right {
   right: -60px;
 }
 
 /* --- Scroll wrapper --- */
-.forum-posts-wrapper {
+.top-posts-wrapper {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
@@ -101,12 +99,12 @@
   padding: 1rem 0;
 }
 
-.forum-posts-wrapper::-webkit-scrollbar {
+.top-posts-wrapper::-webkit-scrollbar {
   display: none;
 }
 
 /* --- Container de posts --- */
-.forum-posts-container {
+.top-posts-grid {
   display: flex;
   gap: 24px;
   transition: transform 0.5s ease-in-out;
@@ -114,7 +112,7 @@
 }
 
 /* --- Carte de post --- */
-.forum-post-card {
+.top-post-card {
   flex: 0 0 calc(100% / 3 - 16px);
   scroll-snap-align: start;
   background: #ffffff;
@@ -128,13 +126,13 @@
 }
 
 /* --- Infos utilisateur --- */
-.forum-user-info {
+.top-post-user-info {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.forum-user-photo {
+.top-post-user-photo {
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -142,14 +140,14 @@
   border: 2px solid #27ae60;
 }
 
-.forum-user-name {
+.top-post-user-name {
   font-size: 1rem;
   font-weight: 700;
   color: #17252a;
   margin: 0;
 }
 
-.forum-user-role {
+.top-post-user-role {
   font-size: 0.75rem;
   color: #ffffff;
   background-color: #27ae60;
@@ -161,7 +159,7 @@
 }
 
 /* --- Contenu du post --- */
-.forum-post-content {
+.top-post-content {
   font-size: 1rem;
   color: #333;
   padding-left: 12px;
@@ -172,7 +170,7 @@
 }
 
 /* --- Réactions --- */
-.forum-post-reactions {
+.top-post-reactions {
   display: flex;
   justify-content: flex-start;
   gap: 20px;
@@ -184,14 +182,14 @@
 }
 
 /* --- Pagination --- */
-.pagination-dots {
+.top-posts-pagination-dots {
   display: flex;
   justify-content: center;
   margin-top: 16px;
   gap: 10px;
 }
 
-.pagination-dot {
+.top-posts-pagination-dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -200,12 +198,12 @@
   transition: all 0.3s ease;
 }
 
-.pagination-dot:hover {
+.top-posts-pagination-dot:hover {
   transform: scale(1.2);
   background: #3aafa9;
 }
 
-.pagination-dot.active {
+.top-posts-pagination-dot.active {
   background: #2b7a78;
   width: 14px;
   height: 14px;
@@ -213,26 +211,25 @@
 
 /* --- Responsive --- */
 @media (max-width: 1024px) {
-  .forum-post-card {
+  .top-post-card {
     flex: 0 0 calc(100% / 2 - 16px);
   }
 }
 
 @media (max-width: 768px) {
-  .forum-post-card {
+  .top-post-card {
     flex: 0 0 100%;
   }
 
-  .forum-header {
+  .top-posts-header {
     margin-bottom: 1rem;
   }
 
-  .scroll-btn.left {
+  .top-posts-scroll-btn.left {
     left: 5px;
   }
 
-  .scroll-btn.right {
+  .top-posts-scroll-btn.right {
     right: 5px;
   }
 }
-
