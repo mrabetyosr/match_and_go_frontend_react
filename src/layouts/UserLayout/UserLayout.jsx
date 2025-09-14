@@ -38,8 +38,8 @@ const UserLayout = () => {
       axios.get("http://localhost:7001/api/users/getuserrate", {
         headers: { Authorization: `Bearer ${token}` }
       })
-      .then(res => setUserInfo(res.data))
-      .catch(err => console.error(err));
+        .then(res => setUserInfo(res.data))
+        .catch(err => console.error(err));
     }
   }, [token]);
 
@@ -92,8 +92,8 @@ const UserLayout = () => {
       {/* Scroll-to-top */}
       <ScrollToTopButton disabled={showSignIn} />
 
-      {/* ✅ Affichage RatingApp uniquement si l'utilisateur n'a pas encore noté */}
-      {userInfo && !userInfo.hasRatedApp && (
+      {/* Inside your UserLayout return */}
+      {userInfo && !userInfo.hasRatedApp && userInfo.loginCount >= 5 && (
         <RatingApp userInfo={userInfo} setUserInfo={setUserInfo} />
       )}
     </div>
