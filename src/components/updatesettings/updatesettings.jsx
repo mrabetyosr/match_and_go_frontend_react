@@ -14,42 +14,41 @@ L.Icon.Default.mergeOptions({
 });
 
 const UpdateSettings = () => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [files, setFiles] = useState({ cover: null, avatar: null });
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    phone: '',
-    location: '',
-    dateOfBirth: '',
-    description: '',
-    category: '',
+  const [usr, setUsr] = useState(null);
+  const [ld, setLd] = useState(true);
+  const [fls, setFls] = useState({ cv: null, av: null });
+  const [fData, setFData] = useState({
+    uname: '',
+    em: '',
+    ph: '',
+    loc: '',
+    dob: '',
+    desc: '',
+    cat: '',
     lat: '',
     lng: '',
   });
-  const [searchQuery, setSearchQuery] = useState('');
-  const navigate = useNavigate();
+  const [sQry, setSQry] = useState('');
+  const nav = useNavigate();
 
-  // Fetch user info
   useEffect(() => {
-    const fetchUser = async () => {
+    const fUsr = async () => {
       try {
         const res = await fetch('http://localhost:7001/api/users/me', {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         const data = await res.json();
-        setUser(data);
-        setFormData({
-          username: data.username || '',
-          email: data.email || '',
-          phone: data.candidateInfo?.phoneNumber || '',
-          location: data.candidateInfo?.location || data.companyInfo?.location || '',
-          dateOfBirth: data.candidateInfo?.dateOfBirth
+        setUsr(data);
+        setFData({
+          uname: data.username || '',
+          em: data.email || '',
+          ph: data.candidateInfo?.phoneNumber || '',
+          loc: data.candidateInfo?.location || data.companyInfo?.location || '',
+          dob: data.candidateInfo?.dateOfBirth
             ? new Date(data.candidateInfo.dateOfBirth).toISOString().substr(0, 10)
             : '',
-          description: data.companyInfo?.description || '',
-          category: data.companyInfo?.category || '',
+          desc: data.companyInfo?.description || '',
+          cat: data.companyInfo?.category || '',
           lat: data.companyInfo?.coordinates?.lat || '',
           lng: data.companyInfo?.coordinates?.lng || '',
         });
@@ -57,26 +56,22 @@ const UpdateSettings = () => {
         console.error(err);
         toast.error('Error loading profile.');
       } finally {
-        setLoading(false);
+        setLd(false);
       }
     };
-    fetchUser();
+    fUsr();
   }, []);
 
-  const handleChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
-  const handleFileChange = (type, file) => setFiles(prev => ({ ...prev, [type]: file }));
+  const hChange = e => setFData({ ...fData, [e.target.name]: e.target.value });
+  const hFileChange = (t, f) => setFls(prev => ({ ...prev, [t]: f }));
 
-  // Met à jour le marker sur la carte
-  const handleMapClick = ({ lat, lng }) => {
-    setFormData(prev => ({ ...prev, lat, lng }));
-  };
+  const hMapClick = ({ lat, lng }) => setFData(prev => ({ ...prev, lat, lng }));
 
-  // Leaflet component
-  const LocationPicker = ({ lat, lng }) => {
-    const MapEvents = () => {
+  const LocPicker = ({ lat, lng }) => {
+    const MapEvt = () => {
       useMapEvents({
         click(e) {
-          handleMapClick({ lat: e.latlng.lat, lng: e.latlng.lng });
+          hMapClick({ lat: e.latlng.lat, lng: e.latlng.lng });
         },
       });
       return null;
@@ -88,48 +83,37 @@ const UpdateSettings = () => {
         zoom={12}
         style={{ height: '300px', width: '100%' }}
         key={`${lat}-${lng}`}
+        className="mp-cntr-xyz"
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
         />
         {lat && lng && (
           <Marker
             position={[lat, lng]}
             draggable={true}
             eventHandlers={{
-              dragend: e =>
-                handleMapClick({
-                  lat: e.target.getLatLng().lat,
-                  lng: e.target.getLatLng().lng,
-                }),
+              dragend: e => hMapClick({ lat: e.target.getLatLng().lat, lng: e.target.getLatLng().lng }),
             }}
           />
         )}
-        <MapEvents />
+        <MapEvt />
       </MapContainer>
     );
   };
 
-  // Search location using Nominatim
-  const handleSearch = async () => {
-    if (!searchQuery) return;
+  const hSearch = async () => {
+    if (!sQry) return;
     try {
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(sQry)}`
       );
       const results = await res.json();
       if (results.length === 0) return toast.warning('Location not found');
 
       const { lat, lon, display_name } = results[0];
-
-      setFormData(prev => ({
-        ...prev,
-        lat: parseFloat(lat),
-        lng: parseFloat(lon),
-        location: display_name,
-      }));
-
+      setFData(prev => ({ ...prev, lat: parseFloat(lat), lng: parseFloat(lon), loc: display_name }));
       toast.success('Location updated on map!');
     } catch (err) {
       console.error(err);
@@ -137,137 +121,114 @@ const UpdateSettings = () => {
     }
   };
 
-  const updateFile = async (type, endpoint) => {
-    if (!files[type]) return toast.warning(`Please select a ${type} file!`);
-    const form = new FormData();
-    form.append(type === 'cover' ? 'cover_User' : 'image_User', files[type]);
-
+  const updFile = async (t, ep) => {
+    if (!fls[t]) return toast.warning(`Please select a ${t} file!`);
+    const f = new FormData();
+    f.append(t === 'cv' ? 'cover_User' : 'image_User', fls[t]);
     try {
-      const res = await fetch(`http://localhost:7001/api/users/${endpoint}`, {
+      const res = await fetch(`http://localhost:7001/api/users/${ep}`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        body: form,
+        body: f,
       });
       if (!res.ok) throw new Error('Update failed');
       const data = await res.json();
-      setUser(prev => ({
-        ...prev,
-        [type === 'cover' ? 'cover_User' : 'image_User']: data[type === 'cover' ? 'cover_User' : 'image_User']
-      }));
-      toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} updated successfully!`);
+      setUsr(prev => ({ ...prev, [t === 'cv' ? 'cover_User' : 'image_User']: data[t === 'cv' ? 'cover_User' : 'image_User'] }));
+      toast.success(`${t} updated successfully!`);
     } catch (err) {
       console.error(err);
-      toast.error(`Error updating ${type}.`);
+      toast.error(`Error updating ${t}.`);
     }
   };
 
-  const updateProfile = async () => {
+  const updProfile = async () => {
     try {
-      const payload = { username: formData.username, email: formData.email };
-
-      if (user.role === 'candidate') {
-        payload.candidateInfo = {
-          phoneNumber: formData.phone,
-          location: formData.location,
-          dateOfBirth: formData.dateOfBirth,
-        };
-      } else if (user.role === 'company') {
+      const payload = { username: fData.uname, email: fData.em };
+      if (usr.role === 'candidate') {
+        payload.candidateInfo = { phoneNumber: fData.ph, location: fData.loc, dateOfBirth: fData.dob };
+      } else if (usr.role === 'company') {
         payload.companyInfo = {
-          location: formData.location,
-          description: formData.description,
-          category: formData.category,
-          coordinates: {
-            lat: parseFloat(formData.lat) || 0,
-            lng: parseFloat(formData.lng) || 0,
-          },
+          location: fData.loc,
+          description: fData.desc,
+          category: fData.cat,
+          coordinates: { lat: parseFloat(fData.lat) || 0, lng: parseFloat(fData.lng) || 0 },
         };
       }
 
       const res = await fetch('http://localhost:7001/api/users/update', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify(payload),
       });
 
       if (!res.ok) throw new Error('Update failed');
       const data = await res.json();
-      setUser(data);
+      setUsr(data);
       toast.success('Profile updated successfully!');
-      navigate('/settings');
+      nav('/settings');
     } catch (err) {
       console.error(err);
       toast.error('Error updating profile.');
     }
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (!user) return <p>User not found</p>;
+  if (ld) return <p className="ld-msg-xyz">Loading...</p>;
+  if (!usr) return <p className="usr-notfound-xyz">User not found</p>;
 
   return (
-    <div className="update-profile-card">
-      <button className="back-button" onClick={() => navigate('/settings')}>
-        ← Back to Settings
-      </button>
+    <div className="upd-cntr-xyz">
+      <button className="bck-btn-xyz" onClick={() => nav('/settings')}>← Back</button>
 
-      {['cover', 'avatar'].map(type => (
-        <div key={type} className={`${type}-section`}>
+      {['cv', 'av'].map(t => (
+        <div key={t} className={`sec-${t}-xyz`}>
           <img
-            src={user[type === 'cover' ? 'cover_User' : 'image_User']
-              ? `http://localhost:7001/images/${user[type === 'cover' ? 'cover_User' : 'image_User']}`
-              : type === 'cover' ? '/defaultCover.png' : '/defaultAvatar.png'}
-            alt={type}
+            src={usr[t === 'cv' ? 'cover_User' : 'image_User']
+              ? `http://localhost:7001/images/${usr[t === 'cv' ? 'cover_User' : 'image_User']}`
+              : t === 'cv' ? '/defaultCover.png' : '/defaultAvatar.png'}
+            alt={t}
+            className={`img-${t}-xyz`}
           />
-          <label className="file-label">
-            Choose {type.charAt(0).toUpperCase() + type.slice(1)}
-            <input type="file" onChange={e => handleFileChange(type, e.target.files[0])} />
+          <label className={`lbl-${t}-xyz`}>
+            Choose {t.toUpperCase()}
+            <input type="file" onChange={e => hFileChange(t, e.target.files[0])} />
           </label>
-          {files[type] && <span className="file-name">{files[type].name}</span>}
-          <button onClick={() => updateFile(type, type === 'cover' ? 'update-cover' : 'update-photo')}>
-            Update {type.charAt(0).toUpperCase() + type.slice(1)}
+          {fls[t] && <span className={`fn-${t}-xyz`}>{fls[t].name}</span>}
+          <button className={`btn-${t}-xyz`} onClick={() => updFile(t, t === 'cv' ? 'update-cover' : 'update-photo')}>
+            Update {t.toUpperCase()}
           </button>
         </div>
       ))}
 
-      <div className="form-section">
-        <input name="username" value={formData.username} onChange={handleChange} placeholder="Username" />
-        <input name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
+      <div className="frm-sec-xyz">
+        <input name="uname" value={fData.uname} onChange={hChange} placeholder="Username" />
+        <input name="em" value={fData.em} onChange={hChange} placeholder="Email" />
 
-        {user.role === 'candidate' && (
+        {usr.role === 'candidate' && (
           <>
-            <input name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone" />
-            <input name="location" value={formData.location} onChange={handleChange} placeholder="Location" />
-            <input type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} />
+            <input name="ph" value={fData.ph} onChange={hChange} placeholder="Phone" />
+            <input name="loc" value={fData.loc} onChange={hChange} placeholder="Location" />
+            <input type="date" name="dob" value={fData.dob} onChange={hChange} />
           </>
         )}
 
-        {user.role === 'company' && (
+        {usr.role === 'company' && (
           <>
-            <input name="location" value={formData.location} onChange={handleChange} placeholder="Location" />
-            <input name="description" value={formData.description} onChange={handleChange} placeholder="Description" />
-            <input name="category" value={formData.category} onChange={handleChange} placeholder="Category" />
+            <input name="loc" value={fData.loc} onChange={hChange} placeholder="Location" />
+            <input name="desc" value={fData.desc} onChange={hChange} placeholder="Description" />
+            <input name="cat" value={fData.cat} onChange={hChange} placeholder="Category" />
 
-            {/* Barre de recherche */}
-            <div className="location-search">
-              <input
-                type="text"
-                placeholder="Search location..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-              />
-              <button onClick={handleSearch}>Search</button>
+            <div className="loc-srch-xyz">
+              <input type="text" value={sQry} onChange={e => setSQry(e.target.value)} placeholder="Search location..." />
+              <button onClick={hSearch}>Search</button>
             </div>
 
-            {/* Carte Leaflet interactive */}
-            <LocationPicker lat={parseFloat(formData.lat)} lng={parseFloat(formData.lng)} />
-            <p>Latitude: {formData.lat}</p>
-            <p>Longitude: {formData.lng}</p>
+            <LocPicker lat={parseFloat(fData.lat)} lng={parseFloat(fData.lng)} />
+            <p className="lat-lng-xyz">Latitude: {fData.lat}</p>
+            <p className="lat-lng-xyz">Longitude: {fData.lng}</p>
           </>
         )}
 
-        <button onClick={updateProfile}>Save Changes</button>
+        <button className="btn-save-xyz" onClick={updProfile}>Save Changes</button>
       </div>
     </div>
   );
