@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./RatingApp.css";
 
 const RatingApp = ({ userInfo, setUserInfo }) => {
@@ -23,39 +25,47 @@ const RatingApp = ({ userInfo, setUserInfo }) => {
 
       setUserInfo({ ...userInfo, hasRatedApp: true });
       setShowModal(false);
-      alert(res.data.message);
+
+      // ✅ Toast succès
+      toast.success(res.data.message || "Thank you for your rating! 🎉");
     } catch (err) {
-      alert(err.response?.data?.message || "Error while rating");
+      // ❌ Toast erreur
+      toast.error(err.response?.data?.message || "Error while rating ❌");
     }
   };
 
   if (!showModal) return null;
 
   return (
-    <div className="app-rating-overlay">
-      <div className="app-rating-box">
-        <button className="app-rating-close" onClick={() => setShowModal(false)}>✖</button>
-        <h2 className="app-rating-title">Rate our App ⭐</h2>
-        <div className="app-rating-stars">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <span
-              key={star}
-              className={star <= rating ? "app-star app-star-selected" : "app-star"}
-              onClick={() => setRating(star)}
-            >
-              ★
-            </span>
-          ))}
+    <>
+      <div className="app-rating-overlay">
+        <div className="app-rating-box">
+          <button className="app-rating-close" onClick={() => setShowModal(false)}>✖</button>
+          <h2 className="app-rating-title">Rate our App ⭐</h2>
+          <div className="app-rating-stars">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <span
+                key={star}
+                className={star <= rating ? "app-star app-star-selected" : "app-star"}
+                onClick={() => setRating(star)}
+              >
+                ★
+              </span>
+            ))}
+          </div>
+          <button
+            className="app-rating-submit"
+            onClick={handleRating}
+            disabled={rating === 0}
+          >
+            Submit
+          </button>
         </div>
-        <button
-          className="app-rating-submit"
-          onClick={handleRating}
-          disabled={rating === 0}
-        >
-          Submit
-        </button>
       </div>
-    </div>
+
+      {/* ✅ Container pour afficher les toasts */}
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
   );
 };
 
