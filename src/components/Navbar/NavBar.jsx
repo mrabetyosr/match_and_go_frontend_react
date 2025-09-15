@@ -115,7 +115,7 @@ const NavBar = ({ showSignIn, setShowSignIn }) => {
                     <ul className="dropdown-menu">
                       <li onClick={() => setDropdownOpen(false)}>
                         <Link to="/settings" style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                          <Settings size={16} /> Settings
+                          <Settings size={16} /> Profile
                         </Link>
                       </li>
                       <li onClick={handleLogout}>
