@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import './JobDetails.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import ApplyJob from '../ApplyJob/ApplyJob.jsx';
 import QuizDrawer from '../QuizDrawer/QuizDrawer.jsx';
 import QuizPopup from '../QuizPopup/QuizPopup.jsx';
@@ -15,6 +15,7 @@ import { faBookmark as regularBookmark } from '@fortawesome/free-regular-svg-ico
 
 const JobDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate(); // ✅ Hook navigation
   const [job, setJob] = useState(null);
   const [company, setCompany] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -174,6 +175,12 @@ const JobDetails = () => {
             <button onClick={handleApplyNow}>Apply Now</button>
             <button onClick={toggleSaveJob}>
               <FontAwesomeIcon icon={isSaved ? solidBookmark : regularBookmark} /> {isSaved ? "Unsave Job" : "Save Job"}
+            </button>
+            <button 
+              onClick={() => navigate(`/profile/${company._id}`)}
+              className="profile-btn"
+            >
+              View Profile
             </button>
           </div>
         </div>
