@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ForumPostReaction from "../ForumPostReaction/ForumPostReaction";
-import ForumPostComment from "../ForumPostComment/ForumPostComment";
+import HandLoader from "../HandLoader/HandLoader"; // Import du HandLoader
 import "./ForumPost.css";
 
 const ForumPost = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeReactions, setActiveReactions] = useState(null);
-  const [activeComments, setActiveComments] = useState(null);
 
   const fetchPosts = async () => {
     try {
@@ -36,33 +34,34 @@ const ForumPost = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      // Refresh posts to update shares count
-      fetchPosts();
+      fetchPosts(); // rafraîchir le compteur de partage
     } catch (err) {
       console.error("Erreur lors du partage :", err);
     }
   };
 
-  if (loading) return <p>Chargement des posts...</p>;
+  // Utilisation du HandLoader pendant le chargement
+  if (loading) {
+    return (
+      <div className="loading-container" style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '200px',
+        flexDirection: 'column'
+      }}>
+        <HandLoader size={100} />
+        <p style={{ marginTop: '20px', color: '#666' }}>Loading posts...</p>
+      </div>
+    );
+  }
+
   if (posts.length === 0) return <p>Aucun post disponible.</p>;
 
   return (
     <div className="forum-container">
       {posts.map((post) => (
         <div key={post._id} className="post-card">
-          {/* Auteur */}
-          <div className="post-author">
-            {post.author?.logo && (
-              <img
-                src={`http://localhost:7001/images/${post.author.logo}`}
-                alt="logo"
-                className="author-logo"
-              />
-            )}
-            <strong>{post.author?.username || "Unknown Author"}</strong>
-            <small>({post.author?.role || "N/A"})</small>
-          </div>
-
           {/* Contenu */}
           <p className="post-content">{post.content}</p>
 
@@ -80,40 +79,14 @@ const ForumPost = () => {
                 href={`http://localhost:7001${post.document}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="document-link"
               >
-                <img
-                  src="/images/pdf-thumbnail.png"
-                  alt="PDF"
-                  className="pdf-thumbnail"
-                />
-                <span>Voir le document</span>
+                Voir le document
               </a>
             </div>
           )}
 
-          {/* Boutons de réaction, commentaire et partage */}
+          {/* Actions */}
           <div className="post-actions">
-            <button
-              className="btn-reaction"
-              onClick={() =>
-                setActiveReactions(
-                  activeReactions === post._id ? null : post._id
-                )
-              }
-            >
-              👍 {post.reactionsCount || 0}
-            </button>
-            <button
-              className="btn-comment"
-              onClick={() =>
-                setActiveComments(
-                  activeComments === post._id ? null : post._id
-                )
-              }
-            >
-              💬 {post.commentsCount || 0}
-            </button>
             <button
               className="btn-share"
               onClick={() => handleShare(post._id)}
@@ -122,15 +95,8 @@ const ForumPost = () => {
             </button>
           </div>
 
-          {/* Afficher les réactions seulement si activeReactions === post._id */}
-          {activeReactions === post._id && (
-            <ForumPostReaction postId={post._id} onReaction={fetchPosts} />
-          )}
-
-          {/* Afficher les commentaires seulement si activeComments === post._id */}
-          {activeComments === post._id && (
-            <ForumPostComment postId={post._id} onCommentAdded={fetchPosts} />
-          )}
+          {/* Composant ForumPostReaction affiché, mais on ne clique pas dessus */}
+          <ForumPostReaction postId={post._id} onReaction={() => {}} />
         </div>
       ))}
     </div>

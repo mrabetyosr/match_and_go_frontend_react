@@ -6,6 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import ApplyJob from '../ApplyJob/ApplyJob.jsx';
 import QuizDrawer from '../QuizDrawer/QuizDrawer.jsx';
 import QuizPopup from '../QuizPopup/QuizPopup.jsx';
+import HandLoader from '../HandLoader/HandLoader.jsx'; // Import du HandLoader
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -117,7 +118,25 @@ const JobDetails = () => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  // Utilisation du HandLoader pendant le chargement
+  if (loading) {
+    return (
+      <div className="job-details-loading-container" style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        flexDirection: 'column'
+      }}>
+        <div className="lo-container">
+          <HandLoader size={120} />
+          <p className="ld-text">Loading job details...</p>
+        </div>
+
+      </div>
+    );
+  }
+
   if (error || !job || !company) return <p>{error || 'Job not found.'}</p>;
 
   const isSaved = savedJobs.includes(job._id);
@@ -176,7 +195,7 @@ const JobDetails = () => {
             <button onClick={toggleSaveJob}>
               <FontAwesomeIcon icon={isSaved ? solidBookmark : regularBookmark} /> {isSaved ? "Unsave Job" : "Save Job"}
             </button>
-            <button 
+            <button
               onClick={() => navigate(`/profile/${company._id}`)}
               className="profile-btn"
             >
@@ -222,7 +241,7 @@ const JobDetails = () => {
       </div>
 
       {/* Modals */}
-      <ApplyJob 
+      <ApplyJob
         isOpen={showApplicationForm}
         onClose={handleCloseApplication}
         job={job}

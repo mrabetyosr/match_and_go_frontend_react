@@ -1,18 +1,9 @@
-import React from "react";
+import React from 'react'
 
-
-const AdminLayout = ({ children }) => {
+const AdminLayout = () => {
   return (
-    <div className="flex h-screen">
-      {/* Sidebar gauche */}
-      
+    <div>AdminLayout</div>
+  )
+}
 
-      {/* Contenu principal */}
-      <div className="flex-1 bg-gray-100 p-6 overflow-auto">
-        {children}
-      </div>
-    </div>
-  );
-};
-
-export default AdminLayout;
+export default AdminLayout
