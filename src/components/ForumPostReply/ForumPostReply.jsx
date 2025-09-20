@@ -6,11 +6,14 @@ const ForumPostReply = ({ commentId, onReplyAdded }) => {
   const [replies, setReplies] = useState([]);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [editingId, setEditingId] = useState(null); // ID de la reply en édition
+  const [editingContent, setEditingContent] = useState("");
 
-  // Fetch all replies for this comment
+  const token = localStorage.getItem("token");
+
+  // Fetch all replies
   const fetchReplies = async () => {
     try {
-      const token = localStorage.getItem("token");
       const res = await axios.get(
         `http://localhost:7001/api/users/comments/${commentId}/replies`,
         { headers: { Authorization: `Bearer ${token}` } }
@@ -26,14 +29,13 @@ const ForumPostReply = ({ commentId, onReplyAdded }) => {
     fetchReplies();
   }, [commentId]);
 
-  // Add a reply
+  // Ajouter une reply
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!content.trim()) return;
 
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
       await axios.post(
         `http://localhost:7001/api/users/comments/${commentId}/replies`,
         { content },
@@ -49,10 +51,9 @@ const ForumPostReply = ({ commentId, onReplyAdded }) => {
     }
   };
 
-  // Delete a reply
+  // Supprimer une reply
   const handleDelete = async (id) => {
     try {
-      const token = localStorage.getItem("token");
       await axios.delete(
         `http://localhost:7001/api/users/replies/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
@@ -63,12 +64,30 @@ const ForumPostReply = ({ commentId, onReplyAdded }) => {
     }
   };
 
+  // Mettre à jour une reply
+  const handleUpdate = async (id) => {
+    if (!editingContent.trim()) return;
+
+    try {
+      await axios.put(
+        `http://localhost:7001/api/users/replies/${id}`,
+        { content: editingContent },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setEditingId(null);
+      setEditingContent("");
+      fetchReplies();
+    } catch (err) {
+      console.error("Error updating reply:", err);
+    }
+  };
+
   // Format date helper
   const formatDate = (isoString) => {
     const date = new Date(isoString);
-    return `${date.getDate().toString().padStart(2,"0")}/${(date.getMonth()+1)
-      .toString().padStart(2,"0")}/${date.getFullYear()} ${date.getHours()
-      .toString().padStart(2,"0")}:${date.getMinutes().toString().padStart(2,"0")}`;
+    return `${date.getDate().toString().padStart(2,"0")}/${
+      (date.getMonth()+1).toString().padStart(2,"0")}/${date.getFullYear()} ${
+      date.getHours().toString().padStart(2,"0")}:${date.getMinutes().toString().padStart(2,"0")}`;
   };
 
   return (
@@ -89,11 +108,29 @@ const ForumPostReply = ({ commentId, onReplyAdded }) => {
         {replies.length > 0 ? (
           replies.map((reply) => (
             <div key={reply._id} className="reply-item">
-              <div className="reply-content">
-                <strong>{reply.author.username}</strong>: {reply.content}
-                <span className="reply-time">{formatDate(reply.createdAt)}</span>
-              </div>
-              <button className="delete-btn" onClick={() => handleDelete(reply._id)}>Delete</button>
+              {editingId === reply._id ? (
+                <>
+                  <input
+                    type="text"
+                    value={editingContent}
+                    onChange={(e) => setEditingContent(e.target.value)}
+                  />
+                  <button onClick={() => handleUpdate(reply._id)}>Save</button>
+                  <button onClick={() => setEditingId(null)}>Cancel</button>
+                </>
+              ) : (
+                <>
+                  <div className="reply-content">
+                    <strong>{reply.author.username}</strong>: {reply.content}
+                    <span className="reply-time">{formatDate(reply.createdAt)}</span>
+                  </div>
+                  <button onClick={() => handleDelete(reply._id)}>Delete</button>
+                  <button onClick={() => {
+                    setEditingId(reply._id);
+                    setEditingContent(reply.content);
+                  }}>Edit</button>
+                </>
+              )}
             </div>
           ))
         ) : (
