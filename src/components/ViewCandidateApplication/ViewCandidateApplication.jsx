@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./ViewCandidateApplication.css";
 import ViewCandidateCalender from "../ViewCandidateCalender/ViewCandidateCalender";
+import ViewCandidateQuizResults from "../ViewCandidateQuizResults/ViewCandidateQuizResults";
 
 // Loader spinner
 const Loader = () => (
@@ -220,8 +221,9 @@ const ViewCandidateApplication = () => {
           </div>
         </div>
 
-        {/* Right sidebar for calendar */}
+        {/* Right sidebar */}
         <div className="vca-sidebar">
+          {/* Calendar section */}
           <div className="vca-sidebar-content">
             <div className="vca-sidebar-header">
               <span className="vca-sidebar-icon">📅</span>
@@ -231,6 +233,17 @@ const ViewCandidateApplication = () => {
               <ViewCandidateCalender
                 applications={applications.filter(a => a.status === "interview_scheduled")}
               />
+            </div>
+          </div>
+
+          {/* Quiz Results section */}
+          <div className="vca-sidebar-content vca-quiz-section">
+            <div className="vca-sidebar-header">
+              <span className="vca-sidebar-icon">🎯</span>
+              <h3>Quiz Results</h3>
+            </div>
+            <div className="vca-quiz-container">
+              <ViewCandidateQuizResults />
             </div>
           </div>
         </div>
