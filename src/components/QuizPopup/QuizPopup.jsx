@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './QuizPopup.css';
 
-const QuizPopup = ({ isOpen, onClose, offerId, onStartQuiz }) => {
+const QuizPopup = ({ isOpen, onClose, offerId }) => {
   const [hasQuiz, setHasQuiz] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isOpen && offerId) {
-      checkOfferQuizzes();
-    }
-  }, [isOpen, offerId]);
-
-  const checkOfferQuizzes = async () => {
+  const checkOfferQuizzes = React.useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(`http://localhost:7001/api/offers/${offerId}/quiz-availability`, {
@@ -35,29 +31,41 @@ const QuizPopup = ({ isOpen, onClose, offerId, onStartQuiz }) => {
       console.error('Error checking quizzes:', error);
       onClose();
     }
-  };
+  }, [offerId, onClose]);
+
+  useEffect(() => {
+    if (isOpen && offerId) {
+      checkOfferQuizzes();
+    }
+  }, [isOpen, offerId, checkOfferQuizzes]);
 
   const handleStartQuiz = async () => {
     setLoading(true);
     try {
+      // Vérifier d'abord que le quiz est disponible
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:7001/api/offers/${offerId}/random-quiz`, {
+      const response = await fetch(`http://localhost:7001/api/offers/${offerId}/quiz-availability`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
       if (!response.ok) {
-        const error = await response.json();
-        toast.error(error.message || "Failed to load quiz");
+        toast.error("Failed to verify quiz availability");
         return;
       }
       
       const data = await response.json();
-      // Fermer le popup et ouvrir le drawer avec les données du quiz
+      if (!data.hasQuiz) {
+        toast.error("No quiz available for this offer");
+        return;
+      }
+      
+      // Fermer le popup et naviguer vers la page du quiz
       onClose();
-      onStartQuiz(data.quiz, data.questions);
+      navigate(`/quiz/${offerId}`);
+      
     } catch (error) {
-      console.error('Error loading quiz:', error);
-      toast.error("Failed to load quiz");
+      console.error('Error starting quiz:', error);
+      toast.error("Failed to start quiz");
     } finally {
       setLoading(false);
     }
@@ -78,7 +86,7 @@ const QuizPopup = ({ isOpen, onClose, offerId, onStartQuiz }) => {
           <h2>🎯 Quiz Available!</h2>
           <button className="qap-close-button" onClick={onClose}>×</button>
         </div>
-
+        
         <div className="qap-main-content">
           <div className="qap-info-section">
             <div className="qap-icon">
@@ -93,11 +101,10 @@ const QuizPopup = ({ isOpen, onClose, offerId, onStartQuiz }) => {
               </p>
             </div>
           </div>
-
+          
           <div className="qap-action-buttons">
-            
-            <button 
-              className="qap-btn-primary" 
+            <button
+              className="qap-btn-primary"
               onClick={handleStartQuiz}
               disabled={loading}
             >
