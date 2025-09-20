@@ -3,31 +3,50 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import HandLoader from "../HandLoader/HandLoader"; // Import du composant HandLoader
 import "./Profile.css"; // Ton style moderne
 
 const Profile = () => {
   const { id } = useParams(); // ID depuis l'URL
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true); // État de chargement
 
   useEffect(() => {
     if (!id) return;
 
     const fetchUser = async () => {
       try {
+        setLoading(true);
         const res = await axios.get(`http://localhost:7001/api/profile/${id}`);
         setUser(res.data);
       } catch (err) {
         console.error("❌ Error fetching user:", err.response?.data || err.message);
         setError(err.response?.data?.message || "Error fetching user");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchUser();
   }, [id]);
 
+  // Affichage du loader pendant le chargement
+  if (loading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '50vh' 
+      }}>
+        <HandLoader size={100} />
+      </div>
+    );
+  }
+
   if (error) return <p style={{ color: "red" }}>{error}</p>;
-  if (!user) return <p>Loading...</p>;
+  if (!user) return <p>No user found</p>;
 
   return (
     <div className="profile-container">

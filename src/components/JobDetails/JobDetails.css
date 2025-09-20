@@ -321,3 +321,16 @@
   margin-top: 100px;
 }
 
+
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; /* espace entre loader et texte */
+}
+
+.ld-text {
+ color: #666;
+  font-size: 18px;
+  text-align: center;
+}
