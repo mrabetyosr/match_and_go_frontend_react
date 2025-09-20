@@ -1,307 +1,152 @@
 /* ===============================================
-   FORUM POST COMPONENT - CSS PROFESSIONNEL
-   Intégré avec le design principal de la page forum
+   FORUM POST - DESIGN PREMIUM & MODERNE
+   Animations fluides, glassmorphism, micro-interactions
 =============================================== */
 
-/* Container principal des posts */
-.forum-container {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 0 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+:root {
+  /* Palette de couleurs premium */
+  --bg-primary: #fafbfc;
+  --bg-secondary: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --bg-hover: rgba(255, 255, 255, 0.95);
+  
+  /* Gradients modernes */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  --gradient-accent: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  
+  /* Couleurs sémantiques */
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --border-light: rgba(226, 232, 240, 0.8);
+  --border-medium: #e2e8f0;
+  
+  /* Ombres sophistiquées */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 20px rgba(102, 126, 234, 0.15);
+  
+  /* Transitions fluides */
+  --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-medium: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* Rayons de bordure */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  
+  /* Espacements */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
 }
 
 /* ===============================================
-   CARTE DE POST
+   CONTAINER PRINCIPAL
+=============================================== */
+
+.forum-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+  background: var(--bg-primary);
+  min-height: 100vh;
+  position: relative;
+}
+
+.forum-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(102, 126, 234, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ===============================================
+   LOADING STATE PREMIUM
+=============================================== */
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: var(--space-lg);
+}
+
+.loading-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-text::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* ===============================================
+   CARTE DE POST PREMIUM
 =============================================== */
 
 .post-card {
-  background: var(--white);
-  border-radius: var(--border-radius);
-  border: 1px solid var(--border-color);
-  padding: 20px;
-  box-shadow: var(--shadow-light);
-  transition: var(--transition);
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
   position: relative;
   overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-medium);
+  transform: translateY(0);
+  opacity: 0;
+  animation: slideInUp 0.6s ease-out forwards;
 }
 
-.post-card:hover {
-  box-shadow: var(--shadow-medium);
-  border-color: var(--light-green);
-  transform: translateY(-1px);
-}
+.post-card:nth-child(n+2) { animation-delay: 0.1s; }
+.post-card:nth-child(n+3) { animation-delay: 0.2s; }
+.post-card:nth-child(n+4) { animation-delay: 0.3s; }
 
-/* ===============================================
-   AUTEUR DU POST
-=============================================== */
-
-.post-author {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.author-logo {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--light-green);
-  transition: var(--transition);
-}
-
-.author-logo:hover {
-  border-color: var(--primary-green);
-  transform: scale(1.02);
-}
-
-.post-author strong {
-  font-weight: 600;
-  color: var(--black);
-  font-size: 15px;
-  margin-right: 6px;
-}
-
-.post-author small {
-  color: var(--dark-gray);
-  font-size: 12px;
-  background: var(--beige);
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-weight: 500;
-}
-
-/* ===============================================
-   CONTENU DU POST
-=============================================== */
-
-.post-content {
-  color: var(--charcoal);
-  font-size: 15px;
-  line-height: 1.6;
-  margin-bottom: 16px;
-  word-wrap: break-word;
-  white-space: pre-wrap;
-}
-
-/* ===============================================
-   MÉDIA DU POST (Photo)
-=============================================== */
-
-.post-photo {
-  margin-bottom: 16px;
-  border-radius: var(--border-radius-small);
-  overflow: hidden;
-  box-shadow: var(--shadow-light);
-}
-
-.post-photo img {
-  width: 100%;
-  max-height: 400px;
-  object-fit: cover;
-  display: block;
-  transition: var(--transition);
-}
-
-.post-photo img:hover {
-  transform: scale(1.02);
-}
-
-/* ===============================================
-   DOCUMENT PDF
-=============================================== */
-
-.post-document {
-  margin-bottom: 16px;
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-small);
-  background: var(--light-beige);
-  transition: var(--transition);
-}
-
-.post-document:hover {
-  border-color: var(--primary-green);
-  box-shadow: var(--shadow-light);
-}
-
-.document-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  text-decoration: none;
-  color: var(--charcoal);
-  transition: var(--transition);
-}
-
-.document-link:hover {
-  color: var(--primary-green);
-  background: var(--light-green);
-}
-
-.pdf-thumbnail {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 6px;
-  border: 1px solid var(--border-color);
-  background: var(--white);
-  padding: 4px;
-}
-
-.document-link span {
-  font-weight: 500;
-  font-size: 14px;
-}
-
-.document-link:hover span {
-  text-decoration: underline;
-}
-
-/* ===============================================
-   ACTIONS DU POST (Réactions, Commentaires, Partage)
-=============================================== */
-
-.post-actions {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 12px 0;
-  border-top: 1px solid var(--border-light);
-  border-bottom: 1px solid var(--border-light);
-  margin-bottom: 16px;
-  gap: 8px;
-}
-
-.btn-reaction,
-.btn-comment,
-.btn-share {
-  background: transparent;
-  border: none;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: var(--transition);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--dark-gray);
-  flex: 1;
-  justify-content: center;
-  position: relative;
-}
-
-.btn-reaction:hover,
-.btn-comment:hover,
-.btn-share:hover {
-  background: var(--light-gray);
-  color: var(--charcoal);
-  transform: translateY(-1px);
-}
-
-/* États actifs des boutons */
-.btn-reaction:active,
-.btn-comment:active,
-.btn-share:active {
-  background: var(--light-green);
-  color: var(--primary-green);
-}
-
-/* Styles spécifiques pour chaque type de bouton */
-.btn-reaction:hover {
-  background: rgba(255, 193, 7, 0.1);
-  color: #ffc107;
-}
-
-.btn-comment:hover {
-  background: rgba(13, 110, 253, 0.1);
-  color: #0d6efd;
-}
-
-.btn-share:hover {
-  background: var(--light-green);
-  color: var(--primary-green);
-}
-
-/* Effet de pulsation pour les compteurs */
-.btn-reaction:active,
-.btn-comment:active,
-.btn-share:active {
-  animation: pulse 0.3s ease-in-out;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-/* ===============================================
-   ÉTATS DE CHARGEMENT ET VIDE
-=============================================== */
-
-.forum-container p {
-  text-align: center;
-  color: var(--dark-gray);
-  font-size: 16px;
-  padding: 40px 20px;
-  background: var(--white);
-  border-radius: var(--border-radius);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-light);
-}
-
-/* Animation de chargement */
-.loading-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px;
-}
-
-.loading-spinner::after {
-  content: '';
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--border-color);
-  border-top: 2px solid var(--primary-green);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* ===============================================
-   SECTIONS DES RÉACTIONS ET COMMENTAIRES
-=============================================== */
-
-/* Container pour les réactions/commentaires qui s'affichent */
-.post-card > div:last-child {
-  margin-top: 0;
-  padding-top: 0;
-  border-top: none;
-}
-
-/* Transition douce pour l'apparition des sections */
-.post-card > div:nth-last-child(-n+2) {
-  animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
+@keyframes slideInUp {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -309,145 +154,496 @@
   }
 }
 
-/* ===============================================
-   RESPONSIVE DESIGN
-=============================================== */
-
-@media (max-width: 768px) {
-  .forum-container {
-    padding: 0 12px;
-    gap: 16px;
-  }
-
-  .post-card {
-    padding: 16px;
-  }
-
-  .post-author {
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-
-  .author-logo {
-    width: 40px;
-    height: 40px;
-  }
-
-  .post-author strong {
-    font-size: 14px;
-  }
-
-  .post-content {
-    font-size: 14px;
-    margin-bottom: 12px;
-  }
-
-  .post-actions {
-    gap: 4px;
-    margin-bottom: 12px;
-  }
-
-  .btn-reaction,
-  .btn-comment,
-  .btn-share {
-    padding: 8px 12px;
-    font-size: 13px;
-  }
-
-  .document-link {
-    padding: 12px;
-  }
-
-  .pdf-thumbnail {
-    width: 32px;
-    height: 32px;
-  }
-}
-
-@media (max-width: 480px) {
-  .post-actions {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .btn-reaction,
-  .btn-comment,
-  .btn-share {
-    width: 100%;
-    justify-content: center;
-    padding: 12px;
-  }
-
-  .post-author {
-    flex-wrap: wrap;
-  }
-
-  .post-author small {
-    margin-left: auto;
-  }
-}
-
-/* ===============================================
-   INTÉGRATION AVEC LES COMPOSANTS ENFANTS
-=============================================== */
-
-/* Styles pour les composants ForumPostReaction et ForumPostComment */
-.post-card .forum-post-reaction,
-.post-card .forum-post-comment {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-light);
-}
-
-/* ===============================================
-   ACCESSIBILITÉ
-=============================================== */
-
-.btn-reaction:focus-visible,
-.btn-comment:focus-visible,
-.btn-share:focus-visible {
-  outline: 2px solid var(--primary-green);
-  outline-offset: 2px;
-}
-
-/* ===============================================
-   ANIMATIONS D'ENTRÉE
-=============================================== */
-
-.post-card {
-  animation: fadeInUp 0.4s ease-out;
-}
-
-.post-card:nth-child(2) {
-  animation-delay: 0.1s;
-}
-
-.post-card:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-.post-card:nth-child(4) {
-  animation-delay: 0.3s;
-}
-
-/* ===============================================
-   ÉTATS HOVER AVANCÉS
-=============================================== */
-
 .post-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  right: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--primary-green), var(--accent-green));
+  background: var(--gradient-primary);
   transform: scaleX(0);
-  transition: transform 0.3s ease-out;
+  transform-origin: left;
+  transition: var(--transition-medium);
+}
+
+.post-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-xl), var(--shadow-glow);
+  background: var(--bg-hover);
+  border-color: rgba(102, 126, 234, 0.3);
 }
 
 .post-card:hover::before {
   transform: scaleX(1);
 }
 
+/* Effet de brillance animé */
+.post-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  transform: rotate(45deg) translate(-100%, -100%);
+  transition: var(--transition-slow);
+  pointer-events: none;
+}
 
+.post-card:hover::after {
+  transform: rotate(45deg) translate(100%, 100%);
+}
+
+/* ===============================================
+   CONTENU DU POST
+=============================================== */
+
+.post-content {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  position: relative;
+}
+
+.post-content::first-letter {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: transparent;
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+/* ===============================================
+   MÉDIA PREMIUM
+=============================================== */
+
+.post-photo {
+  margin-bottom: var(--space-lg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow-md);
+  transform: translateZ(0);
+}
+
+.post-photo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  opacity: 0;
+  transition: var(--transition-medium);
+  z-index: 1;
+}
+
+.post-photo:hover::before {
+  opacity: 1;
+}
+
+.post-photo img {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  object-fit: cover;
+  display: block;
+  transition: var(--transition-slow);
+  transform: scale(1);
+}
+
+.post-photo:hover img {
+  transform: scale(1.05);
+}
+
+/* ===============================================
+   DOCUMENT STYLING PREMIUM
+=============================================== */
+
+.post-document {
+  margin-bottom: var(--space-lg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  transition: var(--transition-medium);
+  position: relative;
+}
+
+.post-document::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--gradient-primary);
+  transform: scaleY(0);
+  transition: var(--transition-medium);
+}
+
+.post-document:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.post-document:hover::before {
+  transform: scaleY(1);
+}
+
+.post-document a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: var(--transition-medium);
+  position: relative;
+  overflow: hidden;
+}
+
+.post-document a::before {
+  content: "📄";
+  font-size: 24px;
+  filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.3));
+}
+
+.post-document a:hover {
+  color: #667eea;
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, transparent 100%);
+}
+
+/* ===============================================
+   ACTIONS PREMIUM
+=============================================== */
+
+.post-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) 0;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  margin: var(--space-lg) 0;
+  position: relative;
+}
+
+.post-actions::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 1px;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: var(--transition-medium);
+}
+
+.post-actions:hover::before {
+  opacity: 0.3;
+}
+
+.btn-share,
+.btn-reactions,
+.btn-comments {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  flex: 1;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-fast);
+  transform: translateZ(0);
+}
+
+/* Effet de vague au clic */
+.btn-share::before,
+.btn-reactions::before,
+.btn-comments::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(102, 126, 234, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  z-index: -1;
+}
+
+.btn-share:active::before,
+.btn-reactions:active::before,
+.btn-comments:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* États hover spécifiques */
+.btn-share:hover {
+  background: rgba(79, 172, 254, 0.1);
+  color: #4facfe;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-reactions:hover {
+  background: rgba(247, 112, 154, 0.1);
+  color: #fa709a;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-comments:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Animation des compteurs */
+.btn-share:hover span:last-child,
+.btn-reactions:hover span:last-child,
+.btn-comments:hover span:last-child {
+  animation: bounce 0.6s ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 20%, 60%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-4px); }
+  80% { transform: translateY(-2px); }
+}
+
+/* ===============================================
+   RÉACTIONS LISTE PREMIUM
+=============================================== */
+
+.reactions-list {
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  margin-top: var(--space-lg);
+  border: 1px solid var(--border-light);
+  animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reactions-users {
+  margin-top: var(--space-md);
+}
+
+.reaction-type-group {
+  margin-bottom: var(--space-lg);
+}
+
+.reaction-type-group:last-child {
+  margin-bottom: 0;
+}
+
+.reaction-type-group strong {
+  display: block;
+  margin-bottom: var(--space-sm);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.reaction-users {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.reaction-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  transition: var(--transition-bounce);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-xs);
+}
+
+.reaction-user::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.reaction-user:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.reaction-user:hover::before {
+  left: 100%;
+}
+
+.reaction-user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  transition: var(--transition-medium);
+  box-shadow: var(--shadow-sm);
+}
+
+.reaction-user:hover .reaction-user-avatar {
+  border-color: #667eea;
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md);
+}
+
+.reaction-user span {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: var(--transition-medium);
+}
+
+.reaction-user:hover span {
+  color: #667eea;
+}
+
+/* ===============================================
+   RESPONSIVE DESIGN PREMIUM
+=============================================== */
+
+@media (max-width: 768px) {
+  .forum-container {
+    padding: var(--space-md);
+  }
+  
+  .post-card {
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+  }
+  
+  .post-actions {
+    gap: var(--space-xs);
+  }
+  
+  .btn-share,
+  .btn-reactions,
+  .btn-comments {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .post-card {
+    padding: var(--space-md);
+  }
+  
+  .post-actions {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  
+  .btn-share,
+  .btn-reactions,
+  .btn-comments {
+    width: 100%;
+    padding: var(--space-md);
+  }
+  
+  .reaction-users {
+    gap: var(--space-sm);
+  }
+  
+  .reaction-user {
+    padding: var(--space-xs) var(--space-sm);
+  }
+  
+  .reaction-user-avatar {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* ===============================================
+   ACCESSIBILITÉ & FOCUS
+=============================================== */
+
+.btn-share:focus-visible,
+.btn-reactions:focus-visible,
+.btn-comments:focus-visible,
+.reaction-user:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* ===============================================
+   PRÉCHARGEMENT & OPTIMISATIONS
+=============================================== */
+
+.post-photo img {
+  will-change: transform;
+}
+
+.post-card {
+  will-change: transform, box-shadow;
+}
+
+.btn-share,
+.btn-reactions,
+.btn-comments {
+  will-change: transform, background-color;
+}
+
+/* Réduction des mouvements pour l'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
