@@ -204,12 +204,7 @@ const AddQuiz = ({ token, offerId, onQuizAdded, onClose }) => {
 
           <div className="modal-footer">
             <div className="footer-actions">
-              <button type="button" className="cancel-btn" onClick={onClose}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2"/>
-                </svg>
-                Cancel
-              </button>
+              
               <button type="submit" className="submit-btn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                   <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2"/>

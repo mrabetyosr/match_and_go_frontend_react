@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import HandLoader from "../HandLoader/HandLoader"; // Import du composant HandLoader
 import "./Profile.css"; // Ton style moderne
 
+
 const Profile = () => {
   const { id } = useParams(); // ID depuis l'URL
   const [user, setUser] = useState(null);

@@ -25,6 +25,7 @@ import ApplicationsSubmissions from '../../components/ApplicationsSubmissions/Ap
 import Profile from "../../components/Profile/Profile.jsx"; // ✅ importe ton composant
 
 import RatingApp from "../../components/RatingApp/RatingApp.jsx"; // ✅ import ton rating
+import QuizPage from '../../pages/QuizPage/QuizPage.jsx';
 import './UserLayout.css';
 
 const UserLayout = () => {
@@ -68,6 +69,7 @@ const UserLayout = () => {
         <Route path="/" element={<Home />} />
         <Route path="find-job" element={<FindJob />} />
         <Route path="find-job/details/:id" element={<JobDetails />} />
+        <Route path="quiz/:offerId" element={<QuizPage />} />
         <Route path="settings" element={<Settings />} />
         <Route path="update-profile" element={<UpdateSettings />} />
         <Route path="forum" element={<Forum />} />

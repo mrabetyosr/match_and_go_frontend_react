@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ApplyJob.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import QuizPopup from '../QuizPopup/QuizPopup';
 
 const ApplyJob = ({ isOpen, onClose, job, company, onApplicationSubmitted }) => {
   const initialFormData = {
@@ -19,10 +20,12 @@ const ApplyJob = ({ isOpen, onClose, job, company, onApplicationSubmitted }) => 
   };
 
   const [formData, setFormData] = useState(initialFormData);
+  const [showQuizPopup, setShowQuizPopup] = useState(false);
 
   // Fonction pour reset + fermer
   const handleClose = () => {
     setFormData(initialFormData);
+    setShowQuizPopup(false);
     onClose();
   };
 
@@ -31,11 +34,24 @@ const ApplyJob = ({ isOpen, onClose, job, company, onApplicationSubmitted }) => 
     if (!isOpen) return;
 
     // Reset form à l'ouverture
-    setFormData(initialFormData);
+    setFormData({
+      firstName: '',
+      lastName: '',
+      telephone: '',
+      email: '',
+      currentLocation: '',
+      dateOfBirth: '',
+      resume: null,
+      linkedinUrl: '',
+      githubUrl: '',
+      motivationLetter: null,
+      agreeToTerms: false
+    });
+    setShowQuizPopup(false);
 
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
-      if (!token) return; // pas de token → on arrête
+      if (!token) return;
 
       try {
         const res = await fetch("http://localhost:7001/api/users/me", {
@@ -43,7 +59,7 @@ const ApplyJob = ({ isOpen, onClose, job, company, onApplicationSubmitted }) => 
         });
 
         if (res.status === 401) {
-          localStorage.removeItem("token"); // token expiré
+          localStorage.removeItem("token");
           return;
         }
 
@@ -112,49 +128,46 @@ const ApplyJob = ({ isOpen, onClose, job, company, onApplicationSubmitted }) => 
     }
   };
 
-  // Nouvelle fonction pour vérifier et gérer les quiz
+  // Fonction pour vérifier et gérer les quiz
   const checkAndHandleQuiz = async () => {
-    console.log("🔍 Checking quiz availability for job:", job._id);
+    console.log("Checking quiz availability for job:", job._id);
     
     try {
       const token = localStorage.getItem("token");
-      console.log("🔑 Token exists:", !!token);
       
-      // Utiliser la nouvelle route quiz-availability
       const response = await fetch(`http://localhost:7001/api/offers/${job._id}/quiz-availability`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      console.log("📡 Response status:", response.status);
-      
       if (response.ok) {
         const data = await response.json();
-        console.log("📋 Quiz availability data:", data);
+        console.log("Quiz availability data:", data);
         
         if (data.hasQuiz) {
-          console.log("✅ Quiz available! Opening quiz popup...");
-          // Il y a un quiz disponible, fermer ce modal et ouvrir le quiz
-          if (onApplicationSubmitted) {
-            console.log("🎯 Calling onApplicationSubmitted callback");
-            onApplicationSubmitted();
-          } else {
-            console.log("❌ onApplicationSubmitted callback is missing!");
-          }
+          console.log("Quiz available! Opening quiz popup...");
+          // Il y a un quiz disponible, afficher le popup quiz
+          setShowQuizPopup(true);
         } else {
-          console.log("❌ No quiz available for this offer");
-          // Pas de quiz, juste fermer le modal normalement
+          console.log("No quiz available for this offer");
+          // Pas de quiz, fermer le modal normalement
           handleClose();
         }
       } else {
-        console.log("❌ Error occurred, status:", response.status);
+        console.log("Error checking quiz availability, status:", response.status);
         // Erreur, fermer le modal normalement
         handleClose();
       }
     } catch (error) {
-      console.error('❌ Error checking quiz availability:', error);
+      console.error('Error checking quiz availability:', error);
       // En cas d'erreur, fermer le modal normalement
       handleClose();
     }
+  };
+
+  // Fonction appelée quand le quiz popup se ferme
+  const handleQuizPopupClose = () => {
+    setShowQuizPopup(false);
+    handleClose(); // Fermer complètement l'application
   };
 
   const handleBackdropClick = (e) => {
@@ -165,6 +178,7 @@ const ApplyJob = ({ isOpen, onClose, job, company, onApplicationSubmitted }) => 
 
   return (
     <>
+      {/* Application Form Modal */}
       <div className="apply-job-overlay" onClick={handleBackdropClick}>
         <div className={`apply-job-panel ${isOpen ? 'open' : ''}`}>
           <div className="apply-job-header">
@@ -266,7 +280,7 @@ const ApplyJob = ({ isOpen, onClose, job, company, onApplicationSubmitted }) => 
                       checked={formData.agreeToTerms} onChange={handleInputChange} required />
                     <span className="checkmark"></span>
                     <span className="terms-text">
-                      I agree to the <a href="#" target="_blank">Terms of Service</a> and consent to data processing.
+                      I agree to the Terms of Service and consent to data processing.
                     </span>
                   </label>
                 </div>
@@ -280,6 +294,13 @@ const ApplyJob = ({ isOpen, onClose, job, company, onApplicationSubmitted }) => 
           </div>
         </div>
       </div>
+
+      {/* Quiz Popup - s'affiche après soumission réussie si quiz disponible */}
+      <QuizPopup
+        isOpen={showQuizPopup}
+        onClose={handleQuizPopupClose}
+        offerId={job?._id}
+      />
 
       <ToastContainer position="top-right" autoClose={3000} />
     </>
