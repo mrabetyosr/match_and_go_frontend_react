@@ -4,11 +4,13 @@ import {
   User, MapPin, Phone, Mail, Calendar, FileText, Github, Linkedin, 
   Clock, CheckCircle, XCircle, ArrowLeft, UserCheck, 
   BarChart3, Eye, Filter, Download, Search, Users,
-  Calendar as CalendarIcon, Star, Target
+  Calendar as CalendarIcon, Star, Target, Award, TrendingUp, 
+  CheckSquare, AlertCircle
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import './ApplicationsSubmissions.css';
 import ScheduleInterviewModal from '../ScheduleInterviewModal/ScheduleInterviewModal';
+import QuizResponsesModal from '../QuizResponsesModal/QuizResponsesModal'; // AJOUT DE CETTE LIGNE
 import ApplicationStats from '../ApplicationStats/ApplicationStats.jsx';
 
 // Sub-components
@@ -66,7 +68,9 @@ const SearchAndFilters = ({
   resultCount,
   totalCount,
   onClearFilters,
-  hasActiveFilters
+  hasActiveFilters,
+  quizFilter,
+  onQuizFilterChange
 }) => (
   <div className="controls-section-one">
     <div className="search-filter-row-one">
@@ -87,6 +91,12 @@ const SearchAndFilters = ({
           <option value="interview_scheduled">Interview ({stats.interviewed})</option>
           <option value="accepted">Accepted ({stats.accepted})</option>
           <option value="rejected">Rejected ({stats.rejected})</option>
+        </select>
+
+        <select value={quizFilter} onChange={(e) => onQuizFilterChange(e.target.value)}>
+          <option value="all">All Quiz Status</option>
+          <option value="submitted">Quiz Submitted</option>
+          <option value="not_submitted">No Quiz</option>
         </select>
 
         <select value={dateRange} onChange={(e) => onDateChange(e.target.value)}>
@@ -124,7 +134,62 @@ const SearchAndFilters = ({
   </div>
 );
 
-const ApplicationCard = ({ application, onStatusUpdate, updatingStatus, getTimeAgo }) => {
+// MISE À JOUR DE CE COMPOSANT
+const QuizStatusBadge = ({ quizSubmission, getTimeAgo, onViewResponses }) => {
+  if (!quizSubmission.hasSubmitted) {
+    return (
+      <div className="quiz-status-badge-one no-quiz-one">
+        <AlertCircle size={14} />
+        <span>No Quiz Submitted</span>
+      </div>
+    );
+  }
+
+  const getScoreColor = (percentage) => {
+    if (percentage >= 80) return 'excellent-one';
+    if (percentage >= 60) return 'good-one';
+    if (percentage >= 40) return 'average-one';
+    return 'poor-one';
+  };
+
+  return (
+    <div className={`quiz-status-badge-one quiz-submitted-one ${getScoreColor(quizSubmission.percentage)}`}>
+      <Award size={14} />
+      <div className="quiz-details-one">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          <div>
+            <span className="quiz-title-one">{quizSubmission.quizTitle}</span>
+            <span className="quiz-time-one">Submitted {getTimeAgo(quizSubmission.submittedAt)}</span>
+          </div>
+          <button 
+            onClick={onViewResponses}
+            style={{
+              background: '#3b82f6',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              padding: '4px 8px',
+              fontSize: '0.75rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              transition: 'background-color 0.2s'
+            }}
+            onMouseOver={(e) => e.target.style.backgroundColor = '#2563eb'}
+            onMouseOut={(e) => e.target.style.backgroundColor = '#3b82f6'}
+          >
+            <Eye size={12} />
+            View Responses
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// MISE À JOUR DE CE COMPOSANT
+const ApplicationCard = ({ application, onStatusUpdate, updatingStatus, getTimeAgo, onViewQuizResponses }) => {
   const getStatusConfig = (status) => {
     const configs = {
       accepted: { color: 'accepted-one', icon: CheckCircle, text: 'Accepted' },
@@ -177,6 +242,15 @@ const ApplicationCard = ({ application, onStatusUpdate, updatingStatus, getTimeA
           <StatusIcon size={16} />
           <span>{statusConfig.text}</span>
         </div>
+      </div>
+
+      {/* Quiz Status Section - MISE À JOUR ICI */}
+      <div className="quiz-section-one">
+        <QuizStatusBadge 
+          quizSubmission={application.quizSubmission} 
+          getTimeAgo={getTimeAgo}
+          onViewResponses={() => onViewQuizResponses(application)}
+        />
       </div>
 
       <div className="card-body-one">
@@ -288,8 +362,12 @@ const ApplicationsSubmissions = () => {
   const [offerTitle, setOfferTitle] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [viewMode, setViewMode] = useState('list');
+  const [viewMode, setViewMode] = useState('cards');
   const [dateRange, setDateRange] = useState('all');
+  const [quizFilter, setQuizFilter] = useState('all');
+  // AJOUT DE CES DEUX LIGNES
+  const [quizResponsesModalOpen, setQuizResponsesModalOpen] = useState(false);
+  const [selectedQuizApplication, setSelectedQuizApplication] = useState(null);
 
   const token = localStorage.getItem('token');
 
@@ -391,6 +469,14 @@ const ApplicationsSubmissions = () => {
     setSelectedApplication(null);
   };
 
+  // AJOUT DE CETTE FONCTION
+  const handleViewQuizResponses = (application) => {
+    if (application.quizSubmission?.hasSubmitted) {
+      setSelectedQuizApplication(application);
+      setQuizResponsesModalOpen(true);
+    }
+  };
+
   const exportToCSV = () => {
     const csvData = applications.map(app => ({
       Name: app.candidateId?.username || 'Unknown',
@@ -398,7 +484,11 @@ const ApplicationsSubmissions = () => {
       Phone: app.phoneNumber || 'N/A',
       Location: app.location || 'N/A',
       Status: app.status,
-      'Applied Date': new Date(app.createdAt).toLocaleDateString()
+      'Applied Date': new Date(app.createdAt).toLocaleDateString(),
+      'Quiz Submitted': app.quizSubmission?.hasSubmitted ? 'Yes' : 'No',
+      'Quiz Score': app.quizSubmission?.hasSubmitted ? `${app.quizSubmission.score}/${app.quizSubmission.totalPossibleScore}` : 'N/A',
+      'Quiz Percentage': app.quizSubmission?.hasSubmitted ? `${app.quizSubmission.percentage}%` : 'N/A',
+      'Quiz Title': app.quizSubmission?.quizTitle || 'N/A'
     }));
 
     const headers = Object.keys(csvData[0]);
@@ -439,6 +529,10 @@ const ApplicationsSubmissions = () => {
     const matchesStatus = filterStatus === 'all' || app.status === filterStatus;
     const matchesSearch = app.candidateId?.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          app.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesQuiz = quizFilter === 'all' || 
+                       (quizFilter === 'submitted' && app.quizSubmission?.hasSubmitted) ||
+                       (quizFilter === 'not_submitted' && !app.quizSubmission?.hasSubmitted);
+    
     let matchesDate = true;
     if (dateRange !== 'all') {
       const appDate = new Date(app.createdAt);
@@ -456,10 +550,10 @@ const ApplicationsSubmissions = () => {
           break;
       }
     }
-    return matchesStatus && matchesSearch && matchesDate;
+    return matchesStatus && matchesSearch && matchesDate && matchesQuiz;
   });
 
-  const hasActiveFilters = filterStatus !== 'all' || searchTerm || dateRange !== 'all';
+  const hasActiveFilters = filterStatus !== 'all' || searchTerm || dateRange !== 'all' || quizFilter !== 'all';
 
   if (loading) {
     return (
@@ -504,8 +598,11 @@ const ApplicationsSubmissions = () => {
             setFilterStatus('all');
             setSearchTerm('');
             setDateRange('all');
+            setQuizFilter('all');
           }}
           hasActiveFilters={hasActiveFilters}
+          quizFilter={quizFilter}
+          onQuizFilterChange={setQuizFilter}
         />
 
         <div className={`applications-list-one ${viewMode}-view-one`}>
@@ -522,6 +619,7 @@ const ApplicationsSubmissions = () => {
                 onStatusUpdate={updateApplicationStatus}
                 updatingStatus={updatingStatus}
                 getTimeAgo={getTimeAgo}
+                onViewQuizResponses={handleViewQuizResponses}
               />
             ))
           )}
@@ -538,6 +636,20 @@ const ApplicationsSubmissions = () => {
             candidateName={selectedApplication.candidateId?.username || 'Unknown Candidate'}
             jobTitle={offerTitle}
             onInterviewScheduled={handleInterviewScheduled}
+          />
+        )}
+
+        {/* AJOUT DE CETTE MODAL */}
+        {quizResponsesModalOpen && selectedQuizApplication && (
+          <QuizResponsesModal
+            isOpen={quizResponsesModalOpen}
+            onClose={() => {
+              setQuizResponsesModalOpen(false);
+              setSelectedQuizApplication(null);
+            }}
+            applicationId={selectedQuizApplication._id}
+            candidateName={selectedQuizApplication.candidateId?.username || 'Unknown Candidate'}
+            quizSubmission={selectedQuizApplication.quizSubmission}
           />
         )}
       </div>
