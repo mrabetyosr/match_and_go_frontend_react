@@ -1,91 +1,388 @@
-@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+/* ========================= */
+/* COMPANY SIGN UP FORM CSS */
+/* ========================= */
 
-/* Formulaire principal */
-.csf-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 100%;
-  max-width: 500px;
+/* Conteneur principal */
+.csf-form-container {
+  padding: 6px;
+  max-width: 420px;
   margin: 0 auto;
+  border-radius: 6px;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+}
+
+.csf-form {
+  border-radius: 8px;
+  padding: 16px;
+}
+
+/* Titres étapes */
+.csf-step-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #2c3e50;
+  text-align: center;
 }
 
 /* Inputs et select */
 .csf-input {
-  padding: 10px;
-  font-size: 13px; /* un peu plus petit */
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  outline: none;
+  width: 100%; /* prend toute la largeur du conteneur */
+  padding: 10px 12px; /* plus de padding */
+  font-size: 0.95rem; /* texte un peu plus lisible */
+  border: 1px solid #ddd; 
+  border-radius: 8px; /* arrondis comme signin-form */
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 8px;
+  background-color: #fff;
 }
 
 .csf-input:focus {
-  border-color: #28a745;
-  box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+  border-color: #2ecc71;
+  box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.2);
+  outline: none;
 }
 
-/* Boutons container */
+.csf-input::placeholder {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+/* Buttons container */
 .csf-buttons {
   display: flex;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 6px;
+  margin-top: 6px;
 }
 
-/* Bouton primaire */
-.csf-btn-primary {
-  flex: 1;
-  padding: 10px 20px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-
-.csf-btn-primary:hover {
-  background-color: #218838;
-}
-
-/* Bouton outline */
+.csf-btn-primary,
 .csf-btn-outline {
-  flex: 1;
-  padding: 10px 20px;
-  background-color: white;
-  color: #28a745;
-  border: 2px solid #28a745;
-  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 4px;
   cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s;
+  transition: all 0.2s ease;
+  border: none;
+  font-weight: 500;
+  flex: 1;
+}
+
+.csf-btn-primary {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.csf-btn-primary:hover:not(:disabled) {
+  background-color: #27ae60;
+}
+
+.csf-btn-primary:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.csf-btn-outline {
+  background-color: transparent;
+  color: #2ecc71;
+  border: 1px solid #2ecc71;
 }
 
 .csf-btn-outline:hover {
-  background-color: #28a745;
+  background-color: #2ecc71;
   color: white;
 }
 
-/* Barre de recherche location */
+/* Location search */
 .csf-location-search {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 6px;
+  margin-bottom: 8px;
+  align-items: stretch;
 }
 
-/* Carte Leaflet */
-.leaflet-container {
-  width: 100%;
-  height: 300px; /* un peu plus petite */
+.csf-location-search .csf-input {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.csf-btn-search {
+  padding: 10px 12px;
+  background-color: #3498db;
+  color: white;
+  border: none;
   border-radius: 8px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
 }
 
+.csf-btn-search:hover {
+  background-color: #2980b9;
+}
+
+/* Carte Leaflet compacte */
+.leaflet-container,
 .csf-map {
   width: 100%;
-  height: 200px; /* hauteur réduite */
+  height: 140px; /* réduit la hauteur */
+  border-radius: 4px;
+  margin-bottom: 6px;
+  border: 1px solid #ddd;
+}
+
+/* Summary section */
+.csf-summary {
+  background-color: #f8f9fa;
   border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.csf-summary h4 {
+  font-size: 13px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.csf-summary-grid {
+  display: grid;
+  gap: 6px;
+}
+
+.csf-summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  background-color: white;
+  border-radius: 4px;
+  font-size: 11px;
+  border: 1px solid #eee;
+}
+
+.csf-summary-item strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.csf-captcha-section {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+/* Plans carousel */
+.csf-plans-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+/* Carrousel */
+.csf-carousel-arrow {
+  width: 26px;
+  height: 26px;
+  font-size: 14px;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.csf-carousel-arrow:hover {
+  background-color: #27ae60;
+}
+
+/* Plans */
+.csf-plan-card {
+  flex: 0 0 220px; /* largeur fixe plus petite */
+  padding: 8px;
+  gap: 4px;
+  font-size: 11px;
+  min-height: 160px;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  position: relative;
+  text-align: center;
+}
+
+.csf-popular-badge {
+  padding: 4px 8px;
+  font-size: 11px;
+  background-color: #f39c12;
+  color: white;
+  border-radius: 12px;
+  position: absolute;
+  top: -12px;        /* décalage de 4px du haut */
+  left: 50%;       /* centré horizontalement */
+  transform: translateX(-50%);
+  font-weight: bold;
+}
+
+
+
+.csf-popular-logo {
+  width: 28px;
+  margin-top: 2px;
+}
+
+.csf-plan-content {
+  padding-top: 8px;
+}
+
+.csf-plan-name {
+  font-size: 12px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 4px;
+}
+
+.csf-plan-price {
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.csf-price-amount {
+  font-size: 16px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.csf-price-period {
+  font-size: 10px;
+  color: #7f8c8d;
+}
+
+.csf-plan-image {
+  height: 12px;
+  margin: 2px 0;
+  width: auto;
+}
+
+.csf-plan-features {
+  font-size: 10px;
+  gap: 1px;
+  margin-bottom: 8px;
+}
+
+.csf-feature {
+  padding: 2px 0;
+  font-size: 10px;
+  color: #2c3e50;
+  text-align: left;
+}
+
+.csf-plan-button {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 6px;
+  margin-top: 12px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.csf-lite-button {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.csf-lite-button:hover:not(:disabled) {
+  background-color: #27ae60;
+}
+
+.csf-pro-button {
+  background-color: #9b59b6;
+  color: white;
+}
+
+.csf-pro-button:hover:not(:disabled) {
+  background-color: #8e44ad;
+}
+
+.csf-plan-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+/* Note de sécurité */
+.csf-security-note {
+  font-size: 10px;
+  margin-top: 4px;
+  text-align: center;
+  color: #7f8c8d;
+}
+
+/* Progress bar compacte */
+.csf-progress {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.csf-progress-bar {
+  height: 4px;
+  width: 100%;
+  background-color: #ecf0f1;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.csf-progress-fill {
+  height: 4px;
+  background-color: #2ecc71;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.csf-progress-text {
+  font-size: 10px;
+  margin-top: 2px;
+  color: #7f8c8d;
+}
+
+/* Responsive pour mobile */
+@media (max-width: 480px) {
+  .csf-form-container {
+    padding: 4px;
+    max-width: 100%;
+  }
+  
+  .csf-form {
+    padding: 12px;
+  }
+  
+  .csf-buttons {
+    flex-direction: column;
+  }
+  
+  .csf-location-search {
+    flex-direction: column;
+  }
+  
+  .csf-plans-carousel {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .csf-plan-card {
+    flex: none;
+    width: 100%;
+    max-width: 280px;
+  }
 }

@@ -1,0 +1,299 @@
+/* === PaymentSuccess.css === */
+
+/* Container global */
+.payment-success-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9fafb;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card principale */
+.payment-success-card {
+  background: #fff;
+  width: 100%;
+  max-width: 700px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  text-align: center;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Logo */
+.payment-logo img {
+  height: 70px;
+  margin-bottom: 20px;
+}
+
+/* Header (status) */
+.payment-header {
+  margin-bottom: 20px;
+}
+
+.payment-header.processing h1,
+.payment-header.processing p {
+  color: #374151;
+}
+
+.payment-header.success h1 {
+  color: #16a34a;
+}
+
+.payment-header.failed h1 {
+  color: #dc2626;
+}
+
+.spinner-large {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #e5e7eb;
+  border-top: 5px solid #16a34a;
+  border-radius: 50%;
+  margin: 0 auto 15px;
+  animation: spin 1s linear infinite;
+}
+
+.success-icon,
+.error-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+/* Progress Steps */
+.progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 25px 0;
+  position: relative;
+}
+
+.step {
+  flex: 1;
+  text-align: center;
+}
+
+.step-circle {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+  font-weight: bold;
+}
+
+.step.completed .step-circle {
+  background: #16a34a;
+  color: #fff;
+}
+
+.step.active .step-circle {
+  border: 3px solid #16a34a;
+  background: #fff;
+  color: #16a34a;
+}
+
+.step.failed .step-circle {
+  background: #dc2626;
+  color: #fff;
+}
+
+.step-text h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.step-text p {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.step-connector {
+  position: absolute;
+  top: 18px;
+  left: 20%;
+  right: 20%;
+  height: 2px;
+  background: #d1d5db;
+  z-index: -1;
+}
+
+/* Payment details */
+.payment-details {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.payment-details h3 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.payment-info .payment-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 14px;
+}
+
+.payment-row span {
+  color: #374151;
+}
+
+.payment-row code {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.status {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status.succeeded,
+.status.active {
+  color: #16a34a;
+}
+
+.status.failed,
+.status.inactive {
+  color: #dc2626;
+}
+
+/* User info */
+.user-info {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.user-info h3 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #065f46;
+}
+
+.user-details .user-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 14px;
+}
+
+.role-badge {
+  padding: 2px 8px;
+  border-radius: 8px;
+  background: #d1fae5;
+  color: #065f46;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Boutons & actions */
+.payment-actions {
+  margin-top: 20px;
+}
+
+.btn-primary {
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background: #15803d;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #16a34a;
+  border: 2px solid #16a34a;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-outline:hover {
+  background: #16a34a;
+  color: #fff;
+}
+
+.processing-message p,
+.redirect-message p,
+.help-text {
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 10px;
+}
+
+/* Next Steps */
+.next-steps {
+  margin-top: 30px;
+  text-align: left;
+}
+
+.next-steps h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.next-steps ul {
+  list-style: none;
+  padding: 0;
+}
+
+.next-steps li {
+  font-size: 14px;
+  margin: 5px 0;
+  color: #374151;
+}
+
+/* Footer */
+.payment-footer {
+  margin-top: 25px;
+  font-size: 13px;
+  color: #6b7280;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 10px;
+}
+
+/* Animations */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

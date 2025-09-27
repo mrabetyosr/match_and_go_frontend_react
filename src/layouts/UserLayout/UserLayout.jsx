@@ -23,6 +23,7 @@ import UpdateSettings from '../../components/updatesettings/updatesettings.jsx';
 import FullApplication from '../../pages/FullApplication/FullApplication.jsx';
 import ApplicationsSubmissions from '../../components/ApplicationsSubmissions/ApplicationsSubmissions.jsx';
 import Profile from "../../components/Profile/Profile.jsx"; // ✅ importe ton composant
+import PaymentSuccess from '../../components/PaymentSuccess/PaymentSuccess.jsx'; // ✅ Nouveau import
 
 import RatingApp from "../../components/RatingApp/RatingApp.jsx"; // ✅ import ton rating
 import QuizPage from '../../pages/QuizPage/QuizPage.jsx';
@@ -74,6 +75,7 @@ const UserLayout = () => {
         <Route path="update-profile" element={<UpdateSettings />} />
         <Route path="forum" element={<Forum />} />
         <Route path="profile/:id" element={<Profile />} /> {/* ✅ nouvelle route */}
+        <Route path="payment-success" element={<PaymentSuccess />} /> {/* ✅ Nouvelle route */}
 
         {/* Route parent */}
         <Route path="applications" element={<FullApplication />}>

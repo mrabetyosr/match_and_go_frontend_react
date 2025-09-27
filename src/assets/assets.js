@@ -11,6 +11,7 @@ import orangelogo from './orangelogo.png';
 import orangecover from './orangecover.jpg';
 import ooredoologo from './ooredoologo.jpeg';
 import ooredoocover from './ooredoocover.jpeg';
+import quote from './forumlogo.png'
 
 import jobsection2 from './2.png';
 import jobsection3 from './3.png';
@@ -18,6 +19,8 @@ import findjob from './findjob.png';
 import candidaturesection from './candidatureSection.png';
 import findjob1 from './findjob1.png';
 import test from './test.png';
+import MatchandGolite from './Match&Golite.png';
+import MatchandGopreimum from './Match&Gopreimum.png';
 
 import claraPhoto from './user1.avif';
 import yassinePhoto from './user2.avif';
@@ -46,8 +49,10 @@ export const assets = {
     test,
     matchgorforum,
     sideimage,
-    GetFound
-
+    GetFound,
+    MatchandGolite,
+    MatchandGopreimum,
+    quote
 }
 export const companies = [
   {
