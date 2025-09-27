@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Home,
   BarChart3,
@@ -16,26 +17,34 @@ import './SideBar.css';
 
 const SideBar = ({ isMobileOpen = false, onMobileClose }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [activeItem, setActiveItem] = useState('dashboard');
   const [isMobile, setIsMobile] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: Home },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-    { id: 'users', label: 'Utilisateurs', icon: Users },
-    { id: 'documents', label: 'Documents', icon: FileText },
-    { id: 'calendar', label: 'Calendrier', icon: Calendar },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'settings', label: 'Paramètres', icon: Settings },
+    { id: 'dashboard', label: 'Dashboard', icon: Home, path: '/Admin/dashboard' },
+    { id: 'analytics', label: 'Analytics', icon: BarChart3, path: '/Admin/analytics' },
+    { id: 'users', label: 'Users', icon: Users, path: '/Admin/users' },
+    { id: 'documents', label: 'Documents', icon: FileText, path: '/Admin/documents' },
+    { id: 'calendar', label: 'Calendar', icon: Calendar, path: '/Admin/calendar' },
+    { id: 'notifications', label: 'Notifications', icon: Bell, path: '/Admin/notifications' },
+    { id: 'settings', label: 'Settings', icon: Settings, path: '/Admin/settings' },
   ];
 
-  // Détection de la taille d'écran
+  // Detect active element based on URL
+  const getActiveItem = () => {
+    const currentPath = location.pathname;
+    const activeMenuItem = menuItems.find(item => item.path === currentPath);
+    return activeMenuItem ? activeMenuItem.id : 'dashboard';
+  };
+
+  // Screen size detection
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth <= 768;
       setIsMobile(mobile);
       
-      // Ferme le menu mobile si on passe en desktop
+      // Close mobile menu when switching to desktop
       if (!mobile && isMobileOpen && onMobileClose) {
         onMobileClose();
       }
@@ -47,37 +56,39 @@ const SideBar = ({ isMobileOpen = false, onMobileClose }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, [isMobileOpen, onMobileClose]);
 
-  // Gestion du toggle interne (pour desktop)
+  // Internal toggle management (for desktop)
   const handleToggle = () => {
     if (isMobile) {
-      // Sur mobile, utilise la prop de fermeture
+      // On mobile, use close prop
       if (onMobileClose) {
         onMobileClose();
       }
     } else {
-      // Sur desktop, toggle collapse
+      // On desktop, toggle collapse
       setIsCollapsed(!isCollapsed);
     }
   };
 
-  // Fermeture au clic sur un élément du menu (mobile)
-  const handleMenuClick = (itemId) => {
-    setActiveItem(itemId);
+  // Navigate to corresponding page
+  const handleMenuClick = (item) => {
+    navigate(item.path);
     if (isMobile && onMobileClose) {
       onMobileClose();
     }
   };
 
-  // Classes conditionnelles
+  // Conditional classes
   const sidebarClasses = [
     'sb',
     isCollapsed && !isMobile ? 'sb--col' : '',
     isMobileOpen ? 'sb--mob-open' : ''
   ].filter(Boolean).join(' ');
 
+  const activeItem = getActiveItem();
+
   return (
     <>
-      {/* Overlay pour mobile */}
+      {/* Mobile overlay */}
       {isMobile && isMobileOpen && (
         <div 
           className="sb__overlay sb__overlay--visible"
@@ -98,8 +109,8 @@ const SideBar = ({ isMobileOpen = false, onMobileClose }) => {
               onClick={handleToggle}
               className="sb__tgl"
               aria-label={isMobile ? 
-                "Fermer le menu" : 
-                (isCollapsed ? "Étendre la sidebar" : "Réduire la sidebar")
+                "Close menu" : 
+                (isCollapsed ? "Expand sidebar" : "Collapse sidebar")
               }
             >
               {isMobile ? 
@@ -120,7 +131,7 @@ const SideBar = ({ isMobileOpen = false, onMobileClose }) => {
               return (
                 <li key={item.id} className="sb__mi">
                   <button
-                    onClick={() => handleMenuClick(item.id)}
+                    onClick={() => handleMenuClick(item)}
                     className={`sb__btn ${isActive ? 'sb__btn--act' : ''}`}
                     aria-label={item.label}
                   >
@@ -172,4 +183,3 @@ const SideBar = ({ isMobileOpen = false, onMobileClose }) => {
 };
 
 export default SideBar;
-

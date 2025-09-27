@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from "react";
 import SideBar from "../../components/SideBar/SideBar";
 import NavBarAdmin from "../../components/NavBarAdmin/NavBarAdmin";
-import './AdminLayout.css';
 
+import './AdminLayout.css';
 
 const AdminLayout = ({ children }) => {
   const [sidebarMobileOpen, setSidebarMobileOpen] = useState(false);
@@ -26,7 +26,7 @@ const AdminLayout = ({ children }) => {
       <div className="admin-layout__main">
         <div className="admin-layout__navbar">
           <NavBarAdmin 
-            title="Tableau de Bord" 
+            title="Dashboard" 
             userName="John Doe"
             onSidebarToggle={handleSidebarToggle}
           />
