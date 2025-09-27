@@ -82,7 +82,7 @@ const NavBarAdmin = ({ title = "Dashboard", userName = "John Doe", onSidebarTogg
               <div className="hdr-db__ttl-wrp">
                 <h1 className="hdr-db__ttl">{title}</h1>
                 <p className="hdr-db__sub">
-                  Bienvenue sur votre tableau de bord
+                  
                 </p>
               </div>
             </div>
@@ -94,7 +94,7 @@ const NavBarAdmin = ({ title = "Dashboard", userName = "John Doe", onSidebarTogg
               <Search className="hdr-db__srch-ico" size={20} />
               <input
                 type="text"
-                placeholder="Rechercher..."
+                placeholder="Search ..."
                 className="hdr-db__srch-inp"
               />
             </div>
