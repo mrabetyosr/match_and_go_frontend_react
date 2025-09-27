@@ -1,12 +1,14 @@
 import React, { useState, useRef } from "react";
 import './SignIn.css';
 import { assets } from '../../assets/assets';
+import { useNavigate } from "react-router-dom"; 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CompanySignUpForm from '../CompanySignUpForm/CompanySignUpForm';
 import ReCAPTCHA from "react-google-recaptcha";
 
 const SignIn = ({ onClose }) => {
+  const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
   const [isCompany, setIsCompany] = useState(false);
   const [step, setStep] = useState("login"); // login | forgot | verify | reset
@@ -51,9 +53,11 @@ const SignIn = ({ onClose }) => {
       });
 
       const data = await res.json();
+      console.log("LOGIN RESPONSE:", data); // debug
+
       if (!res.ok) {
         toast.error(data.message || (isSignUp ? "Registration failed" : "Login failed"));
-        resetCaptcha(); // <-- reset ici
+        resetCaptcha();
         setLoading(false);
         return;
       }
@@ -63,15 +67,42 @@ const SignIn = ({ onClose }) => {
         setIsSignUp(false);
         setIsCompany(false);
       } else {
-        localStorage.setItem("token", data.token);
-        toast.success("✅ Login success!");
-        setTimeout(() => onClose(true), 800);
+        const token = data.token;
+        if (token) localStorage.setItem("token", token);
+
+        // détecter role
+        let role = data.role || data.user?.role;
+        if (!role && token) {
+          try {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            role = payload.role || payload.user?.role || (payload.roles && payload.roles[0]);
+          } catch (err) {
+            console.warn("Could not parse token payload", err);
+          }
+        }
+
+        console.log("Detected role:", role);
+
+        if (role === "admin") {
+          toast.success("✅ Welcome Admin!");
+          resetCaptcha();
+          setTimeout(() => {
+            try {
+              navigate("/admin"); // redirection SPA
+            } catch (err) {
+              window.location.href = "http://localhost:3000/admin"; // fallback
+            }
+          }, 300);
+        } else {
+          toast.success("✅ Login success!");
+          resetCaptcha();
+          setTimeout(() => onClose(true), 800);
+        }
       }
 
       setUsername("");
       setEmail("");
       setPassword("");
-      resetCaptcha();
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong");
@@ -190,12 +221,11 @@ const SignIn = ({ onClose }) => {
             <img src={assets.namelogo} alt="Logo" className="signin-logo" />
             <h2 className="signin-title">Company Registration</h2>
 
-            {/* Company SignUp Form */}
             <CompanySignUpForm
-              onClose={({ success, role }) => {
+              onClose={({ success }) => {
                 if (success) {
-                  setIsCompany(false);  // Close the company form
-                  setIsSignUp(false);   // Switch to login form
+                  setIsCompany(false);
+                  setIsSignUp(false);
                   toast.success("You can now log in!");
                 }
               }}
@@ -211,7 +241,6 @@ const SignIn = ({ onClose }) => {
               </span>
             </p>
 
-            {/* Google reCAPTCHA */}
             <ReCAPTCHA
               sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
               size="normal"
@@ -237,7 +266,6 @@ const SignIn = ({ onClose }) => {
         <div className="signin-right">
           <img src={assets.namelogo} alt="Logo" className="signin-logo" />
 
-          {/* Google reCAPTCHA */}
           <ReCAPTCHA
             sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
             size="normal"
@@ -245,7 +273,6 @@ const SignIn = ({ onClose }) => {
             ref={recaptchaRef}
           />
 
-          {/* Candidate Login / SignUp */}
           {step === "login" && (
             <>
               <h2 className="signin-title">{isSignUp ? "Create Account" : "Welcome Back"}</h2>
@@ -310,7 +337,6 @@ const SignIn = ({ onClose }) => {
             </>
           )}
 
-          {/* Forgot Password */}
           {step === "forgot" && (
             <>
               <h2 className="signin-title">Forgot Password</h2>
@@ -334,7 +360,6 @@ const SignIn = ({ onClose }) => {
             </>
           )}
 
-          {/* Verify Code */}
           {step === "verify" && (
             <>
               <h2 className="signin-title">Verify Code</h2>
@@ -353,7 +378,6 @@ const SignIn = ({ onClose }) => {
             </>
           )}
 
-          {/* Reset Password */}
           {step === "reset" && (
             <>
               <h2 className="signin-title">Reset Password</h2>
