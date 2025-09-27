@@ -45,7 +45,7 @@ const AdminLayout = () => {
             <Route path="/" element={<Navigate to="dashboard" />} />
             
             {/* Routes internes */}
-            <Route path="dashboard" element={<UserDashboard />} />
+            <Route path="Users" element={<UserDashboard />} />
          
           </Routes>
         </main>
