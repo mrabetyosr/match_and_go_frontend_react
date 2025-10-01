@@ -655,3 +655,95 @@
     transition: order 0.3s ease, max-width 0.3s ease;
   }
 }
+
+/* ==============================================
+   ADDITIONS FOR USER PROFILE IMAGES
+   Add these styles to the END of your NavBarAdmin.css
+   ============================================== */
+
+/* Avatar image styling */
+.hdr-db__prf-avt {
+  position: relative;
+  overflow: hidden;
+}
+
+.hdr-db__prf-avt-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.hdr-db__prf-avt-lg {
+  position: relative;
+  overflow: hidden;
+}
+
+.hdr-db__prf-avt-lg .hdr-db__prf-avt-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Loading state for profile button */
+.hdr-db__prf-btn--loading {
+  pointer-events: none;
+  opacity: 0.7;
+  cursor: default;
+}
+
+.hdr-db__prf-avt--loading {
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: navbar-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes navbar-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Prevent clicking on loading state */
+.hdr-db__prf-btn--loading * {
+  pointer-events: none;
+}
+
+/* ==============================================
+   RESPONSIVE ADJUSTMENTS FOR USER INFO
+   ============================================== */
+
+@media (max-width: 1024px) {
+  /* Profile info is already hidden in original CSS at this breakpoint */
+  .hdr-db__prf-name {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hdr-db__prf-avt-img {
+    border-radius: 50%;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Ensure avatar is always visible on mobile */
+  .hdr-db__prf-avt {
+    flex-shrink: 0;
+  }
+  
+  .hdr-db__prf-btn {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small screens - avatar only */
+  .hdr-db__prf-arr {
+    display: none;
+  }
+}

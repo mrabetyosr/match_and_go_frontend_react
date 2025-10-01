@@ -245,3 +245,50 @@
     width: 250px;
   }
 }
+
+/* Add these styles to your existing SideBar.css */
+
+/* Avatar image styling */
+.sb__avt-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.sb__avt--sm .sb__avt-img {
+  border-radius: 8px;
+}
+
+/* Loading state for avatar */
+.sb__avt--loading {
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s ease-in-out infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Ensure avatar container has proper overflow */
+.sb__avt {
+  overflow: hidden;
+}
+
+/* Optional: Add hover effect to user profile section */
+.sb__usr-prf {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.sb__usr-prf:hover {
+  background-color: #f9fafb;
+}

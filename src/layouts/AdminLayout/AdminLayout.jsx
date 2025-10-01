@@ -5,9 +5,10 @@ import SideBar from "../../components/SideBar/SideBar";
 import NavBarAdmin from "../../components/NavBarAdmin/NavBarAdmin";
 import UserDashboard from "../../components/UserDashboard/UserDashboard"; // <-- ta page
 import GeneralDashboard from "../../components/GeneralDashboard/GeneralDashboard"; // <-- ta page
-
+import UserDetails  from "../../components/UserDetails/UserDetails";
 
 import './AdminLayout.css';
+
 
 const AdminLayout = () => {
   const [sidebarMobileOpen, setSidebarMobileOpen] = useState(false);
@@ -48,6 +49,7 @@ const AdminLayout = () => {
             {/* Routes internes */}
             <Route path="dashboard" element={<GeneralDashboard />} />
             <Route path="Users" element={<UserDashboard />} />
+            <Route path="Details" element={<UserDetails />} />
          
           </Routes>
         </main>

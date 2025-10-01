@@ -12,10 +12,12 @@ import {
 } from 'lucide-react';
 import './NavBarAdmin.css';
 
-const NavBarAdmin = ({ title = "Dashboard", userName = "John Doe", onSidebarToggle }) => {
+const NavBarAdmin = ({ title = "Dashboard", onSidebarToggle }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const notifications = [
     { id: 1, text: "Nouveau utilisateur inscrit", time: "Il y a 5 min", unread: true },
@@ -24,6 +26,55 @@ const NavBarAdmin = ({ title = "Dashboard", userName = "John Doe", onSidebarTogg
   ];
 
   const unreadCount = notifications.filter(n => n.unread).length;
+
+  // Fetch current user data
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const token = localStorage.getItem('token'); 
+        const response = await fetch("http://localhost:7001/api/users/me", { 
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          setCurrentUser(userData);
+        } else {
+          console.error('Failed to fetch user data');
+        }
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+
+  // Get user initials
+  const getUserInitials = (username) => {
+    if (!username) return 'U';
+    const names = username.trim().split(' ');
+    if (names.length >= 2) {
+      return (names[0][0] + names[1][0]).toUpperCase();
+    }
+    return username.substring(0, 2).toUpperCase();
+  };
+
+  // Get user role display
+  const getRoleDisplay = (role) => {
+    if (!role) return 'User';
+    const roleMap = {
+      'admin': 'Administrateur',
+      'company': 'Entreprise',
+      'user': 'Utilisateur'
+    };
+    return roleMap[role] || role;
+  };
 
   // Détection de la taille d'écran
   useEffect(() => {
@@ -49,6 +100,13 @@ const NavBarAdmin = ({ title = "Dashboard", userName = "John Doe", onSidebarTogg
       return () => document.removeEventListener('click', handleClickOutside);
     }
   }, [isProfileOpen, isNotificationOpen]);
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    // Redirect to login or home page
+    window.location.href = '/login'; // Adjust as needed
+  };
 
   return (
     <>
@@ -158,60 +216,93 @@ const NavBarAdmin = ({ title = "Dashboard", userName = "John Doe", onSidebarTogg
             </button>
 
             {/* User Profile */}
-            <div className="hdr-db__prf-wrp">
-              <button
-                className="hdr-db__prf-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsProfileOpen(!isProfileOpen);
-                  setIsNotificationOpen(false);
-                }}
-                aria-label="Profil utilisateur"
-              >
-                <div className="hdr-db__prf-avt">
-                  <span>JD</span>
-                </div>
-                <div className="hdr-db__prf-info">
-                  <span className="hdr-db__prf-name">{userName}</span>
-                  <span className="hdr-db__prf-role">Admin</span>
-                </div>
-                <ChevronDown size={16} className="hdr-db__prf-arr" />
-              </button>
+            {!loading && currentUser && (
+              <div className="hdr-db__prf-wrp">
+                <button
+                  className="hdr-db__prf-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsProfileOpen(!isProfileOpen);
+                    setIsNotificationOpen(false);
+                  }}
+                  aria-label="Profil utilisateur"
+                >
+                  <div className="hdr-db__prf-avt">
+                    {currentUser.image_User ? (
+                      <img 
+                        src={currentUser.image_User} 
+                        alt={currentUser.username}
+                        className="hdr-db__prf-avt-img"
+                      />
+                    ) : (
+                      <span>{getUserInitials(currentUser.username)}</span>
+                    )}
+                  </div>
+                  <div className="hdr-db__prf-info">
+                    <span className="hdr-db__prf-name">{currentUser.username}</span>
+                    <span className="hdr-db__prf-role">{getRoleDisplay(currentUser.role)}</span>
+                  </div>
+                  <ChevronDown size={16} className="hdr-db__prf-arr" />
+                </button>
 
-              {/* Profile Dropdown */}
-              {isProfileOpen && (
-                <div className="hdr-db__drp hdr-db__prf-menu" onClick={(e) => e.stopPropagation()}>
-                  <div className="hdr-db__prf-hdr">
-                    <div className="hdr-db__prf-avt-lg">
-                      <span>JD</span>
+                {/* Profile Dropdown */}
+                {isProfileOpen && (
+                  <div className="hdr-db__drp hdr-db__prf-menu" onClick={(e) => e.stopPropagation()}>
+                    <div className="hdr-db__prf-hdr">
+                      <div className="hdr-db__prf-avt-lg">
+                        {currentUser.image_User ? (
+                          <img 
+                            src={currentUser.image_User} 
+                            alt={currentUser.username}
+                            className="hdr-db__prf-avt-img"
+                          />
+                        ) : (
+                          <span>{getUserInitials(currentUser.username)}</span>
+                        )}
+                      </div>
+                      <div>
+                        <p className="hdr-db__prf-name-lg">{currentUser.username}</p>
+                        <p className="hdr-db__prf-email">{currentUser.email}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="hdr-db__prf-name-lg">{userName}</p>
-                      <p className="hdr-db__prf-email">john.doe@example.com</p>
+                    <div className="hdr-db__prf-menu-itms">
+                      <button className="hdr-db__menu-itm">
+                        <UserCircle size={16} />
+                        <span>Mon profil</span>
+                      </button>
+                      <button className="hdr-db__menu-itm">
+                        <Mail size={16} />
+                        <span>Messages</span>
+                      </button>
+                      <button className="hdr-db__menu-itm">
+                        <Settings size={16} />
+                        <span>Paramètres</span>
+                      </button>
+                      <hr className="hdr-db__menu-div" />
+                      <button 
+                        className="hdr-db__menu-itm hdr-db__menu-itm--dgr"
+                        onClick={handleLogout}
+                      >
+                        <LogOut size={16} />
+                        <span>Se déconnecter</span>
+                      </button>
                     </div>
                   </div>
-                  <div className="hdr-db__prf-menu-itms">
-                    <button className="hdr-db__menu-itm">
-                      <UserCircle size={16} />
-                      <span>Mon profil</span>
-                    </button>
-                    <button className="hdr-db__menu-itm">
-                      <Mail size={16} />
-                      <span>Messages</span>
-                    </button>
-                    <button className="hdr-db__menu-itm">
-                      <Settings size={16} />
-                      <span>Paramètres</span>
-                    </button>
-                    <hr className="hdr-db__menu-div" />
-                    <button className="hdr-db__menu-itm hdr-db__menu-itm--dgr">
-                      <LogOut size={16} />
-                      <span>Se déconnecter</span>
-                    </button>
+                )}
+              </div>
+            )}
+
+            {/* Loading state */}
+            {loading && (
+              <div className="hdr-db__prf-wrp">
+                <div className="hdr-db__prf-btn hdr-db__prf-btn--loading">
+                  <div className="hdr-db__prf-avt hdr-db__prf-avt--loading"></div>
+                  <div className="hdr-db__prf-info">
+                    <span className="hdr-db__prf-name">Chargement...</span>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -220,4 +311,3 @@ const NavBarAdmin = ({ title = "Dashboard", userName = "John Doe", onSidebarTogg
 };
 
 export default NavBarAdmin;
-
