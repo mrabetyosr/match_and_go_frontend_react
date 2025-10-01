@@ -3,14 +3,16 @@ import axios from "axios";
 import "./GeneralDashboardStats.css";
 
 const GeneralDashboardStats = () => {
-  const [candidates, setCandidates] = useState(0);
-  const [companies, setCompanies] = useState(0);
-  const [offers, setOffers] = useState(0);
-  const [posts, setPosts] = useState(0);
+  const [stats, setStats] = useState({
+    candidates: 0,
+    companies: 0,
+    offers: 0,
+    posts: 0,
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const token = localStorage.getItem("token"); 
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -32,13 +34,15 @@ const GeneralDashboardStats = () => {
           }),
         ]);
 
-        setCandidates(candidateRes.data.candidates);
-        setCompanies(companyRes.data.companies);
-        setOffers(offerRes.data.offers);
-        setPosts(postRes.data.posts);
+        setStats({
+          candidates: candidateRes.data.candidates,
+          companies: companyRes.data.companies,
+          offers: offerRes.data.offers,
+          posts: postRes.data.posts,
+        });
       } catch (err) {
         console.error(err);
-        setError("Erreur lors du chargement des statistiques.");
+        setError("Error while loading statistics.");
       } finally {
         setLoading(false);
       }
@@ -47,26 +51,49 @@ const GeneralDashboardStats = () => {
     fetchStats();
   }, [token]);
 
-  if (loading) return <p className="loading-text">Chargement des statistiques...</p>;
+  if (loading) return <p className="loading-text">Loading statistics...</p>;
   if (error) return <p className="error-text">{error}</p>;
 
   return (
-    <div className="dash-cont">
-      <div className="dash-card">
-        <h3>Candidats</h3>
-        <p>{candidates}</p>
+    <div className="st-grid">
+      <div className="st-card cand">
+        <div className="st-icn">🎯</div>
+        <div className="st-ctn">
+          <h3>
+            {stats.candidates || 0} <span>Candidates</span>
+          </h3>
+          <span className="st-chg pos">Registered total</span>
+        </div>
       </div>
-      <div className="dash-card">
-        <h3>Entreprises</h3>
-        <p>{companies}</p>
+
+      <div className="st-card comp">
+        <div className="st-icn">🏢</div>
+        <div className="st-ctn">
+          <h3>
+            {stats.companies || 0} <span>Companies</span>
+          </h3>
+          <span className="st-chg">All categories</span>
+        </div>
       </div>
-      <div className="dash-card">
-        <h3>Offres</h3>
-        <p>{offers}</p>
+
+      <div className="st-card off">
+        <div className="st-icn">💼</div>
+        <div className="st-ctn">
+          <h3>
+            {stats.offers || 0} <span>Offers</span>
+          </h3>
+          <span className="st-chg pos">Active & published</span>
+        </div>
       </div>
-      <div className="dash-card">
-        <h3>Posts</h3>
-        <p>{posts}</p>
+
+      <div className="st-card pst">
+        <div className="st-icn">📝</div>
+        <div className="st-ctn">
+          <h3>
+            {stats.posts || 0} <span>Posts</span>
+          </h3>
+          <span className="st-chg">Latest additions</span>
+        </div>
       </div>
     </div>
   );

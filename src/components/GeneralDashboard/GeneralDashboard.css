@@ -1,0 +1,72 @@
+.gd-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1500px;  /* limite la largeur globale */
+  margin: 0 auto;     /* centrer le dashboard */
+}
+
+/* Graphiques côte à côte */
+.gd-charts {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap; /* responsive : les graphiques passent en colonne sur petit écran */
+}
+
+/* Colonne gauche */
+.gd-left {
+  flex: 1;
+  min-width: 300px;  /* largeur minimale pour mobile */
+}
+
+/* Colonne droite */
+.gd-right {
+  flex: 1;
+  min-width: 300px;  /* largeur minimale pour mobile */
+}
+
+/* Ajuste la hauteur des graphiques si nécessaire */
+.gd-left > * .posts-chart-container,
+.gd-right > * .posts-chart-container {
+  height: 250px; /* réduit la hauteur */
+}
+
+/* =============================== */
+/*        Bas du dashboard         */
+/* =============================== */
+
+.gd-bottom {
+  margin-top: 10px;
+  display: flex;
+  gap: 20px;            /* espace entre les deux */
+  flex-wrap: wrap;      /* responsive */
+}
+
+/* Partie gauche : Applicants */
+.gd-bottom-left {
+  flex: 2;              /* prend plus d’espace */
+  min-width: 400px;
+}
+
+/* Partie droite : Meetings */
+.gd-bottom-right {
+  flex: 1;              /* prend moins d’espace */
+  min-width: 300px;
+}
+
+/* Responsive : sur petit écran, tout passe en colonne */
+@media (max-width: 900px) {
+  .gd-charts {
+    flex-direction: column;
+  }
+
+  .gd-bottom {
+    flex-direction: column;
+  }
+
+  .gd-bottom-left,
+  .gd-bottom-right {
+    width: 100%;
+  }
+}

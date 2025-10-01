@@ -1,0 +1,149 @@
+/* Container */
+.off-cont {
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.off-cont h2 {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #222;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Table */
+.off-tbl {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.off-tbl thead {
+  background: #16a34a;
+  color: white;
+  text-align: left;
+}
+
+.off-tbl th {
+  padding: 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.off-tbl td {
+  padding: 14px;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+/* Hover */
+.off-tbl tbody tr:hover {
+  background: #f5fdf7;
+  transition: background 0.2s ease-in-out;
+}
+
+/* Entreprise logo */
+.cmp-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+  margin-top: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.off-tbl td:first-child {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Logo par défaut */
+.def-logo {
+  background: #16a34a;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+/* Candidats */
+.cand-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cand-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+
+.cand-logo:hover {
+  transform: scale(1.1);
+  border-color: #16a34a;
+}
+
+.no-cand {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Progress bar */
+.prg-cont {
+  width: 100%;
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.prg-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+  transition: width 0.3s ease-in-out;
+}
+
+.prg-txt {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* Deadline */
+.off-tbl td:last-child {
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+/* Error */
+.err {
+  color: #dc2626;
+  font-weight: 600;
+  margin-top: 15px;
+}
