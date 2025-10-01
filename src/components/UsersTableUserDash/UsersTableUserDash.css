@@ -1,12 +1,12 @@
 /* ===== USERS SECTION ===== */
-.users-section {
+.users-section-userdash {
   background: var(--bg-white);
   border-radius: 12px;
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow);
 }
 
-.section-header {
+.section-header-userdash {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -14,14 +14,14 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.section-header h2 {
+.section-header-userdash h2 {
   font-size: 20px;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
 }
 
-.export-btn {
+.export-btn-userdash {
   background: linear-gradient(135deg, var(--primary-color), #22c55e);
   color: white;
   border: none;
@@ -36,24 +36,24 @@
   gap: 6px;
 }
 
-.export-btn:hover {
+.export-btn-userdash:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
 }
 
 /* ===== USERS TABLE ===== */
-.users-table-container {
+.users-table-container-userdash {
   overflow-x: auto;
   max-height: 400px;
   overflow-y: auto;
 }
 
-.users-table {
+.users-table-userdash {
   width: 100%;
   border-collapse: collapse;
 }
 
-.users-table th {
+.users-table-userdash th {
   background-color: #f9fafb;
   padding: 16px;
   text-align: left;
@@ -65,21 +65,21 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.users-table th:first-child {
+.users-table-userdash th:first-child {
   width: 50px;
 }
 
-.users-table td {
+.users-table-userdash td {
   padding: 16px;
   border-bottom: 1px solid #f3f4f6;
   vertical-align: middle;
 }
 
-.users-table tbody tr:hover {
+.users-table-userdash tbody tr:hover {
   background-color: var(--bg-light);
 }
 
-.users-table input[type="checkbox"] {
+.users-table-userdash input[type="checkbox"] {
   width: 16px;
   height: 16px;
   cursor: pointer;
@@ -87,13 +87,13 @@
 }
 
 /* ===== USER INFO IN TABLE ===== */
-.user-info {
+.user-info-userdash {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.user-avatar {
+.user-avatar-userdash {
   width: 40px;
   height: 40px;
   border-radius: 8px;
@@ -101,19 +101,19 @@
   border: 2px solid var(--border-color);
 }
 
-.user-name {
+.user-name-userdash {
   font-weight: 600;
   color: var(--text-primary);
   font-size: 14px;
 }
 
-.user-email {
+.user-email-userdash {
   color: var(--text-secondary);
   font-size: 13px;
 }
 
 /* ===== BADGES ===== */
-.role-badge {
+.role-badge-userdash {
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 12px;
@@ -122,7 +122,7 @@
   text-transform: capitalize;
 }
 
-.status-badge {
+.status-badge-userdash {
   font-size: 13px;
   font-weight: 600;
   display: flex;
@@ -131,12 +131,12 @@
 }
 
 /* ===== ACTION BUTTONS ===== */
-.action-buttons {
+.action-buttons-userdash {
   display: flex;
   gap: 8px;
 }
 
-.action-buttons button {
+.action-buttons-userdash button {
   width: 32px;
   height: 32px;
   border: none;
@@ -149,18 +149,37 @@
   justify-content: center;
 }
 
-.btn-view {
+.btn-view-userdash {
   background-color: #f3f4f6;
   color: var(--text-secondary);
 }
 
-.btn-view:hover {
+.btn-view-userdash:hover {
   background-color: #e5e7eb;
   transform: scale(1.1);
 }
 
+/* ===== LOADING & NO USERS MESSAGE ===== */
+.loading-userdash {
+  padding: 40px;
+  text-align: center;
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+.no-users-message-userdash {
+  padding: 40px;
+  text-align: center;
+}
+
+.no-users-message-userdash p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
 /* ===== PAGINATION ===== */
-.pagination {
+.pagination-userdash {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -169,7 +188,7 @@
   border-top: 1px solid var(--border-color);
 }
 
-.pagination button {
+.pagination-btn-userdash {
   padding: 8px 16px;
   border: 1px solid #d1d5db;
   background: var(--bg-white);
@@ -180,18 +199,18 @@
   transition: all 0.2s ease;
 }
 
-.pagination button:not(:disabled):hover {
+.pagination-btn-userdash:not(:disabled):hover {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
   color: white;
 }
 
-.pagination button:disabled {
+.pagination-btn-userdash:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.pagination span {
+.page-info-userdash {
   font-size: 14px;
   font-weight: 600;
   color: #374151;
@@ -199,39 +218,39 @@
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .section-header {
+  .section-header-userdash {
     flex-direction: column;
     gap: 16px;
     align-items: stretch;
   }
   
-  .users-table-container {
+  .users-table-container-userdash {
     font-size: 14px;
   }
   
-  .users-table th,
-  .users-table td {
+  .users-table-userdash th,
+  .users-table-userdash td {
     padding: 12px 8px;
   }
   
-  .user-info {
+  .user-info-userdash {
     gap: 8px;
   }
   
-  .user-avatar {
+  .user-avatar-userdash {
     width: 32px;
     height: 32px;
   }
   
-  .user-name {
+  .user-name-userdash {
     font-size: 13px;
   }
   
-  .user-email {
+  .user-email-userdash {
     font-size: 12px;
   }
   
-  .action-buttons {
+  .action-buttons-userdash {
     flex-direction: column;
   }
 }

@@ -3,9 +3,9 @@ import './DashboardControlsUserDash.css';
 
 const DashboardControlsUserDash = ({ filters, setFilters, fetchUsers, selectedUsers, handleBulkAction }) => {
   return (
-    <div className="dashboard-controls">
-      <div className="filters-section">
-        <div className="search-box">
+    <div className="dashboard-controls-userdash">
+      <div className="filters-section-userdash">
+        <div className="search-box-userdash">
           <input
             type="text"
             placeholder="Search by name, email..."
@@ -36,15 +36,15 @@ const DashboardControlsUserDash = ({ filters, setFilters, fetchUsers, selectedUs
       </div>
 
       {selectedUsers.length > 0 && (
-        <div className="bulk-actions">
+        <div className="bulk-actions-userdash">
           <span>{selectedUsers.length} user(s) selected</span>
-          <button onClick={() => handleBulkAction('activate')} className="btn-activate">
+          <button onClick={() => handleBulkAction('activate')} className="btn-activate-userdash">
             Activate
           </button>
-          <button onClick={() => handleBulkAction('deactivate')} className="btn-deactivate">
+          <button onClick={() => handleBulkAction('deactivate')} className="btn-deactivate-userdash">
             Deactivate
           </button>
-          <button onClick={() => handleBulkAction('delete')} className="btn-delete">
+          <button onClick={() => handleBulkAction('delete')} className="btn-delete-userdash">
             Delete
           </button>
         </div>
