@@ -1,13 +1,14 @@
-/* ===== STATS GRID ===== */
-.stats-grid-userdash {
+/* ===== GRID ===== */
+.st-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   margin-bottom: 32px;
 }
 
-.stat-card-userdash {
-  background: var(--bg-white);
+/* ===== CARD ===== */
+.st-card {
+  background: var(--bg-white, #fff);
   border-radius: 12px;
   padding: 24px;
   box-shadow: var(--shadow, 0 2px 6px rgba(0,0,0,0.1));
@@ -20,7 +21,7 @@
   overflow: hidden;
 }
 
-.stat-card-userdash::before {
+.st-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -30,12 +31,13 @@
   background: linear-gradient(90deg, var(--primary-color, #10B981), #22c55e);
 }
 
-.stat-card-userdash:hover {
+.st-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.stat-icon-userdash {
+/* ===== ICON ===== */
+.st-icn {
   font-size: 32px;
   width: 60px;
   height: 60px;
@@ -47,21 +49,24 @@
   flex-shrink: 0;
 }
 
-.stat-content-userdash h3 {
-  font-size: 28px;
+/* ===== CONTENT ===== */
+.st-ctn h3 {
+  font-size: 24px;
   font-weight: 700;
   color: var(--text-primary, #111827);
   margin: 0 0 6px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
 }
 
-.stat-content-userdash p {
-  font-size: 14px;
-  color: var(--text-secondary, #6b7280);
-  margin: 0 0 8px 0;
+.st-ctn h3 span {
+  font-size: 16px;
   font-weight: 500;
+  color: var(--text-secondary, #6b7280);
 }
 
-.stat-change-userdash {
+.st-chg {
   font-size: 12px;
   font-weight: 600;
   padding: 4px 8px;
@@ -70,29 +75,39 @@
   color: var(--text-secondary, #6b7280);
 }
 
-.stat-change-userdash.positive-userdash {
+.st-chg.pos {
   background-color: #ecfdf5;
   color: var(--primary-color, #10B981);
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .stats-grid-userdash {
+  .st-grid {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  
-  .stat-card-userdash {
+
+  .st-card {
     padding: 20px;
   }
-  
-  .stat-icon-userdash {
+
+  .st-icn {
     width: 50px;
     height: 50px;
     font-size: 28px;
   }
-  
-  .stat-content-userdash h3 {
-    font-size: 24px;
+
+  .st-ctn h3 {
+    font-size: 20px;
   }
+}
+
+/* Loading & Error */
+.loading-text,
+.error-text {
+  text-align: center;
+  font-size: 1rem;
+}
+.error-text {
+  color: red;
 }

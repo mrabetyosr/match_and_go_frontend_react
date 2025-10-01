@@ -1,0 +1,156 @@
+.gd-card {
+  background-color: #ffffff;          
+  padding: 35px 35px;       /* vertical padding augmenté */
+  border-radius: 12px;
+  max-width: 850px;
+  margin: 5px auto;        /* top réduit pour remonter la card */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 60px;       /* hauteur minimale de la card */
+}
+
+
+/* Timeline générale */
+.gd-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Item individuel */
+.gd-timeline-item {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  border-radius: 10px;
+  background-color: #f4fff4;        
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 80px;   /* <-- ajoute un espacement entre les meetings */
+}
+
+.gd-timeline-item:last-child {
+  margin-bottom: 0;      /* pas d'espacement après le dernier item */
+}
+
+
+.gd-timeline-item:hover {
+  transform: translateY(-2px);
+}
+
+/* Date du meeting */
+.gd-meeting-date {
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #006400;   /* vert foncé */
+}
+
+/* Body du meeting */
+.gd-meeting-body {
+  display: flex;
+  justify-content: space-around;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+/* Profil utilisateur (candidat ou entreprise) */
+.gd-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+  text-align: center;
+}
+
+.gd-profile-logo {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 5px;
+  border: 2px solid #28a745; /* vert */
+}
+
+.gd-profile-name {
+  font-weight: 600;
+  font-size: 13px;
+  color: #006400;
+}
+
+.gd-profile-email {
+  font-size: 11px;
+  color: #555;
+  margin-top: 2px;
+}
+
+/* Actions boutons */
+.gd-meeting-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.gd-btn {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.gd-join-btn {
+  background-color: #28a745;   /* vert */
+  color: #fff;
+}
+
+.gd-join-btn:hover {
+  background-color: #218838;
+}
+
+.gd-delete-btn {
+  background-color: #dc3545;   /* rouge pour supprimer */
+  color: #fff;
+}
+
+.gd-delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* Pagination */
+.gd-pagination {
+  margin-top: 50px;   /* espace entre la dernière réunion et les boutons de pagination */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.gd-pagination-btn {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #28a745;  /* vert */
+  background-color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gd-pagination-btn:hover:not(:disabled) {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.gd-pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.gd-pagination-info {
+  font-weight: 600;
+  font-size: 12px;
+  color: #006400;
+}

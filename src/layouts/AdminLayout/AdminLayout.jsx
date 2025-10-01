@@ -4,6 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import SideBar from "../../components/SideBar/SideBar";
 import NavBarAdmin from "../../components/NavBarAdmin/NavBarAdmin";
 import UserDashboard from "../../components/UserDashboard/UserDashboard"; // <-- ta page
+import GeneralDashboard from "../../components/GeneralDashboard/GeneralDashboard"; // <-- ta page
 
 
 import './AdminLayout.css';
@@ -45,6 +46,7 @@ const AdminLayout = () => {
             <Route path="/" element={<Navigate to="dashboard" />} />
             
             {/* Routes internes */}
+            <Route path="dashboard" element={<GeneralDashboard />} />
             <Route path="Users" element={<UserDashboard />} />
          
           </Routes>
