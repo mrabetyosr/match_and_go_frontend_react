@@ -1,12 +1,12 @@
 /* ===== STATS GRID ===== */
-.stats-grid {
+.stats-grid-userdash {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   margin-bottom: 32px;
 }
 
-.stat-card {
+.stat-card-userdash {
   background: var(--bg-white);
   border-radius: 12px;
   padding: 24px;
@@ -20,7 +20,7 @@
   overflow: hidden;
 }
 
-.stat-card::before {
+.stat-card-userdash::before {
   content: '';
   position: absolute;
   top: 0;
@@ -30,12 +30,12 @@
   background: linear-gradient(90deg, var(--primary-color), #22c55e);
 }
 
-.stat-card:hover {
+.stat-card-userdash:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.stat-icon {
+.stat-icon-userdash {
   font-size: 32px;
   width: 60px;
   height: 60px;
@@ -47,21 +47,21 @@
   flex-shrink: 0;
 }
 
-.stat-content h3 {
+.stat-content-userdash h3 {
   font-size: 28px;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0 0 4px 0;
 }
 
-.stat-content p {
+.stat-content-userdash p {
   font-size: 14px;
   color: var(--text-secondary);
   margin: 0 0 8px 0;
   font-weight: 500;
 }
 
-.stat-change {
+.stat-change-userdash {
   font-size: 12px;
   font-weight: 600;
   padding: 4px 8px;
@@ -70,29 +70,29 @@
   color: var(--text-secondary);
 }
 
-.stat-change.positive {
+.stat-change-userdash.positive-userdash {
   background-color: #ecfdf5;
   color: var(--primary-color);
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .stats-grid {
+  .stats-grid-userdash {
     grid-template-columns: 1fr;
     gap: 16px;
   }
   
-  .stat-card {
+  .stat-card-userdash {
     padding: 20px;
   }
   
-  .stat-icon {
+  .stat-icon-userdash {
     width: 50px;
     height: 50px;
     font-size: 28px;
   }
   
-  .stat-content h3 {
+  .stat-content-userdash h3 {
     font-size: 24px;
   }
 }

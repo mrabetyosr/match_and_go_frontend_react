@@ -1,5 +1,5 @@
 /* ===== ACTIVITY SECTION ===== */
-.activity-section {
+.activity-section-userdash {
   background: var(--bg-white);
   border-radius: 12px;
   border: 1px solid var(--border-color);
@@ -7,7 +7,7 @@
   height: fit-content;
 }
 
-.activity-section h3 {
+.activity-section-userdash h3 {
   padding: 24px 24px 16px 24px;
   margin: 0;
   font-size: 18px;
@@ -16,24 +16,24 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.activity-list {
+.activity-list-userdash {
   padding: 16px 0;
   max-height: 600px;
   overflow-y: auto;
 }
 
-.activity-item {
+.activity-item-userdash {
   display: flex;
   gap: 12px;
   padding: 12px 24px;
   transition: background-color 0.2s ease;
 }
 
-.activity-item:hover {
+.activity-item-userdash:hover {
   background-color: #f9fafb;
 }
 
-.activity-avatar img {
+.activity-avatar-userdash img {
   width: 32px;
   height: 32px;
   border-radius: 6px;
@@ -41,26 +41,26 @@
   border: 1px solid var(--border-color);
 }
 
-.activity-content p {
+.activity-content-userdash p {
   margin: 0 0 4px 0;
   font-size: 14px;
   color: #374151;
   line-height: 1.4;
 }
 
-.activity-content strong {
+.activity-content-userdash strong {
   font-weight: 600;
   color: var(--text-primary);
 }
 
-.activity-time {
+.activity-time-userdash {
   font-size: 12px;
   color: var(--text-muted);
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1200px) {
-  .activity-section {
+  .activity-section-userdash {
     order: -1;
   }
 }

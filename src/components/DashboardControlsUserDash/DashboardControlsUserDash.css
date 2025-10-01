@@ -1,5 +1,5 @@
 /* ===== DASHBOARD CONTROLS ===== */
-.dashboard-controls {
+.dashboard-controls-userdash {
   background: var(--bg-white);
   border-radius: 12px;
   padding: 20px;
@@ -8,14 +8,14 @@
   box-shadow: var(--shadow);
 }
 
-.filters-section {
+.filters-section-userdash {
   display: flex;
   gap: 16px;
   align-items: center;
   flex-wrap: wrap;
 }
 
-.search-box {
+.search-box-userdash {
   display: flex;
   align-items: center;
   background-color: #f9fafb;
@@ -26,12 +26,12 @@
   transition: all 0.2s ease;
 }
 
-.search-box:focus-within {
+.search-box-userdash:focus-within {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
 }
 
-.search-box input {
+.search-box-userdash input {
   flex: 1;
   border: none;
   background: transparent;
@@ -41,11 +41,11 @@
   color: #374151;
 }
 
-.search-box input::placeholder {
+.search-box-userdash input::placeholder {
   color: var(--text-muted);
 }
 
-.search-box button {
+.search-box-userdash button {
   background: var(--primary-color);
   border: none;
   padding: 10px 12px;
@@ -56,11 +56,11 @@
   transition: background 0.2s ease;
 }
 
-.search-box button:hover {
+.search-box-userdash button:hover {
   background: var(--primary-hover);
 }
 
-.filters-section select {
+.filters-section-userdash select {
   padding: 10px 12px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
@@ -73,13 +73,13 @@
   min-width: 140px;
 }
 
-.filters-section select:focus {
+.filters-section-userdash select:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
 }
 
 /* ===== BULK ACTIONS ===== */
-.bulk-actions {
+.bulk-actions-userdash {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -90,13 +90,13 @@
   border-radius: 8px;
 }
 
-.bulk-actions span {
+.bulk-actions-userdash span {
   font-size: 14px;
   font-weight: 600;
   color: #0c4a6e;
 }
 
-.bulk-actions button {
+.bulk-actions-userdash button {
   padding: 8px 16px;
   border: none;
   border-radius: 6px;
@@ -106,53 +106,53 @@
   transition: all 0.2s ease;
 }
 
-.btn-activate {
+.btn-activate-userdash {
   background-color: var(--primary-color);
   color: white;
 }
 
-.btn-activate:hover {
+.btn-activate-userdash:hover {
   background-color: var(--primary-hover);
   transform: translateY(-1px);
 }
 
-.btn-deactivate {
+.btn-deactivate-userdash {
   background-color: var(--warning-color);
   color: white;
 }
 
-.btn-deactivate:hover {
+.btn-deactivate-userdash:hover {
   background-color: #d97706;
   transform: translateY(-1px);
 }
 
-.btn-delete {
+.btn-delete-userdash {
   background-color: var(--danger-color);
   color: white;
 }
 
-.btn-delete:hover {
+.btn-delete-userdash:hover {
   background-color: #dc2626;
   transform: translateY(-1px);
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .filters-section {
+  .filters-section-userdash {
     flex-direction: column;
     align-items: stretch;
   }
   
-  .search-box {
+  .search-box-userdash {
     min-width: auto;
   }
   
-  .bulk-actions {
+  .bulk-actions-userdash {
     flex-direction: column;
     align-items: stretch;
   }
   
-  .bulk-actions button {
+  .bulk-actions-userdash button {
     width: 100%;
     justify-content: center;
   }
