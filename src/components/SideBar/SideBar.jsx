@@ -12,12 +12,15 @@ import {
   Menu,
   X
 } from 'lucide-react';
+import { LiaAddressCardSolid } from "react-icons/lia";
 import logo from '../../assets/namebacklogo.png';
 import './SideBar.css';
 
 const SideBar = ({ isMobileOpen = false, onMobileClose }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -25,11 +28,49 @@ const SideBar = ({ isMobileOpen = false, onMobileClose }) => {
     { id: 'dashboard', label: 'Dashboard', icon: Home, path: '/Admin/dashboard' },
     { id: 'analytics', label: 'Analytics', icon: BarChart3, path: '/Admin/analytics' },
     { id: 'users', label: 'Users', icon: Users, path: '/Admin/users' },
-    { id: 'documents', label: 'Documents', icon: FileText, path: '/Admin/documents' },
+    { id: 'details', label: 'Details', icon: LiaAddressCardSolid , path: '/Admin/details' },
     { id: 'calendar', label: 'Calendar', icon: Calendar, path: '/Admin/calendar' },
     { id: 'notifications', label: 'Notifications', icon: Bell, path: '/Admin/notifications' },
     { id: 'settings', label: 'Settings', icon: Settings, path: '/Admin/settings' },
   ];
+
+  // Fetch current user data
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const token = localStorage.getItem('token'); 
+        const response = await fetch("http://localhost:7001/api/users/me", { 
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          setCurrentUser(userData);
+        } else {
+          console.error('Failed to fetch user data');
+        }
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+
+  // Get user initials
+  const getUserInitials = (username) => {
+    if (!username) return 'U';
+    const names = username.trim().split(' ');
+    if (names.length >= 2) {
+      return (names[0][0] + names[1][0]).toUpperCase();
+    }
+    return username.substring(0, 2).toUpperCase();
+  };
 
   // Detect active element based on URL
   const getActiveItem = () => {
@@ -44,32 +85,27 @@ const SideBar = ({ isMobileOpen = false, onMobileClose }) => {
       const mobile = window.innerWidth <= 768;
       setIsMobile(mobile);
       
-      // Close mobile menu when switching to desktop
       if (!mobile && isMobileOpen && onMobileClose) {
         onMobileClose();
       }
     };
 
-    handleResize(); // Check initial size
+    handleResize();
     window.addEventListener('resize', handleResize);
     
     return () => window.removeEventListener('resize', handleResize);
   }, [isMobileOpen, onMobileClose]);
 
-  // Internal toggle management (for desktop)
   const handleToggle = () => {
     if (isMobile) {
-      // On mobile, use close prop
       if (onMobileClose) {
         onMobileClose();
       }
     } else {
-      // On desktop, toggle collapse
       setIsCollapsed(!isCollapsed);
     }
   };
 
-  // Navigate to corresponding page
   const handleMenuClick = (item) => {
     navigate(item.path);
     if (isMobile && onMobileClose) {
@@ -77,7 +113,6 @@ const SideBar = ({ isMobileOpen = false, onMobileClose }) => {
     }
   };
 
-  // Conditional classes
   const sidebarClasses = [
     'sb',
     isCollapsed && !isMobile ? 'sb--col' : '',
@@ -154,26 +189,54 @@ const SideBar = ({ isMobileOpen = false, onMobileClose }) => {
           </ul>
         </nav>
 
-        {/* User Profile */}
-        {(!isCollapsed || isMobile) && (
+        {/* User Profile - Expanded */}
+        {(!isCollapsed || isMobile) && !loading && currentUser && (
           <div className="sb__usr">
             <div className="sb__usr-prf">
               <div className="sb__avt">
-                <span>JD</span>
+                {currentUser.image_User ? (
+                  <img 
+                    src={currentUser.image_User} 
+                    alt={currentUser.username}
+                    className="sb__avt-img"
+                  />
+                ) : (
+                  <span>{getUserInitials(currentUser.username)}</span>
+                )}
               </div>
               <div className="sb__usr-info">
-                <p className="sb__usr-name">John Doe</p>
-                <p className="sb__usr-email">john.doe@example.com</p>
+                <p className="sb__usr-name">{currentUser.username}</p>
+                <p className="sb__usr-email">{currentUser.email}</p>
               </div>
             </div>
           </div>
         )}
 
-        {/* Collapsed User Profile */}
-        {isCollapsed && !isMobile && (
+        {/* User Profile - Collapsed */}
+        {isCollapsed && !isMobile && !loading && currentUser && (
           <div className="sb__usr sb__usr--col">
             <div className="sb__avt sb__avt--sm">
-              <span>JD</span>
+              {currentUser.image_User ? (
+                <img 
+                  src={currentUser.image_User} 
+                  alt={currentUser.username}
+                  className="sb__avt-img"
+                />
+              ) : (
+                <span>{getUserInitials(currentUser.username)}</span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Loading state */}
+        {loading && (!isCollapsed || isMobile) && (
+          <div className="sb__usr">
+            <div className="sb__usr-prf">
+              <div className="sb__avt sb__avt--loading"></div>
+              <div className="sb__usr-info">
+                <p className="sb__usr-name">Loading...</p>
+              </div>
             </div>
           </div>
         )}
