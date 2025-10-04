@@ -67,34 +67,34 @@ const DisplayCampanies = ({ category }) => {
 
   if (!companies || companies.length === 0) {
     return (
-      <div className="no-companies">
+      <div className="no-companies-display-company">
         <p>No companies found for this category.</p>
       </div>
     );
   }
 
   return (
-    <div className="scroll-wrapper">
+    <div className="scroll-wrapper-display-company">
       {showLeftArrow && (
-        <button className="scroll-arrow left" onClick={scrollLeft}>
+        <button className="scroll-arrow-display-company left-display-company" onClick={scrollLeft}>
           {'<'}
         </button>
       )}
       
-      <div className="company-list-horizontal" ref={scrollContainerRef}>
+      <div className="company-list-horizontal-display-company" ref={scrollContainerRef}>
         {companies.map(company => (
-          <div key={company._id} className="company-card">
+          <div key={company._id} className="company-card-display-company">
             <img 
               src={`http://localhost:7001/images/${company.cover_User}`}
               alt="cover"
-              className="company-cover"
+              className="company-cover-display-company"
             />
             
-            <div className="company-content">
+            <div className="company-content-display-company">
               <img 
                 src={`http://localhost:7001/images/${company.image_User}`}
                 alt="logo"
-                className="company-logo"
+                className="company-logo-display-company"
               />
               
               <h2>{company.username}</h2>
@@ -125,7 +125,7 @@ const DisplayCampanies = ({ category }) => {
       </div>
       
       {showRightArrow && (
-        <button className="scroll-arrow right" onClick={scrollRight}>
+        <button className="scroll-arrow-display-company right-display-company" onClick={scrollRight}>
           {'>'}
         </button>
       )}

@@ -1,4 +1,4 @@
-.scroll-wrapper {
+.scroll-wrapper-display-company {
   max-width: 1200px;       /* limit max width */
   margin: 0 auto;          /* center horizontally */
   position: relative;
@@ -7,7 +7,7 @@
   padding: 0 20px;         /* padding around the wrapper */
 }
 
-.company-list-horizontal {
+.company-list-horizontal-display-company {
   display: flex;
   overflow-x: auto;
   scroll-behavior: smooth;
@@ -15,11 +15,11 @@
   padding: 20px 40px;      /* space on left & right inside scroll */
   scrollbar-width: none;   /* Firefox scrollbar hidden */
 }
-.company-list-horizontal::-webkit-scrollbar {
+.company-list-horizontal-display-company::-webkit-scrollbar {
   display: none;           /* Chrome, Safari, Edge scrollbar hidden */
 }
 
-.company-card {
+.company-card-display-company {
   background-color: #fff;
   border-radius: 16px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
@@ -31,50 +31,49 @@
   flex-direction: column;
   transition: transform 0.3s ease;
 }
-.company-card:hover {
+.company-card-display-company:hover {
   transform: translateY(-5px);
 }
 
-.company-cover {
+.company-cover-display-company {
   width: 100%;
   height: 150px;
   object-fit: cover;
 }
 
-.company-content {
+.company-content-display-company {
   padding: 16px;
 }
 
-.company-logo {
+.company-logo-display-company {
   width: 80px;
   height: 80px;
   object-fit: contain;
-  margin-top: -50px; /* remonte le logo de 10px */
+  margin-top: -50px; /* remonte le logo de 50px */
   margin-bottom: 12px;
   border-radius: 12px;
 }
 
-
-.company-content h2 {
+.company-content-display-company h2 {
   font-size: 18px;
   margin: 0 0 8px;
 }
 
-.company-content p {
+.company-content-display-company p {
   font-size: 14px;
   margin: 4px 0;
   color: #444;
 }
 
-.company-content a {
+.company-content-display-company a {
   color: #0073e6;
   text-decoration: none;
 }
-.company-content a:hover {
+.company-content-display-company a:hover {
   text-decoration: underline;
 }
 
-.scroll-arrow {
+.scroll-arrow-display-company {
   background-color: #fff;
   border: none;
   font-size: 28px;
@@ -89,18 +88,18 @@
   box-shadow: 0 0 6px rgba(0,0,0,0.1);
   user-select: none;
 }
-.scroll-arrow:hover {
+.scroll-arrow-display-company:hover {
   background-color: #f0f0f0;
 }
-.scroll-arrow.left {
+.scroll-arrow-display-company.left-display-company {
   left: 0;
 }
-.scroll-arrow.right {
+.scroll-arrow-display-company.right-display-company {
   right: 0;
 }
 
 /* Style for "No companies found" message */
-.no-companies {
+.no-companies-display-company {
   text-align: center;
   padding: 50px 20px;
   font-size: 18px;
