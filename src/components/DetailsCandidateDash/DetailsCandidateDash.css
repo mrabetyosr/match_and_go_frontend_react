@@ -1,117 +1,660 @@
-/* Container principal */
-.cand-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  justify-content: center;
+/* Page Wrapper and Header */
+.page-wrapper {
+  min-height: 100vh;
+  background: #f8f9fa;
 }
 
-/* Card candidat */
+.page-header {
+  background: white;
+  border-left: 4px solid #10b981;
+  padding: 24px 32px;
+  margin-bottom: 0;
+}
+
+.page-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 100%;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.page-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+/* Main Container */
+.enhanced-cand-dashboard {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  background: #f8f9fa;
+  min-height: calc(100vh - 80px);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", sans-serif;
+}
+
+/* Candidate Grid - Left Sidebar */
+.cand-grid {
+  flex: 0 0 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.cand-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cand-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cand-grid::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 3px;
+}
+
+/* Candidate Card */
 .cand-card {
-  background-color: #fff;
-  border: 2px solid #4caf50;
+  background: white;
   border-radius: 12px;
-  width: 300px;
-  padding: 15px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 20px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .cand-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  border-color: #10b981;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+  transform: translateY(-2px);
 }
 
-/* Header */
+.cand-card.active {
+  border-color: #10b981;
+  background: #f0fdf4;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+/* Candidate Header */
 .cand-hdr {
   display: flex;
-  align-items: center;
-  margin-bottom: 15px;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .cand-avt {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
   object-fit: cover;
-  border: 2px solid #4caf50;
-  margin-right: 15px;
+  border: 2px solid #e5e7eb;
+}
+
+.cand-info {
+  flex: 1;
 }
 
 .cand-info h3 {
-  margin: 0;
-  font-size: 1.2rem;
-  color: #333;
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
 }
 
 .cand-email {
-  font-size: 0.9rem;
-  color: #555;
-  margin: 3px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #6b7280;
+  margin: 4px 0;
 }
 
 .cand-role {
-  font-size: 0.8rem;
-  color: #fff;
-  background-color: #4caf50;
-  padding: 3px 8px;
-  border-radius: 8px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  background: #f3f4f6;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #10b981;
+  font-weight: 500;
 }
 
-/* Top Badge */
+/* Badges */
 .cand-top-badge {
-  font-size: 1.5rem;
-  color: #fbc02d;
   display: flex;
-  justify-content: center;
-  margin: 10px 0;
-}
-
-/* All badges */
-.cand-badges {
-  display: flex;
+  align-items: center;
   gap: 8px;
-  justify-content: center;
-  margin-bottom: 10px;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #166534;
 }
 
 .badge-icn {
-  font-size: 1.2rem;
-  color: #4caf50;
+  width: 18px;
+  height: 18px;
 }
 
-/* Détails supplémentaires */
-.cand-det {
-  font-size: 0.9rem;
-  color: #333;
-  margin-top: 10px;
+.badge-icn.bronze {
+  color: #cd7f32;
+}
+.badge-icn.silver {
+  color: #c0c0c0;
+}
+.badge-icn.gold {
+  color: #ffd700;
+}
+.badge-icn.platinum {
+  color: #e5e4e2;
+}
+.badge-icn.diamond {
+  color: #b9f2ff;
 }
 
-.cand-det div {
-  margin-bottom: 6px;
+.cand-badges {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
-/* Skills */
-.cand-skl {
-  margin-top: 6px;
+.badge-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
 }
 
-.skl-list {
+/* Quick Stats */
+.cand-quick-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #4b5563;
+  font-weight: 500;
+  flex: 1;
+}
+
+.stat-item svg {
+  color: #10b981;
+}
+
+/* Contact Info */
+.cand-contact {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.cand-contact strong {
+  color: #374151;
+  font-weight: 500;
+}
+
+/* View Details Button */
+.view-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+  color: #10b981;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Details Panel - Right Side */
+.cand-details-panel {
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+}
+
+.details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.details-header h2 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.close-btn {
+  background: #f3f4f6;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  font-size: 24px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background: #e5e7eb;
+  color: #1f2937;
+}
+
+/* Details Content */
+.details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.details-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 20px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.details-section h3 svg {
+  color: #10b981;
+}
+
+/* Overview Stats Grid */
+.overview-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Reduced stat box padding and sizes to make cards more compact */
+.stat-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: white;
+  border-radius: 10px;
+  border: 2px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.stat-box:hover {
+  border-color: #10b981;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+}
+
+/* Reduced icon size from 32px to 24px */
+.stat-box svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.stat-box.total svg {
+  color: #10b981;
+}
+.stat-box.accepted svg {
+  color: #10b981;
+}
+.stat-box.interview svg {
+  color: #3b82f6;
+}
+.stat-box.quiz svg {
+  color: #8b5cf6;
+}
+
+.stat-box div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Reduced stat number font size from 24px to 20px */
+.stat-box strong {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1;
+}
+
+/* Reduced label font size from 12px to 11px */
+.stat-box span {
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Average Score */
+.avg-score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  background: #f0fdf4;
+  border-radius: 10px;
+  border: 1px solid #bbf7d0;
+  font-size: 13px;
+  color: #166534;
+}
+
+.avg-score svg {
+  color: #10b981;
+}
+
+.avg-score strong {
+  font-weight: 600;
+}
+
+/* Applications List */
+.applications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.application-item {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.application-item:hover {
+  border-color: #10b981;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.app-title h4 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.company-name {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.status-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.status-icon.accepted {
+  color: #10b981;
+}
+.status-icon.rejected {
+  color: #ef4444;
+}
+.status-icon.interview {
+  color: #3b82f6;
+}
+.status-icon.pending {
+  color: #f59e0b;
+}
+
+/* App Meta */
+.app-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.accepted {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status-badge.interview_scheduled {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.app-date {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Quiz Results */
+.quiz-results {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 12px;
+}
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #1f2937;
+}
+
+.quiz-header svg {
+  color: #8b5cf6;
+}
+
+.quiz-score {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.quiz-score svg {
+  color: #10b981;
+}
+
+.percentage {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.percentage.good {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.percentage.low {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.quiz-date {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Documents */
+.app-documents {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.doc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: white;
+  border: 1px solid #10b981;
+  border-radius: 8px;
+  color: #10b981;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.doc-link:hover {
+  background: #10b981;
+  color: white;
+}
+
+/* Social Links */
+.social-links {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.social-links a {
+  padding: 8px 14px;
+  background: #eff6ff;
+  border: 1px solid #3b82f6;
+  border-radius: 8px;
+  color: #3b82f6;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.social-links a:hover {
+  background: #3b82f6;
+  color: white;
+}
+
+/* Contact Info */
+.contact-info {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 3px;
+  gap: 16px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 12px;
+  color: #6b7280;
 }
 
-.skl-item {
-  background-color: #4caf50;
-  color: #fff;
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 0.8rem;
+/* Loader */
+.details-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+/* No Data */
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .overview-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 968px) {
+  .enhanced-cand-dashboard {
+    flex-direction: column;
+  }
+
+  .cand-grid {
+    flex: 1;
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .cand-details-panel {
+    max-height: none;
+  }
+
+  .overview-stats {
+    grid-template-columns: 1fr;
+  }
 }
