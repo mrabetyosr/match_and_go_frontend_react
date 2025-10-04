@@ -53,7 +53,7 @@ const SignIn = ({ onClose }) => {
       });
 
       const data = await res.json();
-      console.log("LOGIN RESPONSE:", data); // debug
+      console.log("LOGIN RESPONSE:", data);
 
       if (!res.ok) {
         toast.error(data.message || (isSignUp ? "Registration failed" : "Login failed"));
@@ -70,7 +70,6 @@ const SignIn = ({ onClose }) => {
         const token = data.token;
         if (token) localStorage.setItem("token", token);
 
-        // détecter role
         let role = data.role || data.user?.role;
         if (!role && token) {
           try {
@@ -88,9 +87,9 @@ const SignIn = ({ onClose }) => {
           resetCaptcha();
           setTimeout(() => {
             try {
-              navigate("/admin"); // redirection SPA
+              navigate("/admin");
             } catch (err) {
-              window.location.href = "http://localhost:3000/admin"; // fallback
+              window.location.href = "http://localhost:3000/admin";
             }
           }, 300);
         } else {
@@ -211,15 +210,15 @@ const SignIn = ({ onClose }) => {
   // --- Company Registration Mode ---
   if (isCompany) {
     return (
-      <div className="signin-container">
-        <div className="signin-card">
-          <button className="close-btn" onClick={() => onClose(false)}>✕</button>
-          <div className="signin-left">
-            <img src={assets.sideimage} alt="Illustration" className="signin-image" />
+      <div className="auth-modal-container">
+        <div className="auth-modal-card">
+          <button className="auth-modal-close-btn" onClick={() => onClose(false)}>✕</button>
+          <div className="auth-modal-image-section">
+            <img src={assets.sideimage} alt="Illustration" className="auth-modal-side-image" />
           </div>
-          <div className="signin-right">
-            <img src={assets.namelogo} alt="Logo" className="signin-logo" />
-            <h2 className="signin-title">Company Registration</h2>
+          <div className="auth-modal-form-section">
+            <img src={assets.namelogo} alt="Logo" className="auth-modal-brand-logo" />
+            <h2 className="auth-modal-heading-company">Company Registration</h2>
 
             <CompanySignUpForm
               onClose={({ success }) => {
@@ -234,9 +233,9 @@ const SignIn = ({ onClose }) => {
               captchaToken={captchaToken}
             />
 
-            <p className="signup-text">
+            <p className="auth-modal-switch-text">
               Not a recruiter?{" "}
-              <span onClick={() => setIsCompany(false)} className="signup-link btn-link">
+              <span onClick={() => setIsCompany(false)} className="auth-modal-link-clickable">
                 Back to Candidate
               </span>
             </p>
@@ -255,16 +254,16 @@ const SignIn = ({ onClose }) => {
 
   // --- Main Candidate Form ---
   return (
-    <div className="signin-container">
-      <div className="signin-card">
-        <button className="close-btn" onClick={() => onClose(false)}>✕</button>
+    <div className="auth-modal-container">
+      <div className="auth-modal-card">
+        <button className="auth-modal-close-btn" onClick={() => onClose(false)}>✕</button>
 
-        <div className="signin-left">
-          <img src={assets.sideimage} alt="Illustration" className="signin-image" />
+        <div className="auth-modal-image-section">
+          <img src={assets.sideimage} alt="Illustration" className="auth-modal-side-image" />
         </div>
 
-        <div className="signin-right">
-          <img src={assets.namelogo} alt="Logo" className="signin-logo" />
+        <div className="auth-modal-form-section">
+          <img src={assets.namelogo} alt="Logo" className="auth-modal-brand-logo" />
 
           <ReCAPTCHA
             sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
@@ -275,8 +274,8 @@ const SignIn = ({ onClose }) => {
 
           {step === "login" && (
             <>
-              <h2 className="signin-title">{isSignUp ? "Create Account" : "Welcome Back"}</h2>
-              <form className="signin-form" onSubmit={handleSubmit}>
+              <h2 className="auth-modal-heading-main">{isSignUp ? "Create Account" : "Welcome Back"}</h2>
+              <form className="auth-modal-form" onSubmit={handleSubmit}>
                 {isSignUp && (
                   <input
                     type="text"
@@ -284,6 +283,7 @@ const SignIn = ({ onClose }) => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
+                    className="auth-modal-input-field"
                   />
                 )}
                 <input
@@ -292,6 +292,7 @@ const SignIn = ({ onClose }) => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  className="auth-modal-input-field"
                 />
                 <input
                   type="password"
@@ -299,36 +300,37 @@ const SignIn = ({ onClose }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  className="auth-modal-input-field"
                 />
                 {!isSignUp && (
-                  <div className="form-links">
-                    <span onClick={() => setStep("forgot")} className="forgot-link">
+                  <div className="auth-modal-links-wrapper">
+                    <span onClick={() => setStep("forgot")} className="auth-modal-forgot-link">
                       Forgot your password?
                     </span>
                   </div>
                 )}
-                <button type="submit" disabled={loading}>
+                <button type="submit" disabled={loading} className="auth-modal-submit-btn">
                   {loading ? (isSignUp ? "Registering..." : "Logging in...") : (isSignUp ? "Sign Up" : "Login")}
                 </button>
               </form>
               {isSignUp && (
-                <p className="company-text">
+                <p className="auth-modal-recruiter-text">
                   I'm a recruiter?{" "}
-                  <span onClick={() => setIsCompany(true)} className="signup-link btn-link">
+                  <span onClick={() => setIsCompany(true)} className="auth-modal-link-clickable">
                     Click here
                   </span>
                 </p>
               )}
-              <p className="signup-text">
+              <p className="auth-modal-switch-text">
                 {isSignUp ? (
                   <>Already have an account?{" "}
-                    <span onClick={() => setIsSignUp(false)} className="signup-link btn-link">
+                    <span onClick={() => setIsSignUp(false)} className="auth-modal-link-clickable">
                       Sign in
                     </span>
                   </>
                 ) : (
                   <>Don't have an account?{" "}
-                    <span onClick={() => setIsSignUp(true)} className="signup-link btn-link">
+                    <span onClick={() => setIsSignUp(true)} className="auth-modal-link-clickable">
                       Sign up
                     </span>
                   </>
@@ -339,21 +341,22 @@ const SignIn = ({ onClose }) => {
 
           {step === "forgot" && (
             <>
-              <h2 className="signin-title">Forgot Password</h2>
-              <form className="signin-form" onSubmit={handleForgotPassword}>
+              <h2 className="auth-modal-heading-main">Forgot Password</h2>
+              <form className="auth-modal-form" onSubmit={handleForgotPassword}>
                 <input
                   type="email"
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  className="auth-modal-input-field"
                 />
-                <button type="submit" disabled={loading}>
+                <button type="submit" disabled={loading} className="auth-modal-submit-btn">
                   {loading ? "Sending..." : "Send Verification Code"}
                 </button>
               </form>
-              <p className="signup-text">
-                <span onClick={() => setStep("login")} className="signup-link btn-link">
+              <p className="auth-modal-switch-text">
+                <span onClick={() => setStep("login")} className="auth-modal-link-clickable">
                   Back to Login
                 </span>
               </p>
@@ -362,16 +365,17 @@ const SignIn = ({ onClose }) => {
 
           {step === "verify" && (
             <>
-              <h2 className="signin-title">Verify Code</h2>
-              <form className="signin-form" onSubmit={handleVerifyCode}>
+              <h2 className="auth-modal-heading-main">Verify Code</h2>
+              <form className="auth-modal-form" onSubmit={handleVerifyCode}>
                 <input
                   type="text"
                   placeholder="Enter code"
                   value={verificationCode}
                   onChange={(e) => setVerificationCode(e.target.value)}
                   required
+                  className="auth-modal-input-field"
                 />
-                <button type="submit" disabled={loading}>
+                <button type="submit" disabled={loading} className="auth-modal-submit-btn">
                   {loading ? "Verifying..." : "Verify Code"}
                 </button>
               </form>
@@ -380,16 +384,17 @@ const SignIn = ({ onClose }) => {
 
           {step === "reset" && (
             <>
-              <h2 className="signin-title">Reset Password</h2>
-              <form className="signin-form" onSubmit={handleResetPassword}>
+              <h2 className="auth-modal-heading-main">Reset Password</h2>
+              <form className="auth-modal-form" onSubmit={handleResetPassword}>
                 <input
                   type="password"
                   placeholder="New Password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
+                  className="auth-modal-input-field"
                 />
-                <button type="submit" disabled={loading}>
+                <button type="submit" disabled={loading} className="auth-modal-submit-btn">
                   {loading ? "Resetting..." : "Reset Password"}
                 </button>
               </form>
