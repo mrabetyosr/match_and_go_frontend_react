@@ -1,0 +1,13 @@
+/* UserDetails.css */
+
+.user-details-container {
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Separation entre les sections */
+.user-details-container > div:not(:last-child) {
+  margin-bottom: 60px;
+  padding-bottom: 40px;
+  border-bottom: 2px solid #e1e8ed;
+}
