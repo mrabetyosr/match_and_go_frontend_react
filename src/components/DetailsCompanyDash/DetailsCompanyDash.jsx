@@ -236,6 +236,22 @@ const DetailsCompanyDash = () => {
 // Modal Component for detailed view
 const CompanyDetailsModal = ({ company, onClose }) => {
   const [activeTab, setActiveTab] = useState('info');
+  const [expandedOffer, setExpandedOffer] = useState(null);
+  const [expandedQuiz, setExpandedQuiz] = useState(null);
+
+  const toggleOffer = (offerId) => {
+    if (expandedOffer === offerId) {
+      setExpandedOffer(null);
+      setExpandedQuiz(null);
+    } else {
+      setExpandedOffer(offerId);
+      setExpandedQuiz(null);
+    }
+  };
+
+  const toggleQuiz = (quizId) => {
+    setExpandedQuiz(expandedQuiz === quizId ? null : quizId);
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -265,7 +281,7 @@ const CompanyDetailsModal = ({ company, onClose }) => {
             className={`tab-btn ${activeTab === 'offers' ? 'active' : ''}`}
             onClick={() => setActiveTab('offers')}
           >
-            Offers ({company.offers.length})
+            Offers & Quizzes ({company.offers.length})
           </button>
         </div>
 
@@ -302,24 +318,155 @@ const CompanyDetailsModal = ({ company, onClose }) => {
           )}
 
           {activeTab === 'offers' && (
-            <div className="offers-list">
+            <div className="offers-accordion">
               {company.offers.length === 0 ? (
                 <p className="no-data">No offers posted yet</p>
               ) : (
                 company.offers.map((offer) => (
-                  <div key={offer._id} className="offer-item">
-                    <h3>{offer.jobTitle}</h3>
-                    <div className="offer-meta">
-                      <span className="offer-type">{offer.jobType}</span>
-                      <span className="offer-salary">${offer.jobSalary}</span>
-                      <span className={`quiz-badge ${offer.hasQuiz ? 'has-quiz' : ''}`}>
-                        {offer.hasQuiz ? `${offer.quizzes.length} Quiz(zes)` : 'No Quiz'}
+                  <div key={offer._id} className="accordion-item">
+                    {/* Offer Header */}
+                    <div 
+                      className="accordion-header"
+                      onClick={() => toggleOffer(offer._id)}
+                    >
+                      <div className="accordion-header-content">
+                        <h3>{offer.jobTitle}</h3>
+                        <div className="offer-header-meta">
+                          <span className="offer-type-badge">{offer.jobType}</span>
+                          <span className="offer-salary-badge">${offer.jobSalary}</span>
+                          {offer.hasQuiz && (
+                            <span className="quiz-count-badge">
+                              {offer.quizzes?.length || 0} Quiz(zes)
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <span className={`accordion-icon ${expandedOffer === offer._id ? 'expanded' : ''}`}>
+                        ▼
                       </span>
                     </div>
-                    <div className="offer-stats">
-                      <span>Applications: {offer.stats.totalApplications}</span>
-                      <span>Pending: {offer.stats.pendingApplications}</span>
-                    </div>
+
+                    {/* Offer Content */}
+                    {expandedOffer === offer._id && (
+                      <div className="accordion-content">
+                        {/* Offer Details */}
+                        <div className="offer-details-section">
+                          <div className="offer-info-grid">
+                            <div className="info-item">
+                              <span className="info-label">Type:</span>
+                              <span className="info-value">{offer.jobType}</span>
+                            </div>
+                            <div className="info-item">
+                              <span className="info-label">Salary:</span>
+                              <span className="info-value">${offer.jobSalary}</span>
+                            </div>
+                            <div className="info-item">
+                              <span className="info-label">Remote:</span>
+                              <span className="info-value">{offer.remote ? 'Yes' : 'No'}</span>
+                            </div>
+                            <div className="info-item">
+                              <span className="info-label">Slots:</span>
+                              <span className="info-value">{offer.jobSlots}</span>
+                            </div>
+                            <div className="info-item">
+                              <span className="info-label">Applications:</span>
+                              <span className="info-value">{offer.stats.totalApplications}</span>
+                            </div>
+                            <div className="info-item">
+                              <span className="info-label">Pending:</span>
+                              <span className="info-value pending">{offer.stats.pendingApplications}</span>
+                            </div>
+                          </div>
+
+                          {offer.description && (
+                            <div className="offer-description">
+                              <h4>Description</h4>
+                              <p>{offer.description}</p>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Quizzes Section */}
+                        {offer.hasQuiz && offer.quizzes && offer.quizzes.length > 0 && (
+                          <div className="quizzes-section">
+                            <h4 className="section-title">📝 Associated Quizzes</h4>
+                            
+                            {offer.quizzes.map((quiz) => (
+                              <div key={quiz._id} className="quiz-accordion-item">
+                                {/* Quiz Header */}
+                                <div 
+                                  className="quiz-accordion-header"
+                                  onClick={() => toggleQuiz(quiz._id)}
+                                >
+                                  <div className="quiz-header-content">
+                                    <h5>{quiz.title}</h5>
+                                    <div className="quiz-meta-badges">
+                                      <span className={`status-badge ${quiz.isPublished ? 'published' : 'draft'}`}>
+                                        {quiz.isPublished ? '✓ Published' : '○ Draft'}
+                                      </span>
+                                      <span className="quiz-info-badge">
+                                        {quiz.questions?.length || 0} Questions
+                                      </span>
+                                      <span className="quiz-info-badge">
+                                        ⏱ {quiz.durationSeconds ? `${Math.floor(quiz.durationSeconds / 60)} min` : 'N/A'}
+                                      </span>
+                                      <span className="quiz-info-badge">
+                                        🎯 {quiz.totalScore} pts total
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <span className={`accordion-icon ${expandedQuiz === quiz._id ? 'expanded' : ''}`}>
+                                    ▼
+                                  </span>
+                                </div>
+
+                                {/* Quiz Content - Questions */}
+                                {expandedQuiz === quiz._id && (
+                                  <div className="quiz-accordion-content">
+                                    {quiz.description && (
+                                      <p className="quiz-description">{quiz.description}</p>
+                                    )}
+                                    
+                                    {quiz.questions && quiz.questions.length > 0 ? (
+                                      <div className="questions-list">
+                                        <h6>Questions:</h6>
+                                        {quiz.questions.map((question, index) => (
+                                          <div key={question._id} className="question-item">
+                                            <div className="question-header">
+                                              <span className="question-number">Q{index + 1}</span>
+                                              <span className="question-points">{question.score} pts</span>
+                                            </div>
+                                            <p className="question-text">{question.questionText}</p>
+                                            <div className="choices-list">
+                                              {question.choices.map((choice, choiceIndex) => (
+                                                <div 
+                                                  key={choiceIndex} 
+                                                  className={`choice-item ${choice === question.correctAnswer ? 'correct' : ''}`}
+                                                >
+                                                  <span className="choice-letter">
+                                                    {String.fromCharCode(65 + choiceIndex)}
+                                                  </span>
+                                                  <span className="choice-text">{choice}</span>
+                                                  {choice === question.correctAnswer && (
+                                                    <span className="correct-badge">✓ Correct</span>
+                                                  )}
+                                                </div>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    ) : (
+                                      <p className="no-data">No questions added yet</p>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 ))
               )}

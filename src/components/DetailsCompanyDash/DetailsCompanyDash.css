@@ -621,6 +621,394 @@
   gap: 14px;
 }
 
+/* Accordion Styles */
+.offers-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.accordion-item {
+  background: #fafbfc;
+  border: 1px solid #f0f2f5;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.accordion-item:hover {
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.08);
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.accordion-header:hover {
+  background: #f0fdf4;
+}
+
+.accordion-header-content {
+  flex: 1;
+}
+
+.accordion-header-content h3 {
+  margin: 0 0 10px 0;
+  font-size: 17px;
+  color: #111827;
+  font-weight: 600;
+}
+
+.offer-header-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.offer-type-badge,
+.offer-salary-badge,
+.quiz-count-badge {
+  padding: 5px 11px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.offer-type-badge {
+  background: white;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+}
+
+.offer-salary-badge {
+  background: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.quiz-count-badge {
+  background: #fef3c7;
+  color: #f59e0b;
+  border: 1px solid #fde68a;
+}
+
+.accordion-icon {
+  font-size: 14px;
+  color: #6b7280;
+  transition: transform 0.3s ease;
+  margin-left: 12px;
+}
+
+.accordion-icon.expanded {
+  transform: rotate(180deg);
+  color: #16a34a;
+}
+
+.accordion-content {
+  padding: 20px;
+  background: white;
+  border-top: 1px solid #f0f2f5;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 2000px;
+  }
+}
+
+/* Offer Details Section */
+.offer-details-section {
+  margin-bottom: 24px;
+}
+
+.offer-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.info-item {
+  background: #fafbfc;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid #e5e7eb;
+}
+
+.info-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.info-value {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.info-value.pending {
+  color: #f59e0b;
+}
+
+.offer-description {
+  background: #fafbfc;
+  padding: 16px;
+  border-radius: 10px;
+  border-left: 3px solid #16a34a;
+}
+
+.offer-description h4 {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.offer-description p {
+  margin: 0;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.6;
+}
+
+/* Quizzes Section */
+.quizzes-section {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 2px solid #f0f2f5;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 16px 0;
+  letter-spacing: 0.3px;
+}
+
+.quiz-accordion-item {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.quiz-accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.quiz-accordion-header:hover {
+  background: #fffbeb;
+}
+
+.quiz-header-content h5 {
+  margin: 0 0 8px 0;
+  font-size: 15px;
+  color: #111827;
+  font-weight: 600;
+}
+
+.quiz-meta-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.status-badge.published {
+  background: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.status-badge.draft {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+
+.quiz-info-badge {
+  padding: 4px 10px;
+  background: white;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.quiz-accordion-content {
+  padding: 16px;
+  background: #fafbfc;
+  border-top: 1px solid #e5e7eb;
+  animation: slideDown 0.3s ease;
+}
+
+.quiz-description {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  border-left: 3px solid #f59e0b;
+}
+
+/* Questions List */
+.questions-list h6 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 14px 0;
+}
+
+.question-item {
+  background: white;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.25s ease;
+}
+
+.question-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.question-number {
+  background: #16a34a;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.question-points {
+  background: #fef3c7;
+  color: #f59e0b;
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.question-text {
+  font-size: 14px;
+  color: #111827;
+  font-weight: 500;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.choices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.choice-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #fafbfc;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+.choice-item.correct {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.choice-letter {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.choice-item.correct .choice-letter {
+  background: #16a34a;
+  color: white;
+  border-color: #16a34a;
+}
+
+.choice-text {
+  flex: 1;
+  font-size: 13px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.correct-badge {
+  background: #16a34a;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
 .offer-item {
   padding: 18px;
   background: #fafbfc;
