@@ -1,0 +1,117 @@
+/* Container principal */
+.cand-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  justify-content: center;
+}
+
+/* Card candidat */
+.cand-card {
+  background-color: #fff;
+  border: 2px solid #4caf50;
+  border-radius: 12px;
+  width: 300px;
+  padding: 15px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cand-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* Header */
+.cand-hdr {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.cand-avt {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #4caf50;
+  margin-right: 15px;
+}
+
+.cand-info h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.cand-email {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 3px 0;
+}
+
+.cand-role {
+  font-size: 0.8rem;
+  color: #fff;
+  background-color: #4caf50;
+  padding: 3px 8px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Top Badge */
+.cand-top-badge {
+  font-size: 1.5rem;
+  color: #fbc02d;
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+/* All badges */
+.cand-badges {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.badge-icn {
+  font-size: 1.2rem;
+  color: #4caf50;
+}
+
+/* Détails supplémentaires */
+.cand-det {
+  font-size: 0.9rem;
+  color: #333;
+  margin-top: 10px;
+}
+
+.cand-det div {
+  margin-bottom: 6px;
+}
+
+/* Skills */
+.cand-skl {
+  margin-top: 6px;
+}
+
+.skl-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 3px;
+}
+
+.skl-item {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
