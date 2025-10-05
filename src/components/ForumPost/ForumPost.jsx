@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // ✅ Importer useNavigate
+import { useNavigate } from "react-router-dom";
 import ForumPostReaction from "../ForumPostReaction/ForumPostReaction";
 import ForumPostComment from "../ForumPostComment/ForumPostComment";
 import HandLoader from "../HandLoader/HandLoader";
 import "./ForumPost.css";
 
-const reactionsMap = {
+const REACTION_ICONS = {
   like: "👍",
   celebrate: "🎉",
   support: "❤️",
@@ -17,11 +17,11 @@ const reactionsMap = {
 const ForumPost = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showReactionsPostId, setShowReactionsPostId] = useState(null);
-  const [showCommentsPostId, setShowCommentsPostId] = useState(null);
+  const [activeReactionsPostId, setActiveReactionsPostId] = useState(null);
+  const [activeCommentsPostId, setActiveCommentsPostId] = useState(null);
   const [reactionsData, setReactionsData] = useState({});
 
-  const navigate = useNavigate(); // ✅ Hook pour la navigation
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const headers = { Authorization: `Bearer ${token}` };
 
@@ -61,7 +61,6 @@ const ForumPost = () => {
     }
   };
 
-  // ✅ Fonction pour naviguer vers le profil
   const handleProfileClick = (userId) => {
     if (userId) {
       navigate(`/profile/${userId}`);
@@ -88,142 +87,173 @@ const ForumPost = () => {
     });
   };
 
+  // Composant pour l'en-tête du post
+  const PostHeader = ({ author, createdAt }) => (
+    <div className="forum-post-header">
+      <img 
+        src={`http://localhost:7001/images/${author?.image_User || author?.logo || "user.png"}`} 
+        alt={author?.username || "User"}
+        className="forum-post-header__avatar"
+        onClick={() => handleProfileClick(author?._id)}
+        style={{ cursor: 'pointer' }}
+      />
+      <div className="forum-post-header__info">
+        <h3 
+          className="forum-post-header__username"
+          onClick={() => handleProfileClick(author?._id)}
+          style={{ cursor: 'pointer' }}
+        >
+          {author?.username || "Utilisateur"}
+        </h3>
+        <time className="forum-post-header__timestamp">
+          {createdAt && formatDate(createdAt)}
+        </time>
+      </div>
+      {author?.role && (
+        <span className="forum-post-header__badge">
+          {author.role}
+        </span>
+      )}
+    </div>
+  );
+
+  // Composant pour les médias du post
+  const PostMedia = ({ photo, document }) => (
+    <>
+      {photo && (
+        <div className="forum-post-media forum-post-media--photo">
+          <img src={`http://localhost:7001${photo}`} alt="post" />
+        </div>
+      )}
+      {document && (
+        <div className="forum-post-media forum-post-media--document">
+          <a href={`http://localhost:7001${document}`} target="_blank" rel="noopener noreferrer">
+            Voir le document
+          </a>
+        </div>
+      )}
+    </>
+  );
+
+  // Composant pour les actions du post
+  const PostActions = ({ post, postReactions, toggleReactions, toggleComments }) => {
+    const reactedTypes = Object.entries(postReactions)
+      .filter(([type, data]) => data.users && data.users.length > 0)
+      .map(([type]) => type);
+
+    const totalReactions = Object.values(postReactions).reduce(
+      (sum, data) => sum + (data.users ? data.users.length : 0),
+      0
+    );
+
+    const tooltipContent = reactedTypes
+      .map((type) => {
+        const users = postReactions[type].users.map((u) => u.username).join(", ");
+        return `${REACTION_ICONS[type]}: ${users}`;
+      })
+      .join("\n");
+
+    const displayReactions = totalReactions > 0 
+      ? reactedTypes.map((type) => REACTION_ICONS[type]).join(" ") 
+      : "👍";
+
+    return (
+      <div className="forum-post-actions">
+        <button 
+          className="forum-post-actions__btn forum-post-actions__btn--share" 
+          onClick={() => handleShare(post._id)}
+        >
+          🔁 {post.sharesCount || 0}
+        </button>
+
+        <button
+          className="forum-post-actions__btn forum-post-actions__btn--reactions"
+          title={tooltipContent || "Aucune réaction"}
+          onClick={toggleReactions}
+        >
+          {displayReactions}
+          {totalReactions > 0 ? ` (${totalReactions})` : ""}
+        </button>
+
+        <button
+          className="forum-post-actions__btn forum-post-actions__btn--comments"
+          onClick={toggleComments}
+        >
+          💬 Commentaires ({post.commentsCount || 0})
+        </button>
+      </div>
+    );
+  };
+
+  // Composant pour le panneau de réactions
+  const ReactionsPanel = ({ postId, postReactions }) => (
+    <div className="forum-reactions-panel">
+      <ForumPostReaction postId={postId} onReaction={fetchPosts} />
+      <div className="forum-reactions-list">
+        {Object.entries(postReactions).map(([type, data]) => {
+          if (!data.users || data.users.length === 0) return null;
+         
+        })}
+      </div>
+    </div>
+  );
+
+  // États de chargement et vide
   if (loading) {
     return (
-      <div className="forum-loading">
+      <div className="forum-container forum-container--loading">
         <HandLoader size={100} />
-        <p className="forum-loading__text">Loading posts...</p>
+        <p className="forum-container__loading-text">Loading posts...</p>
       </div>
     );
   }
 
-  if (posts.length === 0) return <p>Aucun post disponible.</p>;
+  if (posts.length === 0) {
+    return <p className="forum-container__empty-message">Aucun post disponible.</p>;
+  }
 
   return (
-    <div className="forum">
+    <div className="forum-container">
       {posts.map((post) => {
         const postReactions = reactionsData[post._id] || {};
-        const reactedTypes = Object.entries(postReactions)
-          .filter(([type, data]) => data.users && data.users.length > 0)
-          .map(([type]) => type);
-
-        const totalReactions = Object.values(postReactions).reduce(
-          (sum, data) => sum + (data.users ? data.users.length : 0),
-          0
-        );
-
-        const tooltipContent = reactedTypes
-          .map((type) => {
-            const users = postReactions[type].users.map((u) => u.username).join(", ");
-            return `${reactionsMap[type]}: ${users}`;
-          })
-          .join("\n");
 
         return (
-          <article key={post._id} className="post">
-            {/* User Header - ✅ Rendre cliquable */}
-            <div className="post__header">
-              <img 
-                src={`http://localhost:7001/images/${post.author?.image_User || post.author?.logo || "user.png"}`} 
-                alt={post.author?.username || "User"}
-                className="post__avatar"
-                onClick={() => handleProfileClick(post.author?._id)} // ✅ Navigation au clic
-                style={{ cursor: 'pointer' }} // ✅ Curseur pointer
-              />
-              <div className="post__user-info">
-                <h3 
-                  className="post__username"
-                  onClick={() => handleProfileClick(post.author?._id)} // ✅ Navigation au clic
-                  style={{ cursor: 'pointer' }} // ✅ Curseur pointer
-                >
-                  {post.author?.username || "Utilisateur"}
-                </h3>
-                <time className="post__timestamp">
-                  {post.createdAt && formatDate(post.createdAt)}
-                </time>
-              </div>
-              {post.author?.role && (
-                <span className="post__badge post__badge--role">
-                  {post.author.role}
-                </span>
+          <article key={post._id} className="forum-post-card">
+            <PostHeader 
+              author={post.author} 
+              createdAt={post.createdAt} 
+            />
+
+            <p className="forum-post-card__content">{post.content}</p>
+
+            <PostMedia 
+              photo={post.photo} 
+              document={post.document} 
+            />
+
+            <PostActions
+              post={post}
+              postReactions={postReactions}
+              toggleReactions={() => setActiveReactionsPostId(
+                activeReactionsPostId === post._id ? null : post._id
               )}
-            </div>
+              toggleComments={() => setActiveCommentsPostId(
+                activeCommentsPostId === post._id ? null : post._id
+              )}
+            />
 
-            <p className="post__content">{post.content}</p>
-
-            {post.photo && (
-              <div className="post__media post__media--photo">
-                <img src={`http://localhost:7001${post.photo}`} alt="post" />
-              </div>
-            )}
-            {post.document && (
-              <div className="post__media post__media--document">
-                <a href={`http://localhost:7001${post.document}`} target="_blank" rel="noopener noreferrer">
-                  Voir le document
-                </a>
-              </div>
+            {activeReactionsPostId === post._id && (
+              <ReactionsPanel 
+                postId={post._id} 
+                postReactions={postReactions} 
+              />
             )}
 
-            <div className="post__actions">
-              <button className="post__action post__action--share" onClick={() => handleShare(post._id)}>
-                🔁 {post.sharesCount || 0}
-              </button>
-
-              <button
-                className="post__action post__action--reactions"
-                title={tooltipContent || "Aucune réaction"}
-                onClick={() =>
-                  setShowReactionsPostId(showReactionsPostId === post._id ? null : post._id)
-                }
-              >
-                {reactedTypes.map((type) => reactionsMap[type]).join(" ")} {totalReactions > 0 ? `(${totalReactions})` : ""}
-              </button>
-
-              <button
-                className="post__action post__action--comments"
-                onClick={() =>
-                  setShowCommentsPostId(showCommentsPostId === post._id ? null : post._id)
-                }
-              >
-                💬 Commentaires ({post.commentsCount || 0})
-              </button>
-            </div>
-
-            {showReactionsPostId === post._id && (
-              <div className="post__reactions-panel">
-                <ForumPostReaction postId={post._id} onReaction={fetchPosts} />
-                <div className="reactions">
-                  {Object.entries(postReactions).map(([type, data]) => {
-                    if (!data.users || data.users.length === 0) return null;
-                    return (
-                      <div key={type} className="reactions__group">
-                        <strong className="reactions__type">{reactionsMap[type]}</strong>
-                        <div className="reactions__users">
-                          {data.users.map((user) => (
-                            <div 
-                              key={user._id} 
-                              className="reaction-user"
-                              onClick={() => handleProfileClick(user._id)} // ✅ Navigation au clic sur user
-                              style={{ cursor: 'pointer' }} // ✅ Curseur pointer
-                            >
-                              <img
-                                src={`http://localhost:7001/images/${user.logo || "user.png"}`}
-                                alt={user.username}
-                                className="reaction-user__avatar"
-                              />
-                              <span className="reaction-user__name">{user.username}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {showCommentsPostId === post._id && (
-              <ForumPostComment postId={post._id} onCommentAdded={fetchPosts} />
+            {activeCommentsPostId === post._id && (
+              <ForumPostComment 
+                postId={post._id} 
+                onCommentAdded={fetchPosts} 
+              />
             )}
           </article>
         );
