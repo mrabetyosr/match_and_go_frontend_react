@@ -1,171 +1,309 @@
 /* Container principal */
-.upd-cntr-xyz {
-  max-width: 900px;
-  margin: 30px auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.update-settings-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 30px 20px;
+  background: #ffffff;
+  box-sizing: border-box;
 }
 
 /* Bouton retour */
-.bck-btn-xyz {
-  align-self: flex-start;
-  padding: 8px 16px;
-  font-size: 14px;
+.back-button {
+  background: #10b981;
+  color: white;
   border: none;
-  background-color: #e0e0e0;
+  padding: 10px 20px;
   border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.bck-btn-xyz:hover {
-  background-color: #d5d5d5;
-}
-
-/* Sections cover/avatar */
-.sec-cv-xyz, .sec-av-xyz {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-.img-cv-xyz, .img-av-xyz {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 12px;
-  border: 2px solid #ccc;
-}
-.lbl-cv-xyz, .lbl-av-xyz {
-  cursor: pointer;
-  background-color: #f0f0f0;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: 0.3s;
-}
-.lbl-cv-xyz:hover, .lbl-av-xyz:hover {
-  background-color: #e0e0e0;
-}
-.fn-cv-xyz, .fn-av-xyz {
-  font-size: 13px;
-  color: #555;
-}
-.btn-cv-xyz, .btn-av-xyz {
-  padding: 6px 14px;
-  background-color: #4CAF50;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.btn-cv-xyz:hover, .btn-av-xyz:hover {
-  background-color: #45a049;
-}
-
-/* Formulaire */
-.frm-sec-xyz {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.frm-sec-xyz input[type="text"],
-.frm-sec-xyz input[type="email"],
-.frm-sec-xyz input[type="date"] {
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  transition: 0.3s;
-}
-.frm-sec-xyz input:focus {
-  outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
-}
-
-/* Barre de recherche location */
-.loc-srch-xyz {
-  display: flex;
-  gap: 8px;
-  margin: 10px 0;
-}
-.loc-srch-xyz input {
-  flex: 1;
-}
-.loc-srch-xyz button {
-  padding: 6px 12px;
-  background-color: #2196F3;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.loc-srch-xyz button:hover {
-  background-color: #1976D2;
-}
-
-/* Carte Leaflet */
-.mp-cntr-xyz {
-  border-radius: 12px;
-  overflow: hidden;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-}
-
-/* Latitude / Longitude display */
-.lat-lng-xyz {
-  font-size: 13px;
-  color: #555;
-}
-
-/* Bouton save */
-.btn-save-xyz {
-  margin-top: 15px;
-  padding: 10px 18px;
-  background-color: #FF9800;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.btn-save-xyz:hover {
-  background-color: #FB8C00;
-}
-
-/* Messages loading / user not found */
-.ld-msg-xyz, .usr-notfound-xyz {
-  text-align: center;
   font-size: 16px;
-  color: #777;
-  margin: 50px 0;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 25px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-button:hover {
+  background: #059669;
+  transform: translateX(-3px);
+}
+
+/* Section couverture */
+.cover-section {
+  margin-bottom: 80px;
+  padding: 30px;
+  background: #f0fdf4;
+  border-radius: 10px;
+  border: 2px solid #10b981;
+}
+
+.cover-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border: 3px solid #10b981;
+}
+
+.cover-label {
+  display: inline-block;
+  background: #10b981;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+}
+
+.cover-label:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}
+
+.cover-label input[type="file"] {
+  display: none;
+}
+
+.update-cover-btn {
+  background: #ffffff;
+  color: #10b981;
+  border: 2px solid #10b981;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.update-cover-btn:hover {
+  background: #10b981;
+  color: white;
+}
+
+/* Section avatar */
+.avatar-section {
+  margin-bottom: 40px;
+  padding: 20px;
+  background: #f0fdf4;
+  border-radius: 10px;
+  border: 2px solid #10b981;
+  text-align: center;
+}
+
+.avatar-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 4px solid #10b981;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.avatar-label {
+  display: inline-block;
+  background: #10b981;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+}
+
+.avatar-label:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}
+
+.avatar-label input[type="file"] {
+  display: none;
+}
+
+.update-avatar-btn {
+  background: #ffffff;
+  color: #10b981;
+  border: 2px solid #10b981;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.update-avatar-btn:hover {
+  background: #10b981;
+  color: white;
+}
+
+/* Nom du fichier sélectionné */
+.file-name {
+  display: inline-block;
+  color: #059669;
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 10px;
+  padding: 8px 12px;
+  background: white;
+  border-radius: 6px;
+}
+
+/* Section formulaire */
+.form-section {
+  padding: 25px;
+  background: #f9fafb;
+  border-radius: 10px;
+  border: 1px solid #d1fae5;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 15px;
+  border: 2px solid #d1fae5;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Recherche de localisation */
+.location-search {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #d1fae5;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.search-button {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.search-button:hover {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Container de la carte */
+.map-container {
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  border: 3px solid #10b981;
+}
+
+/* Texte des coordonnées */
+.coordinates-text {
+  color: #059669;
+  font-weight: 600;
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+/* Bouton de sauvegarde */
+.save-button {
+  width: 100%;
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.save-button:hover {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+/* Messages de chargement et erreur */
+.loading-message,
+.user-not-found {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #10b981;
+  font-weight: 600;
 }
 
 /* Responsive */
-@media (max-width: 600px) {
-  .upd-cntr-xyz {
-    padding: 15px;
+@media (max-width: 768px) {
+  .update-settings-container {
+    padding: 20px 15px;
   }
-  .sec-cv-xyz, .sec-av-xyz {
+
+  .cover-image {
+    height: 180px;
+  }
+
+  .avatar-image {
+    width: 120px;
+    height: 120px;
+  }
+
+  .location-search {
     flex-direction: column;
-    align-items: flex-start;
   }
-  .img-cv-xyz, .img-av-xyz {
-    width: 100%;
-    height: auto;
-  }
-  .loc-srch-xyz {
-    flex-direction: column;
-  }
-  .loc-srch-xyz button {
+
+  .search-button {
     width: 100%;
   }
+}
+
+/* Animation pour les boutons */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.save-button:active,
+.update-cover-btn:active,
+.update-avatar-btn:active,
+.search-button:active {
+  transform: scale(0.98);
 }
