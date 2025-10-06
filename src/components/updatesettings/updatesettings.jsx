@@ -83,7 +83,7 @@ const UpdateSettings = () => {
         zoom={12}
         style={{ height: '300px', width: '100%' }}
         key={`${lat}-${lng}`}
-        className="mp-cntr-xyz"
+        className="map-container"
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -172,63 +172,63 @@ const UpdateSettings = () => {
     }
   };
 
-  if (ld) return <p className="ld-msg-xyz">Loading...</p>;
-  if (!usr) return <p className="usr-notfound-xyz">User not found</p>;
+  if (ld) return <p className="loading-message">Loading...</p>;
+  if (!usr) return <p className="user-not-found">User not found</p>;
 
   return (
-    <div className="upd-cntr-xyz">
-      <button className="bck-btn-xyz" onClick={() => nav('/settings')}>← Back</button>
+    <div className="update-settings-container">
+      <button className="back-button" onClick={() => nav('/settings')}>← Back</button>
 
       {['cv', 'av'].map(t => (
-        <div key={t} className={`sec-${t}-xyz`}>
+        <div key={t} className={`${t === 'cv' ? 'cover-section' : 'avatar-section'}`}>
           <img
             src={usr[t === 'cv' ? 'cover_User' : 'image_User']
               ? `http://localhost:7001/images/${usr[t === 'cv' ? 'cover_User' : 'image_User']}`
               : t === 'cv' ? '/defaultCover.png' : '/defaultAvatar.png'}
             alt={t}
-            className={`img-${t}-xyz`}
+            className={`${t === 'cv' ? 'cover-image' : 'avatar-image'}`}
           />
-          <label className={`lbl-${t}-xyz`}>
+          <label className={`${t === 'cv' ? 'cover-label' : 'avatar-label'}`}>
             Choose {t.toUpperCase()}
             <input type="file" onChange={e => hFileChange(t, e.target.files[0])} />
           </label>
-          {fls[t] && <span className={`fn-${t}-xyz`}>{fls[t].name}</span>}
-          <button className={`btn-${t}-xyz`} onClick={() => updFile(t, t === 'cv' ? 'update-cover' : 'update-photo')}>
+          {fls[t] && <span className="file-name">{fls[t].name}</span>}
+          <button className={`${t === 'cv' ? 'update-cover-btn' : 'update-avatar-btn'}`} onClick={() => updFile(t, t === 'cv' ? 'update-cover' : 'update-photo')}>
             Update {t.toUpperCase()}
           </button>
         </div>
       ))}
 
-      <div className="frm-sec-xyz">
-        <input name="uname" value={fData.uname} onChange={hChange} placeholder="Username" />
-        <input name="em" value={fData.em} onChange={hChange} placeholder="Email" />
+      <div className="form-section">
+        <input name="uname" value={fData.uname} onChange={hChange} placeholder="Username" className="form-input" />
+        <input name="em" value={fData.em} onChange={hChange} placeholder="Email" className="form-input" />
 
         {usr.role === 'candidate' && (
           <>
-            <input name="ph" value={fData.ph} onChange={hChange} placeholder="Phone" />
-            <input name="loc" value={fData.loc} onChange={hChange} placeholder="Location" />
-            <input type="date" name="dob" value={fData.dob} onChange={hChange} />
+            <input name="ph" value={fData.ph} onChange={hChange} placeholder="Phone" className="form-input" />
+            <input name="loc" value={fData.loc} onChange={hChange} placeholder="Location" className="form-input" />
+            <input type="date" name="dob" value={fData.dob} onChange={hChange} className="form-input" />
           </>
         )}
 
         {usr.role === 'company' && (
           <>
-            <input name="loc" value={fData.loc} onChange={hChange} placeholder="Location" />
-            <input name="desc" value={fData.desc} onChange={hChange} placeholder="Description" />
-            <input name="cat" value={fData.cat} onChange={hChange} placeholder="Category" />
+            <input name="loc" value={fData.loc} onChange={hChange} placeholder="Location" className="form-input" />
+            <input name="desc" value={fData.desc} onChange={hChange} placeholder="Description" className="form-input" />
+            <input name="cat" value={fData.cat} onChange={hChange} placeholder="Category" className="form-input" />
 
-            <div className="loc-srch-xyz">
-              <input type="text" value={sQry} onChange={e => setSQry(e.target.value)} placeholder="Search location..." />
-              <button onClick={hSearch}>Search</button>
+            <div className="location-search">
+              <input type="text" value={sQry} onChange={e => setSQry(e.target.value)} placeholder="Search location..." className="search-input" />
+              <button onClick={hSearch} className="search-button">Search</button>
             </div>
 
             <LocPicker lat={parseFloat(fData.lat)} lng={parseFloat(fData.lng)} />
-            <p className="lat-lng-xyz">Latitude: {fData.lat}</p>
-            <p className="lat-lng-xyz">Longitude: {fData.lng}</p>
+            <p className="coordinates-text">Latitude: {fData.lat}</p>
+            <p className="coordinates-text">Longitude: {fData.lng}</p>
           </>
         )}
 
-        <button className="btn-save-xyz" onClick={updProfile}>Save Changes</button>
+        <button className="save-button" onClick={updProfile}>Save Changes</button>
       </div>
     </div>
   );
