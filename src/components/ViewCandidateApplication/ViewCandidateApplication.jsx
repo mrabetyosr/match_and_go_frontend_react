@@ -36,6 +36,20 @@ const StatsCard = ({ title, count, icon, colorClass }) => (
 
 // Individual application card
 const ApplicationCard = ({ app }) => {
+  // Add null checks to prevent errors
+  if (!app || !app.offerId || !app.offerId.companyId) {
+    return (
+      <div className="vca-application-card vca-status-pending">
+        <div className="vca-card-header">
+          <h4 className="vca-job-title">Application Data Unavailable</h4>
+        </div>
+        <div className="vca-card-body">
+          <p>Unable to load application details</p>
+        </div>
+      </div>
+    );
+  }
+
   const getStatusClass = (status) => {
     switch (status) {
       case "pending": return "vca-status-pending";
@@ -59,30 +73,33 @@ const ApplicationCard = ({ app }) => {
   return (
     <div className={`vca-application-card ${getStatusClass(app.status)}`}>
       <div className="vca-card-header">
-        <h4 className="vca-job-title">{app.offerId.jobTitle}</h4>
+        <h4 className="vca-job-title">{app.offerId.jobTitle || "N/A"}</h4>
         <div className={`vca-status-badge ${getStatusClass(app.status)}`}>
           <span className="vca-status-icon">{getStatusIcon(app.status)}</span>
-          <span className="vca-status-text">{app.status}</span>
+          <span className="vca-status-text">{app.status || "pending"}</span>
         </div>
       </div>
 
       <div className="vca-card-body">
         <div className="vca-company-info">
-          {app.offerId.companyId.image_User ? (
+          {app.offerId.companyId?.image_User ? (
             <img
               src={`http://localhost:7001/images/${app.offerId.companyId.image_User}`}
-              alt={app.offerId.companyId.username}
+              alt={app.offerId.companyId.username || "Company"}
               className="vca-company-image"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextElementSibling.style.display = 'flex';
+              }}
             />
-          ) : (
-            <div className="vca-company-placeholder">
-              <span className="vca-building-icon">🏢</span>
-            </div>
-          )}
+          ) : null}
+          <div className="vca-company-placeholder" style={{ display: app.offerId.companyId?.image_User ? 'none' : 'flex' }}>
+            <span className="vca-building-icon">🏢</span>
+          </div>
           <div className="vca-company-details">
-            <p className="vca-company-name">{app.offerId.companyId.username}</p>
+            <p className="vca-company-name">{app.offerId.companyId?.username || "Company Name"}</p>
             <p className="vca-application-date">
-              Applied on {new Date(app.createdAt).toLocaleDateString()}
+              Applied on {app.createdAt ? new Date(app.createdAt).toLocaleDateString() : "N/A"}
             </p>
           </div>
         </div>
@@ -90,11 +107,11 @@ const ApplicationCard = ({ app }) => {
         <div className="vca-contact-info">
           <div className="vca-contact-item">
             <span className="vca-contact-icon">📧</span>
-            <span className="vca-contact-text">{app.email}</span>
+            <span className="vca-contact-text">{app.email || "N/A"}</span>
           </div>
           <div className="vca-contact-item">
             <span className="vca-contact-icon">📞</span>
-            <span className="vca-contact-text">{app.phoneNumber}</span>
+            <span className="vca-contact-text">{app.phoneNumber || "N/A"}</span>
           </div>
         </div>
       </div>
